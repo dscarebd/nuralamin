@@ -100,9 +100,9 @@ export default function Portfolio() {
             <p className="text-sm text-muted-foreground">Projects I've built and contributed to</p>
           </motion.div>
 
-          <TabsList>
-            <TabsTrigger value="website">Website</TabsTrigger>
-            <TabsTrigger value="mobile">Mobile App</TabsTrigger>
+          <TabsList className="w-full sm:w-auto">
+            <TabsTrigger value="website" className="flex-1 sm:flex-initial">Website</TabsTrigger>
+            <TabsTrigger value="mobile" className="flex-1 sm:flex-initial">Mobile App</TabsTrigger>
           </TabsList>
         </div>
 

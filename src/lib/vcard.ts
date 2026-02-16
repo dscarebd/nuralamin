@@ -4,11 +4,11 @@ VERSION:3.0
 FN:Shariful Islam
 N:Islam;Shariful;;;
 TITLE:Brand Designer
-TEL;TYPE=CELL:+8801XXXXXXXXX
-EMAIL:shariful@logohut.com
-URL:https://logohut.com
-ADR;TYPE=HOME:;;Dhaka;;1000;;Bangladesh
-ORG:LogoHut
+TEL;TYPE=CELL:+8801754392770
+EMAIL:sharif.logohut@gmail.com
+URL:https://www.behance.net/shariflogohut
+ADR;TYPE=HOME:;;Uttara, Dhaka;;1000;;Bangladesh
+ORG:Sharif Logo Hut
 END:VCARD`;
 
   const blob = new Blob([vcard], { type: "text/vcard;charset=utf-8" });

@@ -1,86 +1,102 @@
 import { Phone, Mail, MapPin } from "lucide-react";
 
-const contactItems = [
-  { icon: Phone, label: "Mobile", value: "+880 1XXX-XXXXXX", href: "tel:+8801XXXXXXXXX" },
-  { icon: Mail, label: "Email", value: "shariful@logohut.com", href: "mailto:shariful@logohut.com" },
-  { icon: MapPin, label: "Location", value: "Dhaka, Bangladesh", href: "#" },
-];
-
 const experiences = [
   {
-    title: "Senior Brand Designer",
-    company: "LogoHut Creative Agency",
-    period: "2023 — Present",
-    description: "Leading brand identity projects for international clients, creating comprehensive visual systems.",
+    title: "Brand Designer",
+    company: "American Visa Consulting",
+    period: "Jan 2026 — Present",
+    description: "Redesigned the brand identity to establish trust and create strong, lasting recognition for an American visa consulting company. Created a memorable brand presence that encourages clients to choose the company for US visa consultation.",
   },
   {
     title: "Brand Designer",
-    company: "Creative Studio BD",
-    period: "2021 — 2023",
-    description: "Designed brand identities, logos, and marketing materials for diverse clientele across industries.",
+    company: "Marsus Group",
+    period: "Jan 2024 — Dec 2025",
+    description: "Played a key role in branding 19 sister companies by creating logos, visual systems, and brand guidelines. Delivered end-to-end branding solutions, from logo to full brand guidelines.",
   },
   {
-    title: "Junior Graphic Designer",
-    company: "DesignWorks Agency",
-    period: "2019 — 2021",
-    description: "Created visual content for social media, print materials, and web projects.",
+    title: "Brand Designer",
+    company: "Ducky Memories",
+    period: "Jun 2023 — Dec 2023",
+    description: "Designed complete brand identity systems from logo concept to final execution.",
   },
   {
-    title: "Freelance Designer",
-    company: "Self-Employed",
-    period: "2017 — 2019",
-    description: "Started freelancing with logo design and branding projects for local businesses.",
+    title: "Brand Designer",
+    company: "Sharif Logo Hut",
+    period: "Nov 2021 — Present",
+    description: "Freelance Brand Designer with 300+ branding projects completed for clients worldwide since 2021. Specialized in logo design and full brand identity development.",
   },
 ];
 
 export default function MainContent() {
   return (
-    <main className="flex flex-col gap-8">
+    <main className="flex flex-col gap-6">
       {/* Contact Cards */}
-      <section className="grid gap-3 sm:grid-cols-3">
-        {contactItems.map((c) => (
-          <a
-            key={c.label}
-            href={c.href}
-            className="flex items-center gap-3 rounded-xl border bg-card p-4 transition-colors hover:bg-secondary"
-          >
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-              <c.icon className="h-5 w-5" />
-            </div>
-            <div className="min-w-0">
-              <p className="text-xs text-muted-foreground">{c.label}</p>
-              <p className="truncate text-sm font-medium text-foreground">{c.value}</p>
-            </div>
-          </a>
-        ))}
+      <section className="grid gap-3 grid-cols-2">
+        <a
+          href="tel:01754392770"
+          className="flex items-center gap-3 rounded-xl border bg-card p-4 transition-colors hover:bg-secondary"
+        >
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+            <Phone className="h-5 w-5" />
+          </div>
+          <div className="min-w-0">
+            <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Mobile</p>
+            <p className="text-sm font-semibold text-foreground">01754392770</p>
+          </div>
+        </a>
+        <a
+          href="mailto:sharif.logohut@gmail.com"
+          className="flex items-center gap-3 rounded-xl border bg-card p-4 transition-colors hover:bg-secondary"
+        >
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+            <Mail className="h-5 w-5" />
+          </div>
+          <div className="min-w-0">
+            <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Email</p>
+            <p className="text-sm font-semibold text-foreground truncate">sharif.logohut@gmail.com</p>
+          </div>
+        </a>
+        <div className="col-span-2 flex items-center gap-3 rounded-xl border bg-card p-4">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+            <MapPin className="h-5 w-5" />
+          </div>
+          <div className="min-w-0">
+            <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Location</p>
+            <p className="text-sm font-semibold text-foreground">Uttara, Dhaka, Bangladesh</p>
+          </div>
+        </div>
       </section>
 
       {/* About */}
-      <section className="rounded-xl border bg-card p-6">
-        <h2 className="mb-3 text-lg font-semibold text-foreground">About</h2>
+      <section>
+        <h2 className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground">About</h2>
         <p className="text-sm leading-relaxed text-muted-foreground">
-          I'm Shariful Islam, a passionate Brand Designer based in Dhaka, Bangladesh. With over 7 years of
-          experience in graphic design and branding, I specialize in creating unique and memorable brand
-          identities that help businesses stand out. My approach combines creative thinking with strategic
-          design to deliver impactful visual solutions.
+          Assalamu Alaykum, I'm Shariful Islam — a Brand Designer with over 5 years of experience. I work full-time, so communication with me is always easy and responsive. Design is not just my job, it's my passion. I truly enjoy bringing ideas to life and telling your brand's story the right way. I focus on long-term collaboration and always aim to deliver results that satisfy and build trust.
         </p>
       </section>
 
-      {/* Experience Timeline */}
-      <section className="rounded-xl border bg-card p-6">
-        <h2 className="mb-6 text-lg font-semibold text-foreground">Experience</h2>
-        <div className="relative space-y-8 pl-6 before:absolute before:left-[7px] before:top-2 before:h-[calc(100%-2rem)] before:w-px before:bg-border">
+      <div className="h-px bg-border" />
+
+      {/* Experience */}
+      <section>
+        <h2 className="mb-6 text-xs font-semibold uppercase tracking-widest text-muted-foreground">Experience</h2>
+        <div className="relative space-y-8 pl-6 before:absolute before:left-[5px] before:top-2 before:h-[calc(100%-2rem)] before:w-px before:bg-border">
           {experiences.map((exp, i) => (
             <div key={i} className="relative">
-              {/* Timeline dot */}
-              <div className="absolute -left-6 top-1.5 h-3.5 w-3.5 rounded-full border-2 border-primary bg-background" />
+              <div className="absolute -left-6 top-1.5 h-3 w-3 rounded-full bg-primary" />
               <div className="flex flex-col gap-1">
-                <h3 className="text-sm font-semibold text-foreground">{exp.title}</h3>
-                <p className="text-xs text-muted-foreground">{exp.company}</p>
-                <span className="mt-1 w-fit rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
-                  {exp.period}
-                </span>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{exp.description}</p>
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <h3 className="text-sm font-bold text-foreground">{exp.title}</h3>
+                    <p className="text-xs text-muted-foreground">{exp.company}</p>
+                  </div>
+                  <span className="shrink-0 rounded-full bg-primary/15 px-3 py-1 text-[11px] font-medium text-primary">
+                    {exp.period}
+                  </span>
+                </div>
+                <div className="mt-2 rounded-lg border bg-secondary/50 p-3">
+                  <p className="text-sm leading-relaxed text-muted-foreground">{exp.description}</p>
+                </div>
               </div>
             </div>
           ))}
@@ -88,7 +104,7 @@ export default function MainContent() {
       </section>
 
       {/* Footer */}
-      <footer className="py-4 text-center text-xs text-muted-foreground">
+      <footer className="py-6 text-center text-xs text-muted-foreground">
         © 2026 Shariful Islam
       </footer>
     </main>

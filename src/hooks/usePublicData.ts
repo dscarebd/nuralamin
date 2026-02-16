@@ -100,3 +100,29 @@ export function useSiteSettings() {
     },
   });
 }
+
+export function useBlogPosts() {
+  return useQuery({
+    queryKey: ["blog_posts"],
+    staleTime: 5 * 60 * 1000,
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("blog_posts")
+        .select("*")
+        .eq("is_published", true)
+        .order("published_at", { ascending: false });
+      return data ?? [];
+    },
+  });
+}
+
+export function useBlogCategories() {
+  return useQuery({
+    queryKey: ["blog_categories"],
+    staleTime: 5 * 60 * 1000,
+    queryFn: async () => {
+      const { data } = await supabase.from("blog_categories").select("*").order("display_order");
+      return data ?? [];
+    },
+  });
+}

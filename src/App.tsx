@@ -8,6 +8,8 @@ import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
 import Portfolio from "./pages/Portfolio";
+import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
 import Pricing from "./pages/Pricing";
 import NotFound from "./pages/NotFound";
 import AdminLogin from "./pages/admin/Login";
@@ -20,6 +22,7 @@ import ProjectsEditor from "./pages/admin/ProjectsEditor";
 import PricingEditor from "./pages/admin/PricingEditor";
 import SettingsEditor from "./pages/admin/SettingsEditor";
 import RequestsEditor from "./pages/admin/RequestsEditor";
+import BlogEditor from "./pages/admin/BlogEditor";
 import ProtectedRoute from "./components/admin/ProtectedRoute";
 import FloatingHeader from "./components/FloatingHeader";
 import FloatingFooter from "./components/FloatingFooter";
@@ -51,6 +54,7 @@ function AppLayout() {
             <Route path="experience" element={<ExperienceEditor />} />
             <Route path="projects" element={<ProjectsEditor />} />
             <Route path="pricing" element={<PricingEditor />} />
+            <Route path="blog" element={<BlogEditor />} />
             <Route path="requests" element={<RequestsEditor />} />
             <Route path="settings" element={<SettingsEditor />} />
           </Route>
@@ -68,6 +72,8 @@ function AppLayout() {
           <Routes location={location} key={location.pathname}>
             <Route path="/" element={<motion.div {...pageTransition} className="lg:h-full lg:overflow-hidden"><Index /></motion.div>} />
             <Route path="/portfolio" element={<motion.div {...pageTransition}><Portfolio /></motion.div>} />
+            <Route path="/blog" element={<motion.div {...pageTransition}><Blog /></motion.div>} />
+            <Route path="/blog/:slug" element={<motion.div {...pageTransition}><BlogPost /></motion.div>} />
             <Route path="/pricing" element={<motion.div {...pageTransition}><Pricing /></motion.div>} />
             <Route path="*" element={<motion.div {...pageTransition}><NotFound /></motion.div>} />
           </Routes>

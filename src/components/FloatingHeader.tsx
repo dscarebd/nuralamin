@@ -13,6 +13,7 @@ import headerLogo from "@/assets/header-logo.png";
 const navItems = [
   { label: "Home", to: "/" },
   { label: "Portfolio", to: "/portfolio" },
+  { label: "Blog", to: "/blog" },
   { label: "Pricing", to: "/pricing" },
 ];
 

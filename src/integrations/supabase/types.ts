@@ -19,6 +19,7 @@ export type Database = {
           contact_id: string
           created_at: string
           id: string
+          is_read: boolean
           name: string
           plan_name: string
           project_details: string
@@ -28,6 +29,7 @@ export type Database = {
           contact_id: string
           created_at?: string
           id?: string
+          is_read?: boolean
           name: string
           plan_name: string
           project_details: string
@@ -37,6 +39,7 @@ export type Database = {
           contact_id?: string
           created_at?: string
           id?: string
+          is_read?: boolean
           name?: string
           plan_name?: string
           project_details?: string

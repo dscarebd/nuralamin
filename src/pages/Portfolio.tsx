@@ -241,7 +241,7 @@ export default function Portfolio() {
         </motion.div>
 
         <footer className="py-8 text-center text-xs text-muted-foreground">
-          © 2026 NUR AL AMIN
+          NUR AL AMIN © 2017 – 2026. All Rights Reserved.
         </footer>
       </div>
     </div>

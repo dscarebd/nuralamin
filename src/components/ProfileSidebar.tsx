@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Download, Facebook, Instagram, Send, Youtube, Phone, Mail, MapPin, Share2 } from "lucide-react";
+import { Briefcase, Facebook, Instagram, Send, Youtube, Phone, Mail, MapPin, Share2 } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -57,11 +57,13 @@ export default function ProfileSidebar() {
         <p className="text-sm text-muted-foreground">Website and App Developer</p>
       </motion.div>
 
-      {/* Save Contact */}
+      {/* Hire Me */}
       <motion.div custom={2} variants={fadeUp} initial="hidden" animate="visible" className="w-full">
-        <Button onClick={downloadVCard} className="w-full gap-2 rounded-xl">
-          <Download className="h-4 w-4" />
-          Save Contact
+        <Button asChild className="w-full gap-2 rounded-xl">
+          <a href="/portfolio">
+            <Briefcase className="h-4 w-4" />
+            Hire Me
+          </a>
         </Button>
       </motion.div>
 

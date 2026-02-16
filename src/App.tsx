@@ -69,8 +69,8 @@ function AppLayout() {
             <Route path="*" element={<motion.div {...pageTransition}><NotFound /></motion.div>} />
           </Routes>
         </AnimatePresence>
-        <FloatingFooter />
       </div>
+      <FloatingFooter />
     </div>
   );
 }

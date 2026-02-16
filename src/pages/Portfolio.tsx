@@ -151,23 +151,30 @@ export default function Portfolio() {
 
         {/* Project Detail Dialog */}
         <Dialog open={!!selectedProject} onOpenChange={(open) => !open && setSelectedProject(null)}>
-          <DialogContent className="max-w-2xl animate-enter overflow-hidden p-0">
+          <DialogContent className="max-w-3xl animate-enter overflow-hidden p-0">
             {selectedProject && (
-              <>
-                <div className="relative h-56 w-full overflow-hidden">
-                  <img
-                    src={selectedProject.image}
-                    alt={selectedProject.title}
-                    className="h-full w-full object-cover"
-                  />
-                  <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-background to-transparent" />
+              <div className="flex flex-col sm:flex-row">
+                {/* Left: Image, Name, Category */}
+                <div className="flex flex-col sm:w-1/2">
+                  <div className="relative h-48 w-full overflow-hidden sm:h-full sm:min-h-[320px]">
+                    <img
+                      src={selectedProject.image}
+                      alt={selectedProject.title}
+                      className="h-full w-full object-cover"
+                    />
+                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-background/90 to-transparent p-4 pt-12 sm:from-background/80">
+                      <span className="mb-1.5 inline-block rounded-full bg-primary/20 px-2.5 py-0.5 text-[11px] font-medium text-primary backdrop-blur-sm">
+                        {selectedProject.category}
+                      </span>
+                      <h3 className="text-lg font-bold text-foreground drop-shadow-sm">{selectedProject.title}</h3>
+                    </div>
+                  </div>
                 </div>
-                <div className="space-y-4 p-6 pt-2">
+
+                {/* Right: Description, Tech, Link */}
+                <div className="flex flex-col justify-between space-y-4 p-6 sm:w-1/2">
                   <DialogHeader>
-                    <span className="mb-1 w-fit rounded-full bg-primary/10 px-2.5 py-0.5 text-[11px] font-medium text-primary">
-                      {selectedProject.category}
-                    </span>
-                    <DialogTitle className="text-xl">{selectedProject.title}</DialogTitle>
+                    <DialogTitle className="sr-only">{selectedProject.title}</DialogTitle>
                     <DialogDescription className="text-sm leading-relaxed">
                       {selectedProject.description}
                     </DialogDescription>
@@ -179,13 +186,13 @@ export default function Portfolio() {
                       </span>
                     ))}
                   </div>
-                  <Button asChild className="w-full sm:w-auto">
+                  <Button asChild className="w-full">
                     <a href={selectedProject.link} target="_blank" rel="noopener noreferrer">
                       View Project <ExternalLink className="ml-1 h-4 w-4" />
                     </a>
                   </Button>
                 </div>
-              </>
+              </div>
             )}
           </DialogContent>
         </Dialog>

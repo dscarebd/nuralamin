@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Download, Facebook, Instagram, Send, Youtube, Share2 } from "lucide-react";
+import { Download, Facebook, Instagram, Send, Youtube, Phone, Mail, MapPin, Share2 } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -81,19 +81,44 @@ export default function ProfileSidebar() {
         ))}
       </motion.div>
 
-      {/* QR Section */}
-      <motion.div custom={4} variants={fadeUp} initial="hidden" animate="visible" className="flex w-full flex-col items-center gap-3 rounded-xl border bg-secondary p-4">
-        <p className="text-xs font-medium text-muted-foreground">Scan to Connect</p>
-        <div className="rounded-lg bg-foreground p-2">
-          <QRCodeSVG value={PROFILE_URL} size={100} bgColor="hsl(210,40%,98%)" fgColor="hsl(222,47%,11%)" />
-        </div>
-        <button
-          onClick={() => setQrOpen(true)}
-          className="flex items-center gap-1.5 text-xs text-primary hover:underline"
+      {/* Contact Cards */}
+      <motion.div custom={4} variants={fadeUp} initial="hidden" animate="visible" className="flex w-full flex-col gap-3">
+        <a
+          href="tel:01825668550"
+          className="group relative flex cursor-pointer items-center gap-3 overflow-hidden rounded-xl border border-border/60 bg-secondary p-3 transition-shadow hover:shadow-[0_-2px_20px_-4px_rgba(34,197,94,0.25)]"
         >
-          <Share2 className="h-3 w-3" />
-          Share Profile
-        </button>
+          <div className="absolute inset-x-0 top-0 h-[2px] scale-x-0 bg-gradient-to-r from-transparent via-emerald-400 to-transparent transition-transform duration-300 group-hover:scale-x-100" />
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-400">
+            <Phone className="h-4 w-4" />
+          </div>
+          <div className="min-w-0">
+            <p className="text-[10px] uppercase tracking-wider text-muted-foreground">Mobile</p>
+            <p className="text-xs font-semibold text-foreground">01825668550</p>
+          </div>
+        </a>
+        <a
+          href="mailto:hey@nuralamin.com"
+          className="group relative flex cursor-pointer items-center gap-3 overflow-hidden rounded-xl border border-border/60 bg-secondary p-3 transition-shadow hover:shadow-[0_-2px_20px_-4px_rgba(239,68,68,0.25)]"
+        >
+          <div className="absolute inset-x-0 top-0 h-[2px] scale-x-0 bg-gradient-to-r from-transparent via-red-400 to-transparent transition-transform duration-300 group-hover:scale-x-100" />
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-red-500/15 text-red-400">
+            <Mail className="h-4 w-4" />
+          </div>
+          <div className="min-w-0">
+            <p className="text-[10px] uppercase tracking-wider text-muted-foreground">Email</p>
+            <p className="text-xs font-semibold text-foreground truncate">hey@nuralamin.com</p>
+          </div>
+        </a>
+        <div className="group relative flex items-center gap-3 overflow-hidden rounded-xl border border-border/60 bg-secondary p-3 transition-shadow hover:shadow-[0_-2px_20px_-4px_rgba(249,115,22,0.25)]">
+          <div className="absolute inset-x-0 top-0 h-[2px] scale-x-0 bg-gradient-to-r from-transparent via-orange-400 to-transparent transition-transform duration-300 group-hover:scale-x-100" />
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-orange-500/15 text-orange-400">
+            <MapPin className="h-4 w-4" />
+          </div>
+          <div className="min-w-0">
+            <p className="text-[10px] uppercase tracking-wider text-muted-foreground">Location</p>
+            <p className="text-xs font-semibold text-foreground">Uttara, Dhaka, Bangladesh</p>
+          </div>
+        </div>
       </motion.div>
 
       {/* QR Modal */}

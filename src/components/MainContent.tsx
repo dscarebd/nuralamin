@@ -1,4 +1,3 @@
-import { Phone, Mail, MapPin } from "lucide-react";
 import { motion } from "framer-motion";
 
 const experiences = [
@@ -40,62 +39,6 @@ const stagger = {
 export default function MainContent() {
   return (
     <main className="flex flex-col gap-6">
-      {/* Contact Cards */}
-      <motion.section
-        className="grid gap-3 grid-cols-2"
-        variants={stagger}
-        initial="hidden"
-        animate="visible"
-      >
-        <motion.a
-          variants={fadeUp}
-          whileHover={{ scale: 1.02, y: -2 }}
-          transition={{ type: "spring", stiffness: 300, damping: 20 }}
-          href="tel:01825668550"
-          className="group relative flex cursor-pointer items-center gap-3 overflow-hidden rounded-xl border border-border/60 bg-card p-4 transition-shadow hover:shadow-[0_-2px_20px_-4px_rgba(34,197,94,0.25)]"
-        >
-          <div className="absolute inset-x-0 top-0 h-[2px] scale-x-0 bg-gradient-to-r from-transparent via-emerald-400 to-transparent transition-transform duration-300 group-hover:scale-x-100" />
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-400">
-            <Phone className="h-5 w-5" />
-          </div>
-          <div className="min-w-0">
-            <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Mobile</p>
-            <p className="text-sm font-semibold text-foreground">01825668550</p>
-          </div>
-        </motion.a>
-        <motion.a
-          variants={fadeUp}
-          whileHover={{ scale: 1.02, y: -2 }}
-          transition={{ type: "spring", stiffness: 300, damping: 20 }}
-          href="mailto:hey@nuralamin.com"
-          className="group relative flex cursor-pointer items-center gap-3 overflow-hidden rounded-xl border border-border/60 bg-card p-4 transition-shadow hover:shadow-[0_-2px_20px_-4px_rgba(239,68,68,0.25)]"
-        >
-          <div className="absolute inset-x-0 top-0 h-[2px] scale-x-0 bg-gradient-to-r from-transparent via-red-400 to-transparent transition-transform duration-300 group-hover:scale-x-100" />
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-500/15 text-red-400">
-            <Mail className="h-5 w-5" />
-          </div>
-          <div className="min-w-0">
-            <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Email</p>
-            <p className="text-sm font-semibold text-foreground truncate">hey@nuralamin.com</p>
-          </div>
-        </motion.a>
-        <motion.div
-          variants={fadeUp}
-          whileHover={{ scale: 1.01, y: -2 }}
-          transition={{ type: "spring", stiffness: 300, damping: 20 }}
-          className="group relative col-span-2 flex cursor-pointer items-center gap-3 overflow-hidden rounded-xl border border-border/60 bg-card p-4 transition-shadow hover:shadow-[0_-2px_20px_-4px_rgba(249,115,22,0.25)]"
-        >
-          <div className="absolute inset-x-0 top-0 h-[2px] scale-x-0 bg-gradient-to-r from-transparent via-orange-400 to-transparent transition-transform duration-300 group-hover:scale-x-100" />
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-orange-500/15 text-orange-400">
-            <MapPin className="h-5 w-5" />
-          </div>
-          <div className="min-w-0">
-            <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Location</p>
-            <p className="text-sm font-semibold text-foreground">Uttara, Dhaka, Bangladesh</p>
-          </div>
-        </motion.div>
-      </motion.section>
-
       {/* About */}
       <motion.section
         variants={fadeUp}

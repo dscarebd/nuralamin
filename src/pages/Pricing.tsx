@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, Check, Clock, Zap, Rocket, Send, User, MessageCircle, FileText, Link2, PartyPopper, DollarSign } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -53,6 +53,17 @@ export default function Pricing() {
   const [thankYouOpen, setThankYouOpen] = useState(false);
   const [submittedData, setSubmittedData] = useState<ContactForm | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const hasSubmitted = useRef(false);
+
+  const notifyTelegram = useCallback(async (data: Record<string, string | undefined>, status: "submitted" | "not_requested") => {
+    try {
+      await supabase.functions.invoke("notify-telegram", {
+        body: { ...data, status },
+      });
+    } catch (e) {
+      console.error("Telegram notification failed:", e);
+    }
+  }, []);
 
   const telegramUrl = settings?.telegram_url ?? "https://t.me/nuralamin_official";
   const ctaText = settings?.cta_text ?? "Need a custom solution?";
@@ -73,7 +84,22 @@ export default function Pricing() {
     const minBudget = parsePrice(planPrice);
     setSelectedPlanPrice(minBudget);
     form.reset({ name: "", contact_id: "", project_details: "", project_links: "", budget: "" });
+    hasSubmitted.current = false;
     setFormOpen(true);
+  };
+
+  const handleFormClose = (open: boolean) => {
+    if (!open && !hasSubmitted.current) {
+      const values = form.getValues();
+      const hasData = Object.values(values).some((v) => v?.trim());
+      if (hasData) {
+        notifyTelegram(
+          { name: values.name, contact_id: values.contact_id, project_details: values.project_details, project_links: values.project_links, plan_name: selectedPlan, budget: values.budget },
+          "not_requested"
+        );
+      }
+    }
+    setFormOpen(open);
   };
 
   const onSubmit = async (data: ContactForm) => {
@@ -97,6 +123,12 @@ export default function Pricing() {
       toast({ title: "Error", description: "Failed to submit. Please try again.", variant: "destructive" });
       return;
     }
+
+    hasSubmitted.current = true;
+    notifyTelegram(
+      { name: data.name, contact_id: data.contact_id, project_details: data.project_details, project_links: data.project_links, plan_name: selectedPlan, budget: `$${budgetNum}` },
+      "submitted"
+    );
 
     setSubmittedData(data);
     setFormOpen(false);
@@ -188,7 +220,7 @@ export default function Pricing() {
       </div>
 
       {/* Contact Form Dialog */}
-      <Dialog open={formOpen} onOpenChange={setFormOpen}>
+      <Dialog open={formOpen} onOpenChange={handleFormClose}>
         <DialogContent className="sm:max-w-lg p-0 overflow-hidden rounded-2xl">
           <div className="bg-gradient-to-br from-primary/10 via-accent/5 to-transparent px-6 pt-6 pb-4">
             <DialogHeader>

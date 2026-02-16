@@ -1,39 +1,27 @@
 
 
-## Fix: Footer Appearing Sticky on Mobile/Tablet
+## Portfolio: Two Sections (Website and Mobile App)
 
-### Root Cause
-In `App.tsx`, the layout structure is:
+### What Changes
+The portfolio page will be reorganized into two tabbed sections using the existing Tabs component:
+- **Website** tab: shows projects with categories "Web Application" and "SaaS Product"
+- **Mobile App** tab: shows projects with category "Mobile App"
 
-```text
-<div className="flex h-screen flex-col">
-  <FloatingHeader />
-  <div className="flex-1 overflow-auto">   <-- scrollable area
-    <Routes>...</Routes>
-  </div>
-  <FloatingFooter />                        <-- OUTSIDE scroll area
-</div>
-```
+### How It Works
+- Uses the existing `category` field from the database to filter projects
+- Tabs component (already available in the project) provides the section switching
+- Both tabs show the same card grid layout with the same modal detail view
+- The "All" default view is removed in favor of the two explicit sections
 
-Because the footer is outside the scrollable container, it always stays pinned at the bottom of the viewport regardless of CSS classes. The `sticky` removal had no visible effect.
+### Technical Details
 
-### Solution
-Move `<FloatingFooter />` **inside** the scrollable container so it becomes part of the content flow on mobile/tablet.
+**File: `src/pages/Portfolio.tsx`**
+1. Import `Tabs`, `TabsList`, `TabsTrigger`, `TabsContent` from `@/components/ui/tabs`
+2. Split `dbProjects` into two arrays:
+   - `websiteProjects` -- category includes "Web Application" or "SaaS Product" (or anything not "Mobile App")
+   - `mobileProjects` -- category is "Mobile App"
+3. Wrap the project grid in a `Tabs` component with two `TabsContent` sections, each rendering its own filtered grid of `ProjectCard` components
+4. Default active tab: "website"
 
-**File: `src/App.tsx`**
-- Move `<FloatingFooter />` from after the scrollable div to inside it (after `AnimatePresence`)
-- This way on mobile/tablet it scrolls with content
-- On desktop home page, the `lg:sticky lg:bottom-0` class keeps it pinned at the bottom of the scroll area
+No database changes needed -- the existing `category` column already distinguishes project types.
 
-```text
-After fix:
-<div className="flex h-screen flex-col">
-  <FloatingHeader />
-  <div className="flex-1 overflow-auto">
-    <AnimatePresence>...</AnimatePresence>
-    <FloatingFooter />                    <-- INSIDE scroll area
-  </div>
-</div>
-```
-
-No other files need changes.

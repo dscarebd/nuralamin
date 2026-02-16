@@ -88,27 +88,40 @@ function ProjectCard({ project, onClick }: { project: typeof projects[0]; onClic
   return (
     <motion.div
       variants={fadeUp}
-      whileHover={{ y: -4 }}
-      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      whileHover={{ y: -6, scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+      transition={{ type: "spring", stiffness: 400, damping: 25 }}
       onClick={onClick}
-      className="group relative flex cursor-pointer flex-col overflow-hidden rounded-xl border border-border/60 bg-card transition-shadow hover:shadow-[0_4px_24px_-4px_hsl(var(--primary)/0.2)]"
+      className="group relative flex cursor-pointer flex-col overflow-hidden rounded-xl border border-border/60 bg-card transition-all duration-300 hover:border-primary/30 hover:shadow-[0_8px_30px_-8px_hsl(var(--primary)/0.25)]"
     >
-      <div className="absolute inset-x-0 top-0 z-10 h-[2px] scale-x-0 bg-gradient-to-r from-transparent via-primary to-transparent transition-transform duration-300 group-hover:scale-x-100" />
+      {/* Top accent line */}
+      <div className="absolute inset-x-0 top-0 z-10 h-[2px] origin-left scale-x-0 bg-gradient-to-r from-primary via-primary/80 to-transparent transition-transform duration-500 ease-out group-hover:scale-x-100" />
+      
+      {/* Image */}
       <div className="relative h-40 overflow-hidden">
-        <img src={project.image} alt={project.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
-        <div className="absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-card/40 to-transparent" />
+        <img
+          src={project.image}
+          alt={project.title}
+          className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+        />
+        <div className="absolute inset-0 bg-primary/0 transition-colors duration-300 group-hover:bg-primary/5" />
+        <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-card to-transparent" />
       </div>
+
+      {/* Content */}
       <div className="flex flex-1 flex-col p-5">
-        <span className="mb-2 w-fit rounded-full bg-primary/10 px-2.5 py-0.5 text-[11px] font-medium text-primary">
+        <span className="mb-2 w-fit rounded-full bg-primary/10 px-2.5 py-0.5 text-[11px] font-medium text-primary transition-colors duration-300 group-hover:bg-primary/20">
           {project.category}
         </span>
-        <h3 className="mb-1 text-base font-bold text-foreground">{project.title}</h3>
+        <h3 className="mb-1 text-base font-bold text-foreground transition-colors duration-300 group-hover:text-primary">
+          {project.title}
+        </h3>
         <p className="mb-4 flex-1 line-clamp-2 text-sm leading-relaxed text-muted-foreground">
           {project.description}
         </p>
         <div className="mb-3 flex flex-wrap gap-1.5">
           {project.tech.map((t) => (
-            <span key={t} className="rounded-md bg-secondary px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+            <span key={t} className="rounded-md bg-secondary px-2 py-0.5 text-[10px] font-medium text-muted-foreground transition-colors duration-300 group-hover:bg-primary/10 group-hover:text-primary/80">
               {t}
             </span>
           ))}
@@ -118,9 +131,9 @@ function ProjectCard({ project, onClick }: { project: typeof projects[0]; onClic
           target="_blank"
           rel="noopener noreferrer"
           onClick={(e) => e.stopPropagation()}
-          className="flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+          className="flex items-center gap-1 text-xs font-medium text-primary transition-all duration-300 hover:underline group-hover:translate-x-1"
         >
-          View Project <ExternalLink className="h-3 w-3" />
+          View Project <ExternalLink className="h-3 w-3 transition-transform duration-300 group-hover:rotate-12" />
         </a>
       </div>
     </motion.div>

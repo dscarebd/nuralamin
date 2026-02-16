@@ -1,38 +1,30 @@
 
 
-## Portfolio Digital Business Card — Shariful Islam
+## Project Detail Popup
 
-A dark-themed, single-page digital business card that replicates the design from mycardbd.app/shariflogohut.
+When a user clicks on any project card, a dialog/popup will open showing the full project details in a clean layout.
 
-### Layout
-- **Two-column layout on desktop** (sidebar + main content), stacking to single column on mobile
-- **Dark navy/dark blue background** throughout with subtle card styling
+### What will change
 
-### Left Sidebar
-- **Profile photo** (circular with a colored border ring)
-- **Name & title** — "Shariful Islam" / "Brand Designer"
-- **"Save Contact" button** — downloads a .vcf vCard file with name, phone, email
-- **Social media icons** — Facebook, Instagram, Telegram, WhatsApp, and a "+5" overflow badge
-- **QR Code section** — "Scan to Connect" with a QR code linking to the page, plus a "Share Profile" link
+**File: `src/pages/Portfolio.tsx`**
 
-### Right Main Content
-- **Contact cards** — Mobile number, email, and location displayed in styled dark cards with icons
-- **About section** — Bio paragraph
-- **Experience timeline** — Vertical timeline with blue dots, showing 4 work history entries (title, company, date range badge, description)
+1. Remove the click-to-expand description behavior (remove `expanded` state and `onClick` on description)
+2. Lift state to the parent `Portfolio` component with a `selectedProject` state (stores the clicked project or `null`)
+3. Make the entire card clickable (via `onClick` on the card) to set the selected project
+4. Add a `Dialog` component (already available in the project) that opens when `selectedProject` is set, displaying:
+   - Large project image at the top
+   - Category badge
+   - Project title
+   - Full description text (no truncation)
+   - Tech stack tags
+   - "View Project" link button
+   - Close button (built into Dialog)
 
-### Footer
-- Simple copyright line: "© 2026 Shariful Islam"
+### Technical Details
 
-### Interactive Features
-- **Save Contact button** generates and downloads a .vcf vCard file
-- **QR Code modal** — clicking QR/share opens a modal with a larger QR code and download option
-- **Clickable contact links** — phone calls, email opens mail client, website links open in new tab
-- **Social links** open respective profiles
-- **Fully responsive** — collapses to single column on mobile
-
-### Design Details
-- Dark navy color scheme matching the original
-- Rounded cards with subtle borders
-- Blue accent color for timeline dots and date badges
-- Clean typography with proper hierarchy
+- Import `Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription` from `@/components/ui/dialog`
+- The `ProjectCard` will accept an `onClick` prop instead of managing its own expanded state
+- Description on the card stays truncated at 2 lines (no toggle)
+- The dialog will use `max-w-2xl` for a comfortable reading width
+- The card's "View Project" link click will use `e.stopPropagation()` to prevent opening the dialog when clicking the link directly
 

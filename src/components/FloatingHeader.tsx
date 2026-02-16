@@ -31,7 +31,7 @@ export default function FloatingHeader() {
             <AvatarImage src={photo} alt={name} />
             <AvatarFallback className="text-xs">{name.slice(0, 2).toUpperCase()}</AvatarFallback>
           </Avatar>
-          <img src={headerLogo} alt={name} className="h-5 dark:invert" />
+          <img src={headerLogo} alt={name} className="h-8 dark:invert" />
         </NavLink>
 
         {/* Right: Desktop nav + Theme toggle + mobile menu */}

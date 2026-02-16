@@ -47,6 +47,7 @@ export type Database = {
           display_order: number
           excerpt: string | null
           id: string
+          is_featured: boolean
           is_published: boolean
           published_at: string | null
           slug: string
@@ -62,6 +63,7 @@ export type Database = {
           display_order?: number
           excerpt?: string | null
           id?: string
+          is_featured?: boolean
           is_published?: boolean
           published_at?: string | null
           slug: string
@@ -77,6 +79,7 @@ export type Database = {
           display_order?: number
           excerpt?: string | null
           id?: string
+          is_featured?: boolean
           is_published?: boolean
           published_at?: string | null
           slug?: string

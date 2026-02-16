@@ -79,7 +79,7 @@ export default function ProfileSidebar() {
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className="rounded-full bg-gradient-to-br from-primary to-accent p-1"
+        className="rounded-full bg-gradient-to-br from-primary to-accent p-[2px]"
       >
         <Avatar className="h-32 w-32">
           <AvatarImage src={profile?.photo_url || profilePhoto} alt={name} />

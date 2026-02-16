@@ -4,6 +4,7 @@ import { ExternalLink } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useProjects, useSiteSettings } from "@/hooks/usePublicData";
 import imgEcommerce from "@/assets/project-ecommerce.jpg";
 import imgTaskapp from "@/assets/project-taskapp.jpg";
@@ -84,6 +85,9 @@ export default function Portfolio() {
   const { data: settings } = useSiteSettings();
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
+  const websiteProjects = dbProjects.filter((p) => p.category !== "Mobile App");
+  const mobileProjects = dbProjects.filter((p) => p.category === "Mobile App");
+
   const telegramUrl = settings?.telegram_url ?? "https://t.me/nuralamin_official";
   const footerText = settings?.footer_text ?? "NUR AL AMIN © 2017 – 2026. All Rights Reserved.";
 
@@ -95,11 +99,28 @@ export default function Portfolio() {
           <p className="text-sm text-muted-foreground">Projects I've built and contributed to</p>
         </motion.div>
 
-        <motion.div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" variants={stagger} initial="hidden" animate="visible">
-          {dbProjects.map((project) => (
-            <ProjectCard key={project.id} project={project} onClick={() => setSelectedProject(project)} />
-          ))}
-        </motion.div>
+        <Tabs defaultValue="website" className="w-full">
+          <TabsList className="mb-6">
+            <TabsTrigger value="website">Website</TabsTrigger>
+            <TabsTrigger value="mobile">Mobile App</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="website">
+            <motion.div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" variants={stagger} initial="hidden" animate="visible">
+              {websiteProjects.map((project) => (
+                <ProjectCard key={project.id} project={project} onClick={() => setSelectedProject(project)} />
+              ))}
+            </motion.div>
+          </TabsContent>
+
+          <TabsContent value="mobile">
+            <motion.div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" variants={stagger} initial="hidden" animate="visible">
+              {mobileProjects.map((project) => (
+                <ProjectCard key={project.id} project={project} onClick={() => setSelectedProject(project)} />
+              ))}
+            </motion.div>
+          </TabsContent>
+        </Tabs>
 
         <Dialog open={!!selectedProject} onOpenChange={(open) => !open && setSelectedProject(null)}>
           <DialogContent className="max-w-2xl animate-enter overflow-hidden p-0">

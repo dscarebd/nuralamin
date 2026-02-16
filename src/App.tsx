@@ -19,6 +19,7 @@ import ExperienceEditor from "./pages/admin/ExperienceEditor";
 import ProjectsEditor from "./pages/admin/ProjectsEditor";
 import PricingEditor from "./pages/admin/PricingEditor";
 import SettingsEditor from "./pages/admin/SettingsEditor";
+import RequestsEditor from "./pages/admin/RequestsEditor";
 import ProtectedRoute from "./components/admin/ProtectedRoute";
 
 const queryClient = new QueryClient();
@@ -45,6 +46,7 @@ function AnimatedRoutes() {
           <Route path="experience" element={<ExperienceEditor />} />
           <Route path="projects" element={<ProjectsEditor />} />
           <Route path="pricing" element={<PricingEditor />} />
+          <Route path="requests" element={<RequestsEditor />} />
           <Route path="settings" element={<SettingsEditor />} />
         </Route>
         <Route path="*" element={<motion.div {...pageTransition}><NotFound /></motion.div>} />

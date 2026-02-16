@@ -1,21 +1,15 @@
 
 
-## Add Card Style to Right Side Content
+## Change Portfolio Dialog Layout to Top-Bottom (Stacked)
 
-The left sidebar already has a card wrapper (`rounded-2xl border bg-card p-8`), but the right side (MainContent) has no card container -- it's just raw content. This creates a visual imbalance as seen in the screenshot.
+Currently the project detail dialog uses a side-by-side layout (image left, details right) on desktop. Based on your reference screenshot, you'd like to switch to a stacked layout where the image is on top and the details are below.
 
 ### Changes
 
-**`src/components/MainContent.tsx`**
-- Wrap the entire `<main>` content in a card-style container with `rounded-2xl border bg-card p-8` to match the left sidebar's appearance
-- This gives both sides a consistent card look with matching border, background, and padding
-
-### Technical Detail
-
-The wrapper `<main>` element will get these classes added:
-```
-rounded-2xl border bg-card p-8
-```
-
-This matches the sidebar's existing `rounded-2xl border bg-card p-8` classes exactly, ensuring visual consistency in both light and dark modes.
+**`src/pages/Portfolio.tsx`**
+- Change the dialog inner layout from `flex-col sm:flex-row` to just `flex-col` so the image always sits above the details
+- Remove the `sm:w-1/2` constraint on the image section so it spans full width
+- Limit the image height (e.g., `max-h-72`) so it doesn't take too much vertical space
+- Keep the details section below with its current metadata and button styling
+- Adjust dialog max-width if needed for a cleaner vertical presentation
 

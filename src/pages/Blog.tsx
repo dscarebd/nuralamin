@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Calendar, Tag, ArrowRight, Pin } from "lucide-react";
+import { Calendar, Tag, ArrowRight, Pin, Search } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useBlogPosts, useBlogCategories } from "@/hooks/usePublicData";
 
 const fadeUp = {
@@ -19,11 +20,19 @@ export default function Blog() {
   const { data: posts = [], isLoading } = useBlogPosts();
   const { data: categories = [] } = useBlogCategories();
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [search, setSearch] = useState("");
 
-  const featuredPosts = posts.filter((p) => p.is_featured);
-  const regularPosts = activeCategory
+  const searchLower = search.toLowerCase();
+  const matchesSearch = (post: typeof posts[0]) =>
+    !search ||
+    post.title.toLowerCase().includes(searchLower) ||
+    (post.tags ?? []).some((t) => t.toLowerCase().includes(searchLower));
+
+  const featuredPosts = posts.filter((p) => p.is_featured && matchesSearch(p));
+  const regularPosts = (activeCategory
     ? posts.filter((p) => p.category_id === activeCategory && !p.is_featured)
-    : posts.filter((p) => !p.is_featured);
+    : posts.filter((p) => !p.is_featured)
+  ).filter(matchesSearch);
 
   return (
     <div className="min-h-screen bg-background px-4 py-8 md:px-8">
@@ -32,6 +41,17 @@ export default function Blog() {
           <h1 className="text-2xl font-bold text-foreground">Blog</h1>
           <p className="text-sm text-muted-foreground">Insights, tutorials, and updates</p>
         </motion.div>
+
+        {/* Search bar */}
+        <div className="relative mb-6">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search by title or tags..."
+            className="pl-9"
+          />
+        </div>
 
         {/* Category filters */}
         {categories.length > 0 && (

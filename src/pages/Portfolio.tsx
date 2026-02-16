@@ -18,6 +18,8 @@ const projects = [
     tech: ["React", "Node.js", "MongoDB", "Stripe"],
     link: "#",
     image: imgEcommerce,
+    budget: "$5,000",
+    date: "2025",
   },
   {
     title: "Task Management App",
@@ -26,6 +28,8 @@ const projects = [
     tech: ["React Native", "Firebase", "TypeScript"],
     link: "#",
     image: imgTaskapp,
+    budget: "$3,500",
+    date: "2025",
   },
   {
     title: "Portfolio Website Builder",
@@ -34,6 +38,8 @@ const projects = [
     tech: ["Next.js", "PostgreSQL", "Tailwind CSS"],
     link: "#",
     image: imgPortfolio,
+    budget: "$4,200",
+    date: "2024",
   },
   {
     title: "Restaurant Ordering System",
@@ -42,6 +48,8 @@ const projects = [
     tech: ["React", "Express", "Socket.io", "MySQL"],
     link: "#",
     image: imgRestaurant,
+    budget: "$6,000",
+    date: "2024",
   },
   {
     title: "Fitness Tracker App",
@@ -50,6 +58,8 @@ const projects = [
     tech: ["React Native", "GraphQL", "AWS"],
     link: "#",
     image: imgFitness,
+    budget: "$4,800",
+    date: "2024",
   },
   {
     title: "Learning Management System",
@@ -58,6 +68,8 @@ const projects = [
     tech: ["Next.js", "Supabase", "Tailwind CSS"],
     link: "#",
     image: imgLms,
+    budget: "$7,500",
+    date: "2023",
   },
 ];
 
@@ -154,45 +166,49 @@ export default function Portfolio() {
           <DialogContent className="max-w-4xl animate-enter overflow-hidden p-0">
             {selectedProject && (
               <div className="flex flex-col sm:flex-row sm:min-h-[420px]">
-                {/* Left: Image, Name, Category */}
-                <div className="flex flex-col sm:w-[45%]">
-                  <div className="h-52 w-full overflow-hidden sm:h-64">
+                {/* Left: Image */}
+                <div className="sm:w-[45%]">
+                  <div className="h-52 w-full overflow-hidden sm:h-full">
                     <img
                       src={selectedProject.image}
                       alt={selectedProject.title}
                       className="h-full w-full object-cover"
                     />
                   </div>
-                  <div className="space-y-2 p-5">
-                    <span className="inline-block rounded-full bg-primary/10 px-2.5 py-0.5 text-[11px] font-medium text-primary">
-                      {selectedProject.category}
-                    </span>
-                    <h3 className="text-xl font-bold text-foreground">{selectedProject.title}</h3>
-                  </div>
                 </div>
 
-                {/* Divider */}
-                <div className="mx-0 my-0 hidden border-l border-border sm:block" />
-
-                {/* Right: Description, Tech, Link */}
-                <div className="flex flex-1 flex-col justify-between gap-5 p-5 pt-2 sm:p-6">
-                  <DialogHeader>
-                    <DialogTitle className="sr-only">{selectedProject.title}</DialogTitle>
+                {/* Right: Details */}
+                <div className="flex flex-1 flex-col gap-5 p-6 sm:p-8">
+                  <DialogHeader className="space-y-3">
+                    <DialogTitle className="text-2xl font-extrabold uppercase tracking-tight text-foreground">
+                      {selectedProject.title}
+                    </DialogTitle>
                     <DialogDescription className="text-sm leading-relaxed">
                       {selectedProject.description}
                     </DialogDescription>
                   </DialogHeader>
-                  <div>
-                    <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Tech Stack</p>
-                    <div className="flex flex-wrap gap-2">
-                      {selectedProject.tech.map((t) => (
-                        <span key={t} className="rounded-md bg-secondary px-2.5 py-1 text-xs font-medium text-muted-foreground">
-                          {t}
-                        </span>
-                      ))}
+
+                  {/* Metadata rows */}
+                  <div className="space-y-3 border-t border-border pt-4 text-sm">
+                    <div className="flex gap-6">
+                      <span className="w-24 shrink-0 font-semibold text-foreground">Category</span>
+                      <span className="text-muted-foreground">{selectedProject.category}</span>
+                    </div>
+                    <div className="flex gap-6">
+                      <span className="w-24 shrink-0 font-semibold text-foreground">Date</span>
+                      <span className="text-muted-foreground">{selectedProject.date}</span>
+                    </div>
+                    <div className="flex gap-6">
+                      <span className="w-24 shrink-0 font-semibold text-foreground">Budget</span>
+                      <span className="text-muted-foreground">{selectedProject.budget}</span>
+                    </div>
+                    <div className="flex gap-6">
+                      <span className="w-24 shrink-0 font-semibold text-foreground">Tech Stack</span>
+                      <span className="text-muted-foreground">{selectedProject.tech.join(", ")}</span>
                     </div>
                   </div>
-                  <Button asChild size="lg" className="w-full">
+
+                  <Button asChild size="lg" className="mt-auto w-full">
                     <a href={selectedProject.link} target="_blank" rel="noopener noreferrer">
                       View Project <ExternalLink className="ml-1 h-4 w-4" />
                     </a>

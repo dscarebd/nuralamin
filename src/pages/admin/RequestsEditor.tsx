@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { Trash2, Eye, Inbox, CheckCheck, ClipboardList, MessageCircle, FileText, Link2 } from "lucide-react";
+import { Trash2, Eye, Inbox, CheckCheck, ClipboardList, MessageCircle, FileText, Link2, DollarSign } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 
@@ -15,6 +15,7 @@ interface ContactRequest {
   project_details: string;
   project_links: string | null;
   plan_name: string;
+  budget: string | null;
   created_at: string;
   is_read: boolean;
 }
@@ -173,6 +174,15 @@ export default function RequestsEditor() {
                   </div>
                   <p className="whitespace-pre-wrap text-sm text-foreground leading-relaxed pl-12">{viewItem.project_details}</p>
                 </div>
+                {viewItem.budget && (
+                  <div className="rounded-xl border bg-muted/30 p-4 flex items-center gap-4">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-rose-500/15"><DollarSign className="h-5 w-5 text-rose-500" /></div>
+                    <div>
+                      <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Budget</p>
+                      <p className="text-sm font-semibold text-foreground">{viewItem.budget}</p>
+                    </div>
+                  </div>
+                )}
                 {viewItem.project_links && (
                   <div className="rounded-xl border bg-muted/30 p-4 flex items-center gap-4">
                     <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-sky-500/15"><Link2 className="h-5 w-5 text-sky-500" /></div>

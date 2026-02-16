@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import ImageUpload from "@/components/admin/ImageUpload";
 
 export default function ProfileEditor() {
   const { toast } = useToast();
@@ -20,7 +21,7 @@ export default function ProfileEditor() {
 
   const [form, setForm] = useState({
     name: "", title: "", about: "", phone: "", email: "", location: "",
-    company_name: "", company_url: "", company2_name: "", company2_url: "", profile_url: "",
+    company_name: "", company_url: "", company2_name: "", company2_url: "", profile_url: "", photo_url: "",
   });
 
   useEffect(() => {
@@ -30,7 +31,7 @@ export default function ProfileEditor() {
         phone: profile.phone ?? "", email: profile.email ?? "", location: profile.location ?? "",
         company_name: profile.company_name ?? "", company_url: profile.company_url ?? "",
         company2_name: profile.company2_name ?? "", company2_url: profile.company2_url ?? "",
-        profile_url: profile.profile_url ?? "",
+        profile_url: profile.profile_url ?? "", photo_url: profile.photo_url ?? "",
       });
     }
   }, [profile]);
@@ -68,6 +69,14 @@ export default function ProfileEditor() {
         </Button>
       </div>
       <div className="max-w-2xl space-y-4 rounded-xl border bg-card p-6">
+        <div className="space-y-1.5">
+          <Label>Profile Photo</Label>
+          <ImageUpload
+            value={form.photo_url}
+            onChange={(url) => setForm({ ...form, photo_url: url })}
+            folder="profile"
+          />
+        </div>
         {field("Name", "name")}
         {field("Title", "title")}
         {field("About", "about")}

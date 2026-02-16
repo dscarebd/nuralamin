@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, Check, Clock, Zap, Rocket, Send, User, MessageCircle, FileText, Link2, PartyPopper, DollarSign } from "lucide-react";
+import { Check, Clock, Zap, Rocket, Send, User, MessageCircle, FileText, Link2, PartyPopper, DollarSign } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription,
 } from "@/components/ui/dialog";
-import ThemeToggle from "@/components/ThemeToggle";
+
 import { usePricingPlans, useSiteSettings } from "@/hooks/usePublicData";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -154,12 +154,6 @@ export default function Pricing() {
   return (
     <div className="min-h-screen bg-background px-4 py-10 sm:px-8">
       <div className="mx-auto max-w-5xl">
-        <div className="mb-10 flex items-center justify-between">
-          <Button asChild variant="ghost" size="sm" className="gap-2">
-            <Link to="/"><ArrowLeft className="h-4 w-4" /> Back</Link>
-          </Button>
-          <ThemeToggle />
-        </div>
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mb-12 text-center">
           <h1 className="text-3xl font-bold text-foreground sm:text-4xl">Pricing & Services</h1>

@@ -7,7 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Link } from "react-router-dom";
 import { downloadVCard } from "@/lib/vcard";
-import ThemeToggle from "@/components/ThemeToggle";
+
 import profilePhoto from "@/assets/profile-photo.jpg";
 import anNurLogo from "@/assets/an-nur-digital-logo.png";
 import quranInsightLogo from "@/assets/quran-insight-logo.png";
@@ -75,7 +75,6 @@ export default function ProfileSidebar() {
 
   return (
     <aside className="relative flex h-full flex-col items-center gap-6 rounded-2xl border bg-card p-8">
-      <ThemeToggle className="absolute right-3 top-3" />
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}

@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, ExternalLink } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import ThemeToggle from "@/components/ThemeToggle";
 import { useProjects, useSiteSettings } from "@/hooks/usePublicData";
 import imgEcommerce from "@/assets/project-ecommerce.jpg";
 import imgTaskapp from "@/assets/project-taskapp.jpg";
@@ -91,15 +90,9 @@ export default function Portfolio() {
   return (
     <div className="min-h-screen bg-background px-4 py-8 md:px-8">
       <div className="mx-auto max-w-5xl">
-        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mb-10 flex items-center gap-4">
-          <Button asChild variant="outline" size="icon" className="rounded-full">
-            <Link to="/"><ArrowLeft className="h-4 w-4" /></Link>
-          </Button>
-          <div className="flex-1">
-            <h1 className="text-2xl font-bold text-foreground">My Portfolio</h1>
-            <p className="text-sm text-muted-foreground">Projects I've built and contributed to</p>
-          </div>
-          <ThemeToggle />
+        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mb-10">
+          <h1 className="text-2xl font-bold text-foreground">My Portfolio</h1>
+          <p className="text-sm text-muted-foreground">Projects I've built and contributed to</p>
         </motion.div>
 
         <motion.div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" variants={stagger} initial="hidden" animate="visible">

@@ -49,11 +49,12 @@ export default function MainContent() {
       >
         <motion.a
           variants={fadeUp}
-          whileHover={{ scale: 1.03, y: -2 }}
+          whileHover={{ scale: 1.02, y: -2 }}
           transition={{ type: "spring", stiffness: 300, damping: 20 }}
           href="tel:01754392770"
-          className="flex items-center gap-3 rounded-xl border bg-card p-4"
+          className="group relative flex cursor-pointer items-center gap-3 overflow-hidden rounded-xl border border-border/60 bg-card p-4 transition-shadow hover:shadow-[0_-2px_20px_-4px_rgba(34,197,94,0.25)]"
         >
+          <div className="absolute inset-x-0 top-0 h-[2px] scale-x-0 bg-gradient-to-r from-transparent via-emerald-400 to-transparent transition-transform duration-300 group-hover:scale-x-100" />
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-400">
             <Phone className="h-5 w-5" />
           </div>
@@ -64,11 +65,12 @@ export default function MainContent() {
         </motion.a>
         <motion.a
           variants={fadeUp}
-          whileHover={{ scale: 1.03, y: -2 }}
+          whileHover={{ scale: 1.02, y: -2 }}
           transition={{ type: "spring", stiffness: 300, damping: 20 }}
           href="mailto:sharif.logohut@gmail.com"
-          className="flex items-center gap-3 rounded-xl border bg-card p-4"
+          className="group relative flex cursor-pointer items-center gap-3 overflow-hidden rounded-xl border border-border/60 bg-card p-4 transition-shadow hover:shadow-[0_-2px_20px_-4px_rgba(239,68,68,0.25)]"
         >
+          <div className="absolute inset-x-0 top-0 h-[2px] scale-x-0 bg-gradient-to-r from-transparent via-red-400 to-transparent transition-transform duration-300 group-hover:scale-x-100" />
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-500/15 text-red-400">
             <Mail className="h-5 w-5" />
           </div>
@@ -79,10 +81,11 @@ export default function MainContent() {
         </motion.a>
         <motion.div
           variants={fadeUp}
-          whileHover={{ scale: 1.02, y: -2 }}
+          whileHover={{ scale: 1.01, y: -2 }}
           transition={{ type: "spring", stiffness: 300, damping: 20 }}
-          className="col-span-2 flex items-center gap-3 rounded-xl border bg-card p-4"
+          className="group relative col-span-2 flex cursor-pointer items-center gap-3 overflow-hidden rounded-xl border border-border/60 bg-card p-4 transition-shadow hover:shadow-[0_-2px_20px_-4px_rgba(249,115,22,0.25)]"
         >
+          <div className="absolute inset-x-0 top-0 h-[2px] scale-x-0 bg-gradient-to-r from-transparent via-orange-400 to-transparent transition-transform duration-300 group-hover:scale-x-100" />
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-orange-500/15 text-orange-400">
             <MapPin className="h-5 w-5" />
           </div>

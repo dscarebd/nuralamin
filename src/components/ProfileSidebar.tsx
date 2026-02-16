@@ -39,7 +39,7 @@ export default function ProfileSidebar() {
   const [qrOpen, setQrOpen] = useState(false);
 
   return (
-    <aside className="relative flex flex-col items-center gap-6 rounded-2xl border bg-card p-8">
+    <aside className="relative flex h-full flex-col items-center gap-6 rounded-2xl border bg-card p-8">
       <ThemeToggle className="absolute right-3 top-3" />
       {/* Profile Photo */}
       <motion.div

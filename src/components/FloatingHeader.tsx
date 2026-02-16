@@ -6,7 +6,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { NavLink } from "@/components/NavLink";
 import ThemeToggle from "@/components/ThemeToggle";
 import { useProfile } from "@/hooks/usePublicData";
-import profilePhoto from "@/assets/profile-photo.jpg";
+import headerIcon from "@/assets/header-icon.png";
 import headerLogo from "@/assets/header-logo.png";
 
 const navItems = [
@@ -20,7 +20,7 @@ export default function FloatingHeader() {
   const [open, setOpen] = useState(false);
 
   const name = profile?.name ?? "NUR AL AMIN";
-  const photo = profile?.photo_url || profilePhoto;
+  const photo = profile?.photo_url || headerIcon;
 
   return (
     <div className="sticky top-0 z-50 w-full px-4 pt-3 md:px-8">

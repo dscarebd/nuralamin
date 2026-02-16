@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Download, Facebook, Instagram, Send, MessageCircle, Share2 } from "lucide-react";
+import { Download, Facebook, Instagram, Send, Youtube, MessageCircle, Share2 } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -9,10 +9,11 @@ import { downloadVCard } from "@/lib/vcard";
 import profilePhoto from "@/assets/profile-photo.jpg";
 
 const socials = [
-  { icon: Facebook, href: "https://facebook.com/shariflogohut", label: "Facebook" },
-  { icon: Instagram, href: "https://instagram.com/shariflogohut", label: "Instagram" },
-  { icon: Send, href: "https://t.me/shariflogohut", label: "Telegram" },
-  { icon: MessageCircle, href: "https://wa.me/8801XXXXXXXXX", label: "WhatsApp" },
+  { icon: Facebook, href: "https://facebook.com/nuralamin", label: "Facebook" },
+  { icon: Instagram, href: "https://instagram.com/nuralamin", label: "Instagram" },
+  { icon: Send, href: "https://t.me/nuralamin", label: "Telegram" },
+  { icon: Youtube, href: "https://youtube.com/@nuralamin", label: "YouTube" },
+  { icon: MessageCircle, href: "https://wa.me/8801825668550", label: "WhatsApp" },
 ];
 
 const PROFILE_URL = "https://mycardbd.app/shariflogohut";
@@ -72,9 +73,6 @@ export default function ProfileSidebar() {
             <s.icon className="h-4 w-4" />
           </a>
         ))}
-        <span className="flex h-10 w-10 items-center justify-center rounded-full border bg-secondary text-xs font-semibold text-muted-foreground">
-          +5
-        </span>
       </motion.div>
 
       {/* QR Section */}

@@ -7,6 +7,7 @@ import { NavLink } from "@/components/NavLink";
 import ThemeToggle from "@/components/ThemeToggle";
 import { useProfile } from "@/hooks/usePublicData";
 import profilePhoto from "@/assets/profile-photo.jpg";
+import headerLogo from "@/assets/header-logo.png";
 
 const navItems = [
   { label: "Home", to: "/" },
@@ -30,7 +31,7 @@ export default function FloatingHeader() {
             <AvatarImage src={photo} alt={name} />
             <AvatarFallback className="text-xs">{name.slice(0, 2).toUpperCase()}</AvatarFallback>
           </Avatar>
-          <span className="text-sm font-bold text-foreground">{name}</span>
+          <img src={headerLogo} alt={name} className="h-5 dark:invert" />
         </NavLink>
 
         {/* Right: Desktop nav + Theme toggle + mobile menu */}

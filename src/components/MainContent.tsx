@@ -3,28 +3,28 @@ import { motion } from "framer-motion";
 
 const experiences = [
   {
-    title: "Brand Designer",
-    company: "American Visa Consulting",
-    period: "Jan 2026 — Present",
-    description: "Redesigned the brand identity to establish trust and create strong, lasting recognition for an American visa consulting company. Created a memorable brand presence that encourages clients to choose the company for US visa consultation.",
+    title: "Full Stack Developer",
+    company: "Freelance / Self-Employed",
+    period: "Jan 2024 — Present",
+    description: "Building custom websites and mobile applications for clients worldwide. Specializing in React, Next.js, React Native, and full-stack solutions with modern UI/UX practices.",
   },
   {
-    title: "Brand Designer",
-    company: "Marsus Group",
-    period: "Jan 2024 — Dec 2025",
-    description: "Played a key role in branding 19 sister companies by creating logos, visual systems, and brand guidelines. Delivered end-to-end branding solutions, from logo to full brand guidelines.",
+    title: "Web Developer",
+    company: "Tech Solutions BD",
+    period: "Jun 2022 — Dec 2023",
+    description: "Developed and maintained responsive web applications using React and Node.js. Collaborated with cross-functional teams to deliver scalable and performant digital products.",
   },
   {
-    title: "Brand Designer",
-    company: "Ducky Memories",
-    period: "Jun 2023 — Dec 2023",
-    description: "Designed complete brand identity systems from logo concept to final execution.",
+    title: "Junior Web Developer",
+    company: "Digital Agency",
+    period: "Jan 2021 — May 2022",
+    description: "Built interactive front-end interfaces and integrated REST APIs. Gained hands-on experience with JavaScript, TypeScript, and modern front-end frameworks.",
   },
   {
-    title: "Brand Designer",
-    company: "Sharif Logo Hut",
-    period: "Nov 2021 — Present",
-    description: "Freelance Brand Designer with 300+ branding projects completed for clients worldwide since 2021. Specialized in logo design and full brand identity development.",
+    title: "Freelance Developer",
+    company: "Self-Employed",
+    period: "Jun 2019 — Dec 2020",
+    description: "Started freelancing with WordPress sites and custom landing pages. Gradually transitioned to full-stack development with React and Node.js.",
   },
 ];
 
@@ -105,7 +105,7 @@ export default function MainContent() {
       >
         <h2 className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground">About</h2>
         <p className="text-sm leading-relaxed text-muted-foreground">
-          Assalamu Alaykum, I'm Shariful Islam — a Brand Designer with over 5 years of experience. I work full-time, so communication with me is always easy and responsive. Design is not just my job, it's my passion. I truly enjoy bringing ideas to life and telling your brand's story the right way. I focus on long-term collaboration and always aim to deliver results that satisfy and build trust.
+          Assalamu Alaykum, I'm Nur Al Amin — a Website and App Developer with over 5 years of experience. I work full-time, so communication with me is always easy and responsive. Development is not just my job, it's my passion. I truly enjoy turning ideas into functional, beautiful digital products. I focus on long-term collaboration and always aim to deliver clean, scalable code that satisfies and builds trust.
         </p>
       </motion.section>
 

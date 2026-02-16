@@ -23,6 +23,7 @@ import RequestsEditor from "./pages/admin/RequestsEditor";
 import ProtectedRoute from "./components/admin/ProtectedRoute";
 import FloatingHeader from "./components/FloatingHeader";
 import FloatingFooter from "./components/FloatingFooter";
+import { usePrefetchData } from "./hooks/usePrefetchData";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +34,7 @@ const pageTransition = {
 };
 
 function AppLayout() {
+  usePrefetchData();
   const location = useLocation();
   const isAdmin = location.pathname.startsWith("/admin");
   const isHome = location.pathname === "/";

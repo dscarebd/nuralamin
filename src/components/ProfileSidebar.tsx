@@ -63,7 +63,7 @@ export default function ProfileSidebar() {
       {/* Hire Me */}
       <motion.div custom={2} variants={fadeUp} initial="hidden" animate="visible" className="w-full">
         <Button asChild className="w-full gap-2 rounded-xl">
-          <Link to="/portfolio">
+          <Link to="/pricing">
             <Briefcase className="h-4 w-4" />
             Hire Me
           </Link>

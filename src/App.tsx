@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ThemeProvider } from "next-themes";
 import Index from "./pages/Index";
 import Portfolio from "./pages/Portfolio";
+import Pricing from "./pages/Pricing";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ function AnimatedRoutes() {
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<motion.div {...pageTransition}><Index /></motion.div>} />
         <Route path="/portfolio" element={<motion.div {...pageTransition}><Portfolio /></motion.div>} />
+        <Route path="/pricing" element={<motion.div {...pageTransition}><Pricing /></motion.div>} />
         <Route path="*" element={<motion.div {...pageTransition}><NotFound /></motion.div>} />
       </Routes>
     </AnimatePresence>

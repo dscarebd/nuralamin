@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, ExternalLink } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import imgEcommerce from "@/assets/project-ecommerce.jpg";
@@ -139,9 +140,9 @@ export default function Portfolio() {
           className="mb-10 flex items-center gap-4"
         >
           <Button asChild variant="outline" size="icon" className="rounded-full">
-            <a href="/">
+            <Link to="/">
               <ArrowLeft className="h-4 w-4" />
-            </a>
+            </Link>
           </Button>
           <div>
             <h1 className="text-2xl font-bold text-foreground">My Portfolio</h1>
@@ -238,7 +239,7 @@ export default function Portfolio() {
               </a>
             </Button>
             <Button asChild variant="outline">
-              <a href="/">Back to Profile</a>
+              <Link to="/">Back to Profile</Link>
             </Button>
           </div>
         </motion.div>

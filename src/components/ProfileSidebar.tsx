@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { downloadVCard } from "@/lib/vcard";
 import ThemeToggle from "@/components/ThemeToggle";
 import profilePhoto from "@/assets/profile-photo.jpg";
+import { useProfile, useSocialLinks } from "@/hooks/usePublicData";
 
 const WhatsAppIcon = ({ className }: { className?: string }) => (
   <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
@@ -16,32 +17,63 @@ const WhatsAppIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-const socials = [
-  { icon: Facebook, href: "https://facebook.com/nuralamin", label: "Facebook", hoverBg: "hover:bg-[#1877F2]" },
-  { icon: Instagram, href: "https://instagram.com/nuralamin", label: "Instagram", hoverBg: "hover:bg-gradient-to-br hover:from-[#F58529] hover:via-[#DD2A7B] hover:to-[#8134AF]" },
-  { icon: Send, href: "https://t.me/nuralamin", label: "Telegram", hoverBg: "hover:bg-[#26A5E4]" },
-  { icon: Youtube, href: "https://youtube.com/@nuralamin", label: "YouTube", hoverBg: "hover:bg-[#FF0000]" },
-  { icon: WhatsAppIcon, href: "https://wa.me/8801825668550", label: "WhatsApp", hoverBg: "hover:bg-[#25D366]" },
-];
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  Facebook, Instagram, Send, Youtube, WhatsApp: WhatsAppIcon,
+};
 
-const PROFILE_URL = "https://mycardbd.app/shariflogohut";
+const hoverBgMap: Record<string, string> = {
+  Facebook: "hover:bg-[#1877F2]",
+  Instagram: "hover:bg-gradient-to-br hover:from-[#F58529] hover:via-[#DD2A7B] hover:to-[#8134AF]",
+  Telegram: "hover:bg-[#26A5E4]",
+  YouTube: "hover:bg-[#FF0000]",
+  WhatsApp: "hover:bg-[#25D366]",
+};
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
   visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
+    opacity: 1, y: 0,
     transition: { delay: i * 0.1, duration: 0.5, ease: "easeOut" as const },
   }),
 };
 
 export default function ProfileSidebar() {
   const [qrOpen, setQrOpen] = useState(false);
+  const { data: profile } = useProfile();
+  const { data: socialLinks = [] } = useSocialLinks();
+
+  const name = profile?.name ?? "NUR AL AMIN";
+  const title = profile?.title ?? "Website and App Developer";
+  const phone = profile?.phone ?? "01825668550";
+  const email = profile?.email ?? "hey@nuralamin.com";
+  const location = profile?.location ?? "Uttara, Dhaka, Bangladesh";
+  const companyName = profile?.company_name ?? "An-Nur Digital";
+  const companyUrl = profile?.company_url ?? "https://annurdigital.com/";
+  const company2Name = profile?.company2_name ?? "Quran Insight";
+  const company2Url = profile?.company2_url ?? "https://quraninsight.app/";
+  const profileUrl = profile?.profile_url ?? "https://mycardbd.app/shariflogohut";
+
+  const socials = socialLinks.map((s) => ({
+    icon: iconMap[s.platform] ?? iconMap[s.icon ?? ""] ?? Send,
+    href: s.url,
+    label: s.platform,
+    hoverBg: hoverBgMap[s.platform] ?? "hover:bg-primary",
+  }));
+
+  // Fallback if DB is empty
+  const defaultSocials = [
+    { icon: Facebook, href: "https://facebook.com/nuralamin", label: "Facebook", hoverBg: "hover:bg-[#1877F2]" },
+    { icon: Instagram, href: "https://instagram.com/nuralamin", label: "Instagram", hoverBg: "hover:bg-gradient-to-br hover:from-[#F58529] hover:via-[#DD2A7B] hover:to-[#8134AF]" },
+    { icon: Send, href: "https://t.me/nuralamin", label: "Telegram", hoverBg: "hover:bg-[#26A5E4]" },
+    { icon: Youtube, href: "https://youtube.com/@nuralamin", label: "YouTube", hoverBg: "hover:bg-[#FF0000]" },
+    { icon: WhatsAppIcon, href: "https://wa.me/8801825668550", label: "WhatsApp", hoverBg: "hover:bg-[#25D366]" },
+  ];
+
+  const displaySocials = socials.length > 0 ? socials : defaultSocials;
 
   return (
     <aside className="relative flex h-full flex-col items-center gap-6 rounded-2xl border bg-card p-8">
       <ThemeToggle className="absolute right-3 top-3" />
-      {/* Profile Photo */}
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -49,124 +81,65 @@ export default function ProfileSidebar() {
         className="rounded-full bg-gradient-to-br from-primary to-accent p-1"
       >
         <Avatar className="h-32 w-32">
-          <AvatarImage src={profilePhoto} alt="NUR AL AMIN" />
-          <AvatarFallback className="text-2xl">NA</AvatarFallback>
+          <AvatarImage src={profile?.photo_url || profilePhoto} alt={name} />
+          <AvatarFallback className="text-2xl">{name.slice(0, 2).toUpperCase()}</AvatarFallback>
         </Avatar>
       </motion.div>
 
-      {/* Name & Title */}
       <motion.div custom={1} variants={fadeUp} initial="hidden" animate="visible" className="text-center">
-        <h1 className="text-2xl font-bold text-foreground">NUR AL AMIN</h1>
-        <p className="text-sm text-muted-foreground">Website and App Developer</p>
+        <h1 className="text-2xl font-bold text-foreground">{name}</h1>
+        <p className="text-sm text-muted-foreground">{title}</p>
       </motion.div>
 
-      {/* Hire Me */}
       <motion.div custom={2} variants={fadeUp} initial="hidden" animate="visible" className="w-full">
         <Button asChild className="w-full gap-2 rounded-xl">
-          <Link to="/pricing">
-            <Briefcase className="h-4 w-4" />
-            Hire Me
-          </Link>
+          <Link to="/pricing"><Briefcase className="h-4 w-4" /> Hire Me</Link>
         </Button>
       </motion.div>
 
-      {/* Social Icons */}
       <motion.div custom={3} variants={fadeUp} initial="hidden" animate="visible" className="flex items-center gap-3">
-        {socials.map((s) => (
-          <a
-            key={s.label}
-            href={s.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={s.label}
-            className={`flex h-10 w-10 items-center justify-center rounded-full border bg-secondary text-muted-foreground transition-all duration-300 hover:text-white hover:border-transparent ${s.hoverBg}`}
-          >
+        {displaySocials.map((s) => (
+          <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label}
+            className={`flex h-10 w-10 items-center justify-center rounded-full border bg-secondary text-muted-foreground transition-all duration-300 hover:text-white hover:border-transparent ${s.hoverBg}`}>
             <s.icon className="h-4 w-4" />
           </a>
         ))}
       </motion.div>
 
-      {/* Contact Cards */}
       <motion.div custom={4} variants={fadeUp} initial="hidden" animate="visible" className="flex w-full flex-col gap-3">
-        <a
-          href="tel:01825668550"
-          className="group relative flex cursor-pointer items-center gap-3 overflow-hidden rounded-xl border border-border/60 bg-secondary p-3 transition-shadow hover:shadow-[0_-2px_20px_-4px_rgba(34,197,94,0.25)]"
-        >
+        <a href={`tel:${phone}`} className="group relative flex cursor-pointer items-center gap-3 overflow-hidden rounded-xl border border-border/60 bg-secondary p-3 transition-shadow hover:shadow-[0_-2px_20px_-4px_rgba(34,197,94,0.25)]">
           <div className="absolute inset-x-0 top-0 h-[2px] scale-x-0 bg-gradient-to-r from-transparent via-emerald-400 to-transparent transition-transform duration-300 group-hover:scale-x-100" />
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-400">
-            <Phone className="h-4 w-4" />
-          </div>
-          <div className="min-w-0">
-            <p className="text-[10px] uppercase tracking-wider text-muted-foreground">Mobile</p>
-            <p className="text-xs font-semibold text-foreground">01825668550</p>
-          </div>
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-400"><Phone className="h-4 w-4" /></div>
+          <div className="min-w-0"><p className="text-[10px] uppercase tracking-wider text-muted-foreground">Mobile</p><p className="text-xs font-semibold text-foreground">{phone}</p></div>
         </a>
-        <a
-          href="mailto:hey@nuralamin.com"
-          className="group relative flex cursor-pointer items-center gap-3 overflow-hidden rounded-xl border border-border/60 bg-secondary p-3 transition-shadow hover:shadow-[0_-2px_20px_-4px_rgba(239,68,68,0.25)]"
-        >
+        <a href={`mailto:${email}`} className="group relative flex cursor-pointer items-center gap-3 overflow-hidden rounded-xl border border-border/60 bg-secondary p-3 transition-shadow hover:shadow-[0_-2px_20px_-4px_rgba(239,68,68,0.25)]">
           <div className="absolute inset-x-0 top-0 h-[2px] scale-x-0 bg-gradient-to-r from-transparent via-red-400 to-transparent transition-transform duration-300 group-hover:scale-x-100" />
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-red-500/15 text-red-400">
-            <Mail className="h-4 w-4" />
-          </div>
-          <div className="min-w-0">
-            <p className="text-[10px] uppercase tracking-wider text-muted-foreground">Email</p>
-            <p className="text-xs font-semibold text-foreground truncate">hey@nuralamin.com</p>
-          </div>
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-red-500/15 text-red-400"><Mail className="h-4 w-4" /></div>
+          <div className="min-w-0"><p className="text-[10px] uppercase tracking-wider text-muted-foreground">Email</p><p className="text-xs font-semibold text-foreground truncate">{email}</p></div>
         </a>
         <div className="group relative flex items-center gap-3 overflow-hidden rounded-xl border border-border/60 bg-secondary p-3 transition-shadow hover:shadow-[0_-2px_20px_-4px_rgba(249,115,22,0.25)]">
           <div className="absolute inset-x-0 top-0 h-[2px] scale-x-0 bg-gradient-to-r from-transparent via-orange-400 to-transparent transition-transform duration-300 group-hover:scale-x-100" />
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-orange-500/15 text-orange-400">
-            <MapPin className="h-4 w-4" />
-          </div>
-          <div className="min-w-0">
-            <p className="text-[10px] uppercase tracking-wider text-muted-foreground">Location</p>
-            <p className="text-xs font-semibold text-foreground">Uttara, Dhaka, Bangladesh</p>
-          </div>
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-orange-500/15 text-orange-400"><MapPin className="h-4 w-4" /></div>
+          <div className="min-w-0"><p className="text-[10px] uppercase tracking-wider text-muted-foreground">Location</p><p className="text-xs font-semibold text-foreground">{location}</p></div>
         </div>
-        <a
-          href="https://annurdigital.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group relative flex cursor-pointer items-center gap-3 overflow-hidden rounded-xl border border-border/60 bg-secondary p-3 transition-shadow hover:shadow-[0_-2px_20px_-4px_rgba(99,102,241,0.25)]"
-        >
+        <a href={companyUrl} target="_blank" rel="noopener noreferrer" className="group relative flex cursor-pointer items-center gap-3 overflow-hidden rounded-xl border border-border/60 bg-secondary p-3 transition-shadow hover:shadow-[0_-2px_20px_-4px_rgba(99,102,241,0.25)]">
           <div className="absolute inset-x-0 top-0 h-[2px] scale-x-0 bg-gradient-to-r from-transparent via-indigo-400 to-transparent transition-transform duration-300 group-hover:scale-x-100" />
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-indigo-500/15 text-indigo-400">
-            <Briefcase className="h-4 w-4" />
-          </div>
-          <div className="min-w-0">
-            <p className="text-[10px] uppercase tracking-wider text-muted-foreground">Founder</p>
-            <p className="text-xs font-semibold text-foreground">An-Nur Digital</p>
-          </div>
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-indigo-500/15 text-indigo-400"><Briefcase className="h-4 w-4" /></div>
+          <div className="min-w-0"><p className="text-[10px] uppercase tracking-wider text-muted-foreground">Founder</p><p className="text-xs font-semibold text-foreground">{companyName}</p></div>
         </a>
-        <a
-          href="https://quraninsight.app/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group relative flex cursor-pointer items-center gap-3 overflow-hidden rounded-xl border border-border/60 bg-secondary p-3 transition-shadow hover:shadow-[0_-2px_20px_-4px_rgba(20,184,166,0.25)]"
-        >
+        <a href={company2Url} target="_blank" rel="noopener noreferrer" className="group relative flex cursor-pointer items-center gap-3 overflow-hidden rounded-xl border border-border/60 bg-secondary p-3 transition-shadow hover:shadow-[0_-2px_20px_-4px_rgba(20,184,166,0.25)]">
           <div className="absolute inset-x-0 top-0 h-[2px] scale-x-0 bg-gradient-to-r from-transparent via-teal-400 to-transparent transition-transform duration-300 group-hover:scale-x-100" />
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-teal-500/15 text-teal-400">
-            <Briefcase className="h-4 w-4" />
-          </div>
-          <div className="min-w-0">
-            <p className="text-[10px] uppercase tracking-wider text-muted-foreground">Founder</p>
-            <p className="text-xs font-semibold text-foreground">Quran Insight</p>
-          </div>
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-teal-500/15 text-teal-400"><Briefcase className="h-4 w-4" /></div>
+          <div className="min-w-0"><p className="text-[10px] uppercase tracking-wider text-muted-foreground">Founder</p><p className="text-xs font-semibold text-foreground">{company2Name}</p></div>
         </a>
       </motion.div>
 
-      {/* View Portfolio */}
       <motion.div custom={5} variants={fadeUp} initial="hidden" animate="visible" className="w-full">
         <Button asChild className="w-full gap-2 rounded-xl bg-gradient-to-r from-primary to-accent text-primary-foreground hover:opacity-90">
-          <Link to="/portfolio">
-            <Briefcase className="h-4 w-4" />
-            View My Portfolio
-          </Link>
+          <Link to="/portfolio"><Briefcase className="h-4 w-4" /> View My Portfolio</Link>
         </Button>
       </motion.div>
 
-      {/* QR Modal */}
       <Dialog open={qrOpen} onOpenChange={setQrOpen}>
         <DialogContent className="max-w-xs border bg-card">
           <DialogHeader>
@@ -175,18 +148,10 @@ export default function ProfileSidebar() {
           </DialogHeader>
           <div className="flex flex-col items-center gap-4 py-4">
             <div className="rounded-lg bg-foreground p-3">
-              <QRCodeSVG value={PROFILE_URL} size={200} bgColor="hsl(210,40%,98%)" fgColor="hsl(222,47%,11%)" />
+              <QRCodeSVG value={profileUrl} size={200} bgColor="hsl(210,40%,98%)" fgColor="hsl(222,47%,11%)" />
             </div>
-            <p className="text-xs text-muted-foreground break-all">{PROFILE_URL}</p>
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={() => {
-                navigator.clipboard.writeText(PROFILE_URL);
-              }}
-            >
-              Copy Link
-            </Button>
+            <p className="text-xs text-muted-foreground break-all">{profileUrl}</p>
+            <Button size="sm" variant="outline" onClick={() => navigator.clipboard.writeText(profileUrl)}>Copy Link</Button>
           </div>
         </DialogContent>
       </Dialog>

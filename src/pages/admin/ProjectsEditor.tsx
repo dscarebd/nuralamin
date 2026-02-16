@@ -7,6 +7,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Plus, Trash2, Save } from "lucide-react";
 import ImageUpload from "@/components/admin/ImageUpload";
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from "@dnd-kit/core";
+import { SortableContext, verticalListSortingStrategy, arrayMove } from "@dnd-kit/sortable";
+import SortableItem from "@/components/admin/SortableItem";
+import { useReorder } from "@/hooks/useReorder";
 
 type ProjectForm = { title: string; category: string; description: string; tech: string; image_url: string; link: string; budget: string; date: string };
 
@@ -22,6 +26,21 @@ export default function ProjectsEditor() {
   });
 
   const [editing, setEditing] = useState<Record<string, ProjectForm>>({});
+  const reorderMutation = useReorder("projects", "projects");
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+    useSensor(KeyboardSensor)
+  );
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+    const oldIndex = projects.findIndex((p) => p.id === active.id);
+    const newIndex = projects.findIndex((p) => p.id === over.id);
+    const reordered = arrayMove(projects, oldIndex, newIndex);
+    reorderMutation.mutate(reordered.map((item, i) => ({ id: item.id, display_order: i + 1 })));
+  };
 
   const startEdit = (p: typeof projects[0]) => {
     setEditing({ ...editing, [p.id]: { title: p.title, category: p.category ?? "", description: p.description ?? "", tech: (p.tech ?? []).join(", "), image_url: p.image_url ?? "", link: p.link ?? "", budget: p.budget ?? "", date: p.date ?? "" } });
@@ -65,49 +84,55 @@ export default function ProjectsEditor() {
         <Button onClick={() => addMutation.mutate()} className="gap-2"><Plus className="h-4 w-4" /> Add Project</Button>
       </div>
       <div className="max-w-2xl space-y-4">
-        {projects.map((p) => {
-          const ed = editing[p.id];
-          return (
-            <div key={p.id} className="rounded-xl border bg-card p-4 space-y-3">
-              {ed ? (
-                <>
-                  <div className="grid grid-cols-2 gap-3">
-                    <Input value={ed.title} onChange={(e) => setEditing({ ...editing, [p.id]: { ...ed, title: e.target.value } })} placeholder="Title" />
-                    <Input value={ed.category} onChange={(e) => setEditing({ ...editing, [p.id]: { ...ed, category: e.target.value } })} placeholder="Category" />
+        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+          <SortableContext items={projects.map((p) => p.id)} strategy={verticalListSortingStrategy}>
+            {projects.map((p) => {
+              const ed = editing[p.id];
+              return (
+                <SortableItem key={p.id} id={p.id}>
+                  <div className="rounded-r-xl border border-l-0 bg-card p-4 space-y-3">
+                    {ed ? (
+                      <>
+                        <div className="grid grid-cols-2 gap-3">
+                          <Input value={ed.title} onChange={(e) => setEditing({ ...editing, [p.id]: { ...ed, title: e.target.value } })} placeholder="Title" />
+                          <Input value={ed.category} onChange={(e) => setEditing({ ...editing, [p.id]: { ...ed, category: e.target.value } })} placeholder="Category" />
+                        </div>
+                        <Textarea value={ed.description} onChange={(e) => setEditing({ ...editing, [p.id]: { ...ed, description: e.target.value } })} placeholder="Description" rows={3} />
+                        <Input value={ed.tech} onChange={(e) => setEditing({ ...editing, [p.id]: { ...ed, tech: e.target.value } })} placeholder="Tech (comma separated)" />
+                        <div className="space-y-1.5">
+                          <ImageUpload
+                            value={ed.image_url}
+                            onChange={(url) => setEditing({ ...editing, [p.id]: { ...ed, image_url: url } })}
+                            folder="projects"
+                          />
+                        </div>
+                        <Input value={ed.link} onChange={(e) => setEditing({ ...editing, [p.id]: { ...ed, link: e.target.value } })} placeholder="Project Link" />
+                        <div className="grid grid-cols-2 gap-3">
+                          <Input value={ed.budget} onChange={(e) => setEditing({ ...editing, [p.id]: { ...ed, budget: e.target.value } })} placeholder="Budget" />
+                          <Input value={ed.date} onChange={(e) => setEditing({ ...editing, [p.id]: { ...ed, date: e.target.value } })} placeholder="Date" />
+                        </div>
+                        <div className="flex gap-2">
+                          <Button size="sm" onClick={() => saveMutation.mutate({ id: p.id, data: ed })} className="gap-1"><Save className="h-3 w-3" /> Save</Button>
+                          <Button size="sm" variant="outline" onClick={() => setEditing((e) => { const n = { ...e }; delete n[p.id]; return n; })}>Cancel</Button>
+                        </div>
+                      </>
+                    ) : (
+                      <div className="flex items-start justify-between">
+                        <div onClick={() => startEdit(p)} className="cursor-pointer flex-1">
+                          <h3 className="font-semibold text-foreground">{p.title}</h3>
+                          <p className="text-sm text-muted-foreground">{p.category} · {p.date} · {p.budget}</p>
+                        </div>
+                        <Button variant="ghost" size="icon" onClick={() => deleteMutation.mutate(p.id)}>
+                          <Trash2 className="h-4 w-4 text-destructive" />
+                        </Button>
+                      </div>
+                    )}
                   </div>
-                  <Textarea value={ed.description} onChange={(e) => setEditing({ ...editing, [p.id]: { ...ed, description: e.target.value } })} placeholder="Description" rows={3} />
-                  <Input value={ed.tech} onChange={(e) => setEditing({ ...editing, [p.id]: { ...ed, tech: e.target.value } })} placeholder="Tech (comma separated)" />
-                  <div className="space-y-1.5">
-                    <ImageUpload
-                      value={ed.image_url}
-                      onChange={(url) => setEditing({ ...editing, [p.id]: { ...ed, image_url: url } })}
-                      folder="projects"
-                    />
-                  </div>
-                  <Input value={ed.link} onChange={(e) => setEditing({ ...editing, [p.id]: { ...ed, link: e.target.value } })} placeholder="Project Link" />
-                  <div className="grid grid-cols-2 gap-3">
-                    <Input value={ed.budget} onChange={(e) => setEditing({ ...editing, [p.id]: { ...ed, budget: e.target.value } })} placeholder="Budget" />
-                    <Input value={ed.date} onChange={(e) => setEditing({ ...editing, [p.id]: { ...ed, date: e.target.value } })} placeholder="Date" />
-                  </div>
-                  <div className="flex gap-2">
-                    <Button size="sm" onClick={() => saveMutation.mutate({ id: p.id, data: ed })} className="gap-1"><Save className="h-3 w-3" /> Save</Button>
-                    <Button size="sm" variant="outline" onClick={() => setEditing((e) => { const n = { ...e }; delete n[p.id]; return n; })}>Cancel</Button>
-                  </div>
-                </>
-              ) : (
-                <div className="flex items-start justify-between">
-                  <div onClick={() => startEdit(p)} className="cursor-pointer flex-1">
-                    <h3 className="font-semibold text-foreground">{p.title}</h3>
-                    <p className="text-sm text-muted-foreground">{p.category} · {p.date} · {p.budget}</p>
-                  </div>
-                  <Button variant="ghost" size="icon" onClick={() => deleteMutation.mutate(p.id)}>
-                    <Trash2 className="h-4 w-4 text-destructive" />
-                  </Button>
-                </div>
-              )}
-            </div>
-          );
-        })}
+                </SortableItem>
+              );
+            })}
+          </SortableContext>
+        </DndContext>
       </div>
     </div>
   );

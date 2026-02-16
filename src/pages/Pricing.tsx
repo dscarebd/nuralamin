@@ -253,7 +253,7 @@ export default function Pricing() {
                 <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-amber-500/15"><User className="h-5 w-5 text-amber-500" /></div>
                 <Label htmlFor="name" className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Name *</Label>
               </div>
-              <Input id="name" placeholder="Your full name" className="ml-12 w-[calc(100%-3rem)] rounded-lg border border-input bg-background" {...form.register("name")} />
+              <Input id="name" placeholder="Your full name" className={`ml-12 w-[calc(100%-3rem)] rounded-lg border bg-background ${form.formState.errors.name ? "border-destructive" : "border-input"}`} {...form.register("name")} />
               {form.formState.errors.name && <p className="ml-12 text-xs text-destructive mt-1">{form.formState.errors.name.message}</p>}
             </div>
             <div className="rounded-xl border bg-muted/30 p-4">
@@ -261,7 +261,7 @@ export default function Pricing() {
                 <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-500/15"><MessageCircle className="h-5 w-5 text-emerald-500" /></div>
                 <Label htmlFor="contact_id" className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">WhatsApp or Telegram ID *</Label>
               </div>
-              <Input id="contact_id" placeholder="@username or phone number" className="ml-12 w-[calc(100%-3rem)] rounded-lg border border-input bg-background" {...form.register("contact_id")} />
+              <Input id="contact_id" placeholder="@username or phone number" className={`ml-12 w-[calc(100%-3rem)] rounded-lg border bg-background ${form.formState.errors.contact_id ? "border-destructive" : "border-input"}`} {...form.register("contact_id")} />
               {form.formState.errors.contact_id && <p className="ml-12 text-xs text-destructive mt-1">{form.formState.errors.contact_id.message}</p>}
             </div>
             <div className="rounded-xl border bg-muted/30 p-4">
@@ -269,7 +269,7 @@ export default function Pricing() {
                 <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-violet-500/15"><FileText className="h-5 w-5 text-violet-500" /></div>
                 <Label htmlFor="project_details" className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Project Details *</Label>
               </div>
-              <Textarea id="project_details" placeholder="Describe your project..." rows={3} className="ml-12 w-[calc(100%-3rem)] rounded-lg border border-input bg-background resize-none" {...form.register("project_details")} />
+              <Textarea id="project_details" placeholder="Describe your project..." rows={3} className={`ml-12 w-[calc(100%-3rem)] rounded-lg border bg-background resize-none ${form.formState.errors.project_details ? "border-destructive" : "border-input"}`} {...form.register("project_details")} />
               {form.formState.errors.project_details && <p className="ml-12 text-xs text-destructive mt-1">{form.formState.errors.project_details.message}</p>}
             </div>
             <div className="rounded-xl border bg-muted/30 p-4">
@@ -284,7 +284,7 @@ export default function Pricing() {
                 <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-rose-500/15"><DollarSign className="h-5 w-5 text-rose-500" /></div>
                 <Label htmlFor="budget" className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Budget * (min ${selectedPlanPrice})</Label>
               </div>
-              <Input id="budget" type="number" min={selectedPlanPrice} placeholder={`Minimum $${selectedPlanPrice}`} className="ml-12 w-[calc(100%-3rem)] rounded-lg border border-input bg-background" {...form.register("budget")} />
+              <Input id="budget" type="number" min={selectedPlanPrice} placeholder={`Minimum $${selectedPlanPrice}`} className={`ml-12 w-[calc(100%-3rem)] rounded-lg border bg-background ${form.formState.errors.budget || isBudgetTooLow ? "border-destructive" : "border-input"}`} {...form.register("budget")} />
               {form.formState.errors.budget && <p className="ml-12 text-xs text-destructive mt-1">{form.formState.errors.budget.message}</p>}
               {isBudgetTooLow && <p className="ml-12 text-xs text-amber-500 mt-1">⚠️ Budget must be at least ${selectedPlanPrice}</p>}
             </div>

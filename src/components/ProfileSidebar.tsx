@@ -81,7 +81,7 @@ export default function ProfileSidebar() {
         transition={{ duration: 0.6, ease: "easeOut" }}
         className="rounded-full bg-gradient-to-br from-primary to-accent p-1"
       >
-        <Avatar className="h-32 w-32">
+        <Avatar className="h-28 w-28">
           <AvatarImage src={profile?.photo_url || profilePhoto} alt={name} />
           <AvatarFallback className="text-2xl">{name.slice(0, 2).toUpperCase()}</AvatarFallback>
         </Avatar>

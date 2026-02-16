@@ -60,8 +60,8 @@ function AppLayout() {
 
   return (
     <div className="flex h-screen flex-col">
-      <FloatingHeader />
       <div className="flex-1 overflow-auto">
+        <FloatingHeader />
         <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>
             <Route path="/" element={<motion.div {...pageTransition} className="lg:h-full lg:overflow-hidden"><Index /></motion.div>} />

@@ -27,7 +27,7 @@ export default function MainContent() {
   const footerText = settings?.footer_text ?? "NUR AL AMIN © 2017 – 2026. All Rights Reserved.";
 
   return (
-    <main className="flex h-full flex-col gap-6 overflow-y-auto rounded-2xl border bg-card p-8 scrollbar-thin">
+    <main className="flex h-full flex-col gap-4 overflow-y-auto rounded-2xl border bg-card p-6 scrollbar-thin">
       <motion.section variants={fadeUp} initial="hidden" animate="visible">
         <h2 className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground">About</h2>
         <div className="prose prose-sm dark:prose-invert max-w-none text-sm leading-relaxed text-muted-foreground" dangerouslySetInnerHTML={{ __html: about }} />

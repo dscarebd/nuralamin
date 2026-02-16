@@ -22,6 +22,7 @@ import SettingsEditor from "./pages/admin/SettingsEditor";
 import RequestsEditor from "./pages/admin/RequestsEditor";
 import ProtectedRoute from "./components/admin/ProtectedRoute";
 import FloatingHeader from "./components/FloatingHeader";
+import FloatingFooter from "./components/FloatingFooter";
 
 const queryClient = new QueryClient();
 
@@ -57,6 +58,7 @@ function AppLayout() {
         <Route path="*" element={<motion.div {...pageTransition}><NotFound /></motion.div>} />
         </Routes>
       </AnimatePresence>
+      {!isAdmin && <FloatingFooter />}
     </>
   );
 }

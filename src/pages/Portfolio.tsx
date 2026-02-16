@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import imgEcommerce from "@/assets/project-ecommerce.jpg";
 import imgTaskapp from "@/assets/project-taskapp.jpg";
 import imgPortfolio from "@/assets/project-portfolio.jpg";
@@ -69,15 +70,14 @@ const stagger = {
   visible: { transition: { staggerChildren: 0.1 } },
 };
 
-function ProjectCard({ project, index }: { project: typeof projects[0]; index: number }) {
-  const [expanded, setExpanded] = useState(false);
-
+function ProjectCard({ project, onClick }: { project: typeof projects[0]; onClick: () => void }) {
   return (
     <motion.div
       variants={fadeUp}
       whileHover={{ y: -4 }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
-      className="group relative flex flex-col overflow-hidden rounded-xl border border-border/60 bg-card transition-shadow hover:shadow-[0_4px_24px_-4px_hsl(var(--primary)/0.2)]"
+      onClick={onClick}
+      className="group relative flex cursor-pointer flex-col overflow-hidden rounded-xl border border-border/60 bg-card transition-shadow hover:shadow-[0_4px_24px_-4px_hsl(var(--primary)/0.2)]"
     >
       <div className="absolute inset-x-0 top-0 z-10 h-[2px] scale-x-0 bg-gradient-to-r from-transparent via-primary to-transparent transition-transform duration-300 group-hover:scale-x-100" />
       <div className="relative h-40 overflow-hidden">
@@ -89,12 +89,9 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
           {project.category}
         </span>
         <h3 className="mb-1 text-base font-bold text-foreground">{project.title}</h3>
-        <div
-          onClick={() => setExpanded(!expanded)}
-          className="mb-4 flex-1 cursor-pointer text-sm leading-relaxed text-muted-foreground"
-        >
-          <p className={expanded ? "" : "line-clamp-2"}>{project.description}</p>
-        </div>
+        <p className="mb-4 flex-1 line-clamp-2 text-sm leading-relaxed text-muted-foreground">
+          {project.description}
+        </p>
         <div className="mb-3 flex flex-wrap gap-1.5">
           {project.tech.map((t) => (
             <span key={t} className="rounded-md bg-secondary px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
@@ -106,6 +103,7 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
           href={project.link}
           target="_blank"
           rel="noopener noreferrer"
+          onClick={(e) => e.stopPropagation()}
           className="flex items-center gap-1 text-xs font-medium text-primary hover:underline"
         >
           View Project <ExternalLink className="h-3 w-3" />
@@ -116,6 +114,8 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
 }
 
 export default function Portfolio() {
+  const [selectedProject, setSelectedProject] = useState<typeof projects[0] | null>(null);
+
   return (
     <div className="min-h-screen bg-background px-4 py-8 md:px-8">
       <div className="mx-auto max-w-5xl">
@@ -144,10 +144,51 @@ export default function Portfolio() {
           initial="hidden"
           animate="visible"
         >
-           {projects.map((project, i) => (
-              <ProjectCard key={i} project={project} index={i} />
-            ))}
+          {projects.map((project, i) => (
+            <ProjectCard key={i} project={project} onClick={() => setSelectedProject(project)} />
+          ))}
         </motion.div>
+
+        {/* Project Detail Dialog */}
+        <Dialog open={!!selectedProject} onOpenChange={(open) => !open && setSelectedProject(null)}>
+          <DialogContent className="max-w-2xl overflow-hidden p-0">
+            {selectedProject && (
+              <>
+                <div className="relative h-56 w-full overflow-hidden">
+                  <img
+                    src={selectedProject.image}
+                    alt={selectedProject.title}
+                    className="h-full w-full object-cover"
+                  />
+                  <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-background to-transparent" />
+                </div>
+                <div className="space-y-4 p-6 pt-2">
+                  <DialogHeader>
+                    <span className="mb-1 w-fit rounded-full bg-primary/10 px-2.5 py-0.5 text-[11px] font-medium text-primary">
+                      {selectedProject.category}
+                    </span>
+                    <DialogTitle className="text-xl">{selectedProject.title}</DialogTitle>
+                    <DialogDescription className="text-sm leading-relaxed">
+                      {selectedProject.description}
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedProject.tech.map((t) => (
+                      <span key={t} className="rounded-md bg-secondary px-2.5 py-1 text-xs font-medium text-muted-foreground">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                  <Button asChild className="w-full sm:w-auto">
+                    <a href={selectedProject.link} target="_blank" rel="noopener noreferrer">
+                      View Project <ExternalLink className="ml-1 h-4 w-4" />
+                    </a>
+                  </Button>
+                </div>
+              </>
+            )}
+          </DialogContent>
+        </Dialog>
 
         {/* Contact CTA */}
         <motion.div

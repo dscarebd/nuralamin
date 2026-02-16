@@ -111,17 +111,17 @@ export default function ProfileSidebar() {
       <motion.div custom={4} variants={fadeUp} initial="hidden" animate="visible" className="flex w-full flex-col gap-3">
         <a href={`tel:${phone}`} className="group relative flex cursor-pointer items-center gap-3 overflow-hidden rounded-xl border border-border/60 bg-secondary p-3 transition-shadow hover:shadow-[0_-2px_20px_-4px_rgba(34,197,94,0.25)]">
           <div className="absolute inset-x-0 top-0 h-[2px] scale-x-0 bg-gradient-to-r from-transparent via-emerald-400 to-transparent transition-transform duration-300 group-hover:scale-x-100" />
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald-500/25 text-emerald-500"><Phone className="h-4 w-4" /></div>
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald-500 text-white"><Phone className="h-4 w-4" /></div>
           <div className="min-w-0"><p className="text-[10px] uppercase tracking-wider text-muted-foreground">Mobile</p><p className="text-xs font-semibold text-foreground">{phone}</p></div>
         </a>
         <a href={`mailto:${email}`} className="group relative flex cursor-pointer items-center gap-3 overflow-hidden rounded-xl border border-border/60 bg-secondary p-3 transition-shadow hover:shadow-[0_-2px_20px_-4px_rgba(239,68,68,0.25)]">
           <div className="absolute inset-x-0 top-0 h-[2px] scale-x-0 bg-gradient-to-r from-transparent via-red-400 to-transparent transition-transform duration-300 group-hover:scale-x-100" />
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-red-500/25 text-red-500"><Mail className="h-4 w-4" /></div>
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-red-500 text-white"><Mail className="h-4 w-4" /></div>
           <div className="min-w-0"><p className="text-[10px] uppercase tracking-wider text-muted-foreground">Email</p><p className="text-xs font-semibold text-foreground truncate">{email}</p></div>
         </a>
         <div className="group relative flex items-center gap-3 overflow-hidden rounded-xl border border-border/60 bg-secondary p-3 transition-shadow hover:shadow-[0_-2px_20px_-4px_rgba(249,115,22,0.25)]">
           <div className="absolute inset-x-0 top-0 h-[2px] scale-x-0 bg-gradient-to-r from-transparent via-orange-400 to-transparent transition-transform duration-300 group-hover:scale-x-100" />
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-orange-500/25 text-orange-500"><MapPin className="h-4 w-4" /></div>
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-orange-500 text-white"><MapPin className="h-4 w-4" /></div>
           <div className="min-w-0"><p className="text-[10px] uppercase tracking-wider text-muted-foreground">Location</p><p className="text-xs font-semibold text-foreground">{location}</p></div>
         </div>
         <a href={companyUrl} target="_blank" rel="noopener noreferrer" className="group relative flex cursor-pointer items-center gap-3 overflow-hidden rounded-xl border border-border/60 bg-secondary p-3 transition-shadow hover:shadow-[0_-2px_20px_-4px_rgba(99,102,241,0.25)]">

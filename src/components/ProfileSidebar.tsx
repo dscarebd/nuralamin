@@ -74,7 +74,7 @@ export default function ProfileSidebar() {
   const displaySocials = socials.length > 0 ? socials : defaultSocials;
 
   return (
-    <aside className="relative flex h-full flex-col items-center gap-6 rounded-2xl border bg-card px-8 pt-8 pb-4">
+    <aside className="relative flex h-full flex-col items-center gap-6 rounded-2xl border bg-card px-8 pt-8 pb-2">
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}

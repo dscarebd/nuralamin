@@ -38,7 +38,7 @@ const stagger = {
 
 export default function MainContent() {
   return (
-    <main className="flex flex-col gap-6 rounded-2xl border bg-card p-8">
+    <main className="flex h-full flex-col gap-6 overflow-y-auto rounded-2xl border bg-card p-8 scrollbar-thin">
       {/* About */}
       <motion.section
         variants={fadeUp}

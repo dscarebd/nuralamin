@@ -8,7 +8,7 @@ const Index = () => {
         <div className="lg:sticky lg:top-8 lg:self-stretch">
           <ProfileSidebar />
         </div>
-        <div className="lg:overflow-y-auto lg:pr-2 scrollbar-thin">
+        <div className="lg:overflow-hidden">
           <MainContent />
         </div>
       </div>

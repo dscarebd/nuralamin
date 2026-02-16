@@ -21,6 +21,7 @@ import PricingEditor from "./pages/admin/PricingEditor";
 import SettingsEditor from "./pages/admin/SettingsEditor";
 import RequestsEditor from "./pages/admin/RequestsEditor";
 import ProtectedRoute from "./components/admin/ProtectedRoute";
+import FloatingHeader from "./components/FloatingHeader";
 
 const queryClient = new QueryClient();
 
@@ -30,14 +31,18 @@ const pageTransition = {
   exit: { opacity: 0, transition: { duration: 0.2, ease: "easeIn" as const } },
 };
 
-function AnimatedRoutes() {
+function AppLayout() {
   const location = useLocation();
+  const isAdmin = location.pathname.startsWith("/admin");
+
   return (
-    <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
-        <Route path="/" element={<motion.div {...pageTransition}><Index /></motion.div>} />
-        <Route path="/portfolio" element={<motion.div {...pageTransition}><Portfolio /></motion.div>} />
-        <Route path="/pricing" element={<motion.div {...pageTransition}><Pricing /></motion.div>} />
+    <>
+      {!isAdmin && <FloatingHeader />}
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
+          <Route path="/" element={<motion.div {...pageTransition}><Index /></motion.div>} />
+          <Route path="/portfolio" element={<motion.div {...pageTransition}><Portfolio /></motion.div>} />
+          <Route path="/pricing" element={<motion.div {...pageTransition}><Pricing /></motion.div>} />
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin" element={<ProtectedRoute><Dashboard /></ProtectedRoute>}>
           <Route index element={<DashboardHome />} />
@@ -50,8 +55,9 @@ function AnimatedRoutes() {
           <Route path="settings" element={<SettingsEditor />} />
         </Route>
         <Route path="*" element={<motion.div {...pageTransition}><NotFound /></motion.div>} />
-      </Routes>
-    </AnimatePresence>
+        </Routes>
+      </AnimatePresence>
+    </>
   );
 }
 
@@ -63,7 +69,7 @@ const App = () => (
           <Toaster />
           <Sonner />
           <BrowserRouter>
-            <AnimatedRoutes />
+            <AppLayout />
           </BrowserRouter>
         </TooltipProvider>
       </AuthProvider>

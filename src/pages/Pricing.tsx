@@ -19,9 +19,9 @@ import { useToast } from "@/hooks/use-toast";
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = { Clock, Zap, Rocket };
 const iconColorMap: Record<string, { bg: string; text: string }> = {
-  Clock: { bg: "bg-sky-500/15", text: "text-sky-500" },
-  Zap: { bg: "bg-amber-500/15", text: "text-amber-500" },
-  Rocket: { bg: "bg-rose-500/15", text: "text-rose-500" },
+  Clock: { bg: "bg-sky-500", text: "text-white" },
+  Zap: { bg: "bg-amber-500", text: "text-white" },
+  Rocket: { bg: "bg-rose-500", text: "text-white" },
 };
 
 const fadeUp = {

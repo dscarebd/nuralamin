@@ -22,6 +22,7 @@ type BlogPostForm = {
   category_id: string;
   tags: string;
   is_published: boolean;
+  is_featured: boolean;
 };
 
 function slugify(text: string) {
@@ -50,7 +51,7 @@ export default function BlogEditor() {
 
   const [editing, setEditing] = useState<string | null>(null);
   const [form, setForm] = useState<BlogPostForm>({
-    title: "", slug: "", excerpt: "", content: "", cover_image_url: "", category_id: "", tags: "", is_published: false,
+    title: "", slug: "", excerpt: "", content: "", cover_image_url: "", category_id: "", tags: "", is_published: false, is_featured: false,
   });
   const [newCategory, setNewCategory] = useState("");
   const [catDialogOpen, setCatDialogOpen] = useState(false);
@@ -66,6 +67,7 @@ export default function BlogEditor() {
       category_id: post.category_id ?? "",
       tags: (post.tags ?? []).join(", "),
       is_published: post.is_published,
+      is_featured: post.is_featured,
     });
   };
 
@@ -80,6 +82,7 @@ export default function BlogEditor() {
         category_id: data.category_id || null,
         tags: data.tags.split(",").map((t) => t.trim()).filter(Boolean),
         is_published: data.is_published,
+        is_featured: data.is_featured,
         published_at: data.is_published ? new Date().toISOString() : null,
       }).eq("id", id);
       if (error) throw error;
@@ -262,12 +265,21 @@ export default function BlogEditor() {
                     onChange={(html) => setForm({ ...form, content: html })}
                   />
                 </div>
-                <div className="flex items-center gap-3">
-                  <Switch
-                    checked={form.is_published}
-                    onCheckedChange={(checked) => setForm({ ...form, is_published: checked })}
-                  />
-                  <Label className="text-sm">{form.is_published ? "Published" : "Draft"}</Label>
+                <div className="flex items-center gap-6">
+                  <div className="flex items-center gap-3">
+                    <Switch
+                      checked={form.is_published}
+                      onCheckedChange={(checked) => setForm({ ...form, is_published: checked })}
+                    />
+                    <Label className="text-sm">{form.is_published ? "Published" : "Draft"}</Label>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Switch
+                      checked={form.is_featured}
+                      onCheckedChange={(checked) => setForm({ ...form, is_featured: checked })}
+                    />
+                    <Label className="text-sm">{form.is_featured ? "Featured" : "Not Featured"}</Label>
+                  </div>
                 </div>
                 <div className="flex gap-2">
                   <Button size="sm" onClick={() => saveMutation.mutate({ id: post.id, data: form })} className="gap-1">

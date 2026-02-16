@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Plus, Trash2, Save } from "lucide-react";
+import ImageUpload from "@/components/admin/ImageUpload";
 
 type ProjectForm = { title: string; category: string; description: string; tech: string; image_url: string; link: string; budget: string; date: string };
 
@@ -76,10 +77,14 @@ export default function ProjectsEditor() {
                   </div>
                   <Textarea value={ed.description} onChange={(e) => setEditing({ ...editing, [p.id]: { ...ed, description: e.target.value } })} placeholder="Description" rows={3} />
                   <Input value={ed.tech} onChange={(e) => setEditing({ ...editing, [p.id]: { ...ed, tech: e.target.value } })} placeholder="Tech (comma separated)" />
-                  <div className="grid grid-cols-2 gap-3">
-                    <Input value={ed.image_url} onChange={(e) => setEditing({ ...editing, [p.id]: { ...ed, image_url: e.target.value } })} placeholder="Image URL" />
-                    <Input value={ed.link} onChange={(e) => setEditing({ ...editing, [p.id]: { ...ed, link: e.target.value } })} placeholder="Project Link" />
+                  <div className="space-y-1.5">
+                    <ImageUpload
+                      value={ed.image_url}
+                      onChange={(url) => setEditing({ ...editing, [p.id]: { ...ed, image_url: url } })}
+                      folder="projects"
+                    />
                   </div>
+                  <Input value={ed.link} onChange={(e) => setEditing({ ...editing, [p.id]: { ...ed, link: e.target.value } })} placeholder="Project Link" />
                   <div className="grid grid-cols-2 gap-3">
                     <Input value={ed.budget} onChange={(e) => setEditing({ ...editing, [p.id]: { ...ed, budget: e.target.value } })} placeholder="Budget" />
                     <Input value={ed.date} onChange={(e) => setEditing({ ...editing, [p.id]: { ...ed, date: e.target.value } })} placeholder="Date" />

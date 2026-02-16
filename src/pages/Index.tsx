@@ -1,11 +1,12 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import ProfileSidebar from "@/components/ProfileSidebar";
+import MainContent from "@/components/MainContent";
 
 const Index = () => {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
+    <div className="min-h-screen bg-background px-4 py-8 md:px-8">
+      <div className="mx-auto grid max-w-5xl gap-8 lg:grid-cols-[320px_1fr]">
+        <ProfileSidebar />
+        <MainContent />
       </div>
     </div>
   );

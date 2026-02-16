@@ -93,7 +93,7 @@ export default function MainContent() {
         viewport={{ once: true }}
         className="py-6 text-center text-xs text-muted-foreground"
       >
-        © 2026 NUR AL AMIN
+        NUR AL AMIN © 2017 – 2026. All Rights Reserved.
       </motion.footer>
     </main>
   );

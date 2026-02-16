@@ -57,7 +57,9 @@ export default function FloatingHeader() {
             </SheetTrigger>
             <SheetContent side="right" className="w-64">
               <SheetHeader>
-                <SheetTitle className="text-left">Navigation</SheetTitle>
+                <SheetTitle className="text-left">
+                  <img src={headerLogo} alt={name} className="h-[40px] dark:invert" />
+                </SheetTitle>
               </SheetHeader>
               <nav className="mt-6 flex flex-col gap-2">
                 {navItems.map((item) => (

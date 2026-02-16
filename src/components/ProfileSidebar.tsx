@@ -158,7 +158,7 @@ export default function ProfileSidebar() {
 
       {/* View Portfolio */}
       <motion.div custom={5} variants={fadeUp} initial="hidden" animate="visible" className="w-full">
-        <Button asChild variant="outline" className="w-full gap-2 rounded-xl">
+        <Button asChild className="w-full gap-2 rounded-xl bg-gradient-to-r from-primary to-accent text-primary-foreground hover:opacity-90">
           <Link to="/portfolio">
             <Briefcase className="h-4 w-4" />
             View My Portfolio

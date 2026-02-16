@@ -76,6 +76,10 @@ export default function Pricing() {
     defaultValues: { name: "", contact_id: "", project_details: "", project_links: "", budget: "" },
   });
 
+  const watchedBudget = form.watch("budget");
+  const budgetNum = parseInt((watchedBudget || "").replace(/[^0-9]/g, ""), 10);
+  const isBudgetTooLow = budgetNum > 0 && budgetNum < selectedPlanPrice;
+
   const parsePrice = (price: string) => {
     const num = parseInt(price.replace(/[^0-9]/g, ""), 10);
     return isNaN(num) ? 0 : num;
@@ -280,8 +284,9 @@ export default function Pricing() {
               </div>
               <Input id="budget" type="number" min={selectedPlanPrice} placeholder={`Minimum $${selectedPlanPrice}`} className="ml-12 w-[calc(100%-3rem)] rounded-lg border border-input bg-background" {...form.register("budget")} />
               {form.formState.errors.budget && <p className="ml-12 text-xs text-destructive mt-1">{form.formState.errors.budget.message}</p>}
+              {isBudgetTooLow && <p className="ml-12 text-xs text-amber-500 mt-1">⚠️ Budget must be at least ${selectedPlanPrice}</p>}
             </div>
-            <Button type="submit" className="mt-2 w-full gap-2 rounded-xl" disabled={submitting}>
+            <Button type="submit" className="mt-2 w-full gap-2 rounded-xl" disabled={submitting || isBudgetTooLow}>
               <Send className="h-4 w-4" /> {submitting ? "Submitting..." : "Submit Request"}
             </Button>
           </form>

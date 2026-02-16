@@ -4,9 +4,9 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import ImageUpload from "@/components/admin/ImageUpload";
+import RichTextEditor from "@/components/admin/RichTextEditor";
 
 export default function ProfileEditor() {
   const { toast } = useToast();
@@ -53,7 +53,7 @@ export default function ProfileEditor() {
     <div className="space-y-1.5">
       <Label>{label}</Label>
       {key === "about" ? (
-        <Textarea value={form[key]} onChange={(e) => setForm({ ...form, [key]: e.target.value })} rows={4} />
+        <RichTextEditor value={form[key]} onChange={(html) => setForm({ ...form, [key]: html })} />
       ) : (
         <Input type={type} value={form[key]} onChange={(e) => setForm({ ...form, [key]: e.target.value })} />
       )}

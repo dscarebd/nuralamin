@@ -3,8 +3,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import RichTextEditor from "@/components/admin/RichTextEditor";
 import { Plus, Trash2, Save } from "lucide-react";
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy, arrayMove } from "@dnd-kit/sortable";
@@ -90,7 +90,7 @@ export default function ExperienceEditor() {
                         <Input value={ed.title} onChange={(e) => setEditing({ ...editing, [exp.id]: { ...ed, title: e.target.value } })} placeholder="Title" />
                         <Input value={ed.company} onChange={(e) => setEditing({ ...editing, [exp.id]: { ...ed, company: e.target.value } })} placeholder="Company" />
                         <Input value={ed.period} onChange={(e) => setEditing({ ...editing, [exp.id]: { ...ed, period: e.target.value } })} placeholder="Period" />
-                        <Textarea value={ed.description} onChange={(e) => setEditing({ ...editing, [exp.id]: { ...ed, description: e.target.value } })} placeholder="Description" rows={3} />
+                        <RichTextEditor value={ed.description} onChange={(html) => setEditing({ ...editing, [exp.id]: { ...ed, description: html } })} placeholder="Description" />
                         <div className="flex gap-2">
                           <Button size="sm" onClick={() => saveMutation.mutate({ id: exp.id, data: ed })} className="gap-1"><Save className="h-3 w-3" /> Save</Button>
                           <Button size="sm" variant="outline" onClick={() => setEditing((e) => { const n = { ...e }; delete n[exp.id]; return n; })}>Cancel</Button>

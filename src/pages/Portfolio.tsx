@@ -183,7 +183,7 @@ export default function Portfolio() {
             {selectedProject && (
               <div className="flex flex-col">
                 {/* Top: Image */}
-                <div className="h-48 sm:h-72 w-full overflow-hidden">
+                <div className="aspect-video w-full overflow-hidden">
                   <img
                     src={selectedProject.image}
                     alt={selectedProject.title}

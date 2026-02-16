@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { Trash2, Eye, Inbox } from "lucide-react";
+import { Trash2, Eye, Inbox, CheckCheck } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 
@@ -16,6 +16,7 @@ interface ContactRequest {
   project_links: string | null;
   plan_name: string;
   created_at: string;
+  is_read: boolean;
 }
 
 export default function RequestsEditor() {
@@ -42,9 +43,42 @@ export default function RequestsEditor() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["contact_requests"] });
+      queryClient.invalidateQueries({ queryKey: ["unread_requests_count"] });
       toast({ title: "Deleted", description: "Request removed." });
     },
   });
+
+  const markReadMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("contact_requests").update({ is_read: true }).eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["contact_requests"] });
+      queryClient.invalidateQueries({ queryKey: ["unread_requests_count"] });
+    },
+  });
+
+  const markAllReadMutation = useMutation({
+    mutationFn: async () => {
+      const { error } = await supabase.from("contact_requests").update({ is_read: true }).eq("is_read", false);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["contact_requests"] });
+      queryClient.invalidateQueries({ queryKey: ["unread_requests_count"] });
+      toast({ title: "Done", description: "All requests marked as read." });
+    },
+  });
+
+  const handleView = (r: ContactRequest) => {
+    setViewItem(r);
+    if (!r.is_read) {
+      markReadMutation.mutate(r.id);
+    }
+  };
+
+  const unreadCount = requests.filter((r) => !r.is_read).length;
 
   if (isLoading) {
     return <div className="flex items-center justify-center p-12"><div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" /></div>;
@@ -52,9 +86,16 @@ export default function RequestsEditor() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-foreground">Contact Requests</h1>
-        <p className="text-sm text-muted-foreground">View and manage incoming project requests.</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-foreground">Contact Requests</h1>
+          <p className="text-sm text-muted-foreground">View and manage incoming project requests.</p>
+        </div>
+        {unreadCount > 0 && (
+          <Button variant="outline" size="sm" className="gap-2" onClick={() => markAllReadMutation.mutate()}>
+            <CheckCheck className="h-4 w-4" /> Mark all read
+          </Button>
+        )}
       </div>
 
       {requests.length === 0 ? (
@@ -67,6 +108,7 @@ export default function RequestsEditor() {
           <Table>
             <TableHeader>
               <TableRow>
+                <TableHead className="w-8"></TableHead>
                 <TableHead>Name</TableHead>
                 <TableHead>Contact</TableHead>
                 <TableHead>Plan</TableHead>
@@ -76,13 +118,16 @@ export default function RequestsEditor() {
             </TableHeader>
             <TableBody>
               {requests.map((r) => (
-                <TableRow key={r.id}>
-                  <TableCell className="font-medium">{r.name}</TableCell>
+                <TableRow key={r.id} className={!r.is_read ? "bg-primary/5" : ""}>
+                  <TableCell>
+                    {!r.is_read && <span className="block h-2.5 w-2.5 rounded-full bg-primary" />}
+                  </TableCell>
+                  <TableCell className={`font-medium ${!r.is_read ? "font-bold" : ""}`}>{r.name}</TableCell>
                   <TableCell>{r.contact_id}</TableCell>
                   <TableCell>{r.plan_name}</TableCell>
                   <TableCell>{format(new Date(r.created_at), "MMM d, yyyy")}</TableCell>
                   <TableCell className="text-right space-x-1">
-                    <Button size="icon" variant="ghost" onClick={() => setViewItem(r)}>
+                    <Button size="icon" variant="ghost" onClick={() => handleView(r)}>
                       <Eye className="h-4 w-4" />
                     </Button>
                     <Button size="icon" variant="ghost" className="text-destructive" onClick={() => deleteMutation.mutate(r.id)}>

@@ -3,6 +3,8 @@ import { User, Link2, Briefcase, FolderOpen, DollarSign, Settings, LogOut, Layou
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 const navItems = [
   { label: "Dashboard", icon: LayoutDashboard, path: "/admin" },
@@ -18,6 +20,19 @@ const navItems = [
 export default function AdminSidebar() {
   const location = useLocation();
   const { signOut } = useAuth();
+
+  const { data: unreadCount = 0 } = useQuery({
+    queryKey: ["unread_requests_count"],
+    queryFn: async () => {
+      const { count, error } = await supabase
+        .from("contact_requests")
+        .select("*", { count: "exact", head: true })
+        .eq("is_read", false);
+      if (error) return 0;
+      return count ?? 0;
+    },
+    refetchInterval: 30000,
+  });
 
   return (
     <aside className="flex h-full w-64 flex-col border-r bg-card">
@@ -41,6 +56,11 @@ export default function AdminSidebar() {
           >
             <item.icon className="h-4 w-4" />
             {item.label}
+            {item.label === "Requests" && unreadCount > 0 && (
+              <span className="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-destructive px-1.5 text-[11px] font-semibold text-destructive-foreground">
+                {unreadCount > 99 ? "99+" : unreadCount}
+              </span>
+            )}
           </Link>
         ))}
       </nav>

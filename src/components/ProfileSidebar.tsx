@@ -9,6 +9,8 @@ import { Link } from "react-router-dom";
 import { downloadVCard } from "@/lib/vcard";
 import ThemeToggle from "@/components/ThemeToggle";
 import profilePhoto from "@/assets/profile-photo.jpg";
+import anNurLogo from "@/assets/an-nur-digital-logo.png";
+import quranInsightLogo from "@/assets/quran-insight-logo.png";
 import { useProfile, useSocialLinks } from "@/hooks/usePublicData";
 
 const WhatsAppIcon = ({ className }: { className?: string }) => (
@@ -124,12 +126,12 @@ export default function ProfileSidebar() {
         </div>
         <a href={companyUrl} target="_blank" rel="noopener noreferrer" className="group relative flex cursor-pointer items-center gap-3 overflow-hidden rounded-xl border border-border/60 bg-secondary p-3 transition-shadow hover:shadow-[0_-2px_20px_-4px_rgba(99,102,241,0.25)]">
           <div className="absolute inset-x-0 top-0 h-[2px] scale-x-0 bg-gradient-to-r from-transparent via-indigo-400 to-transparent transition-transform duration-300 group-hover:scale-x-100" />
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-indigo-500/15 text-indigo-400"><Briefcase className="h-4 w-4" /></div>
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full overflow-hidden"><img src={anNurLogo} alt="An-Nur Digital" className="h-9 w-9 object-contain" /></div>
           <div className="min-w-0"><p className="text-[10px] uppercase tracking-wider text-muted-foreground">Founder</p><p className="text-xs font-semibold text-foreground">{companyName}</p></div>
         </a>
         <a href={company2Url} target="_blank" rel="noopener noreferrer" className="group relative flex cursor-pointer items-center gap-3 overflow-hidden rounded-xl border border-border/60 bg-secondary p-3 transition-shadow hover:shadow-[0_-2px_20px_-4px_rgba(20,184,166,0.25)]">
           <div className="absolute inset-x-0 top-0 h-[2px] scale-x-0 bg-gradient-to-r from-transparent via-teal-400 to-transparent transition-transform duration-300 group-hover:scale-x-100" />
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-teal-500/15 text-teal-400"><Briefcase className="h-4 w-4" /></div>
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full overflow-hidden"><img src={quranInsightLogo} alt="Quran Insight" className="h-9 w-9 object-cover rounded-full" /></div>
           <div className="min-w-0"><p className="text-[10px] uppercase tracking-wider text-muted-foreground">Founder</p><p className="text-xs font-semibold text-foreground">{company2Name}</p></div>
         </a>
       </motion.div>

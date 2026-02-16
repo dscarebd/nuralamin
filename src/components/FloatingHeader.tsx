@@ -27,7 +27,7 @@ export default function FloatingHeader() {
       <header className="mx-auto flex h-16 max-w-5xl items-center justify-between rounded-2xl border border-border bg-background/70 px-3 shadow-lg shadow-black/5 backdrop-blur-xl md:px-5">
         {/* Left: Avatar + Name */}
         <NavLink to="/" className="flex items-center gap-2.5">
-          <img src={headerLogo} alt={name} className="h-[46px] dark:invert" />
+          <img src={headerLogo} alt={name} className="h-[50px] dark:invert" />
         </NavLink>
 
         {/* Right: Desktop nav + Theme toggle + mobile menu */}

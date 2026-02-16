@@ -101,8 +101,8 @@ export default function Portfolio() {
           </motion.div>
 
           <TabsList className="w-full sm:w-auto">
-            <TabsTrigger value="website" className="flex-1 sm:flex-initial">Website</TabsTrigger>
-            <TabsTrigger value="mobile" className="flex-1 sm:flex-initial">Mobile App</TabsTrigger>
+            <TabsTrigger value="website" className="flex-1 sm:flex-initial data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Website</TabsTrigger>
+            <TabsTrigger value="mobile" className="flex-1 sm:flex-initial data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Mobile App</TabsTrigger>
           </TabsList>
         </div>
 

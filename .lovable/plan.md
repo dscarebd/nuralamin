@@ -1,25 +1,16 @@
 
 
-## Pricing: Mobile-Only Tabs for Each Plan
+## Make Header Card Bigger
 
-### What Changes
-On mobile, the 3 pricing cards will be shown one at a time using a tabbed toggle (same style as the Portfolio page tabs). On desktop, the existing 3-column grid layout remains unchanged.
+The header bar currently has a fixed height of `h-14` (56px), which looks small compared to the content cards below. The plan is to increase its size for better visual balance.
 
-### How It Works
-- 3 tabs: **Hourly**, **Project Based**, **Monthly Retainer** (matching the plan names from the database)
-- Tabs are full-width with equal 1/3 splits on mobile (same style as Portfolio's 50/50 tabs)
-- On desktop (sm and above), the tabs are hidden and all 3 cards show in the normal grid
-- Default active tab: first plan (Hourly)
+### Changes
 
-### Technical Details
+**File: `src/components/FloatingHeader.tsx`**
 
-**File: `src/pages/Pricing.tsx`**
+1. Increase header height from `h-14` (56px) to `h-16` (64px)
+2. Increase the avatar size from `h-8 w-8` to `h-9 w-9` to match the larger header
+3. Increase horizontal padding from `px-4 md:px-6` to `px-5 md:px-8` for more breathing room
 
-1. Import `Tabs`, `TabsList`, `TabsTrigger`, `TabsContent` from `@/components/ui/tabs`
-2. Import `useIsMobile` from `@/hooks/use-mobile`
-3. On mobile: wrap the plans section in a `Tabs` component with 3 triggers, each `TabsContent` rendering a single plan card
-4. On desktop: render the existing grid of all plans as-is (hidden on mobile)
-5. The `TabsList` gets `w-full sm:hidden` classes, and each `TabsTrigger` gets `flex-1` for equal widths
-6. The desktop grid gets `hidden sm:grid` to only show on larger screens
+These are small CSS-only tweaks -- no structural or backend changes needed.
 
-No database or backend changes needed.

@@ -142,18 +142,48 @@ export default function RequestsEditor() {
       )}
 
       <Dialog open={!!viewItem} onOpenChange={() => setViewItem(null)}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Request from {viewItem?.name}</DialogTitle>
-            <DialogDescription>Submitted on {viewItem ? format(new Date(viewItem.created_at), "PPP 'at' p") : ""}</DialogDescription>
-          </DialogHeader>
+        <DialogContent className="sm:max-w-lg p-0 overflow-hidden rounded-2xl">
           {viewItem && (
-            <div className="space-y-3 text-sm">
-              <div><span className="font-medium text-muted-foreground">Plan:</span> <span className="text-foreground">{viewItem.plan_name}</span></div>
-              <div><span className="font-medium text-muted-foreground">Contact:</span> <span className="text-foreground">{viewItem.contact_id}</span></div>
-              <div><span className="font-medium text-muted-foreground">Project Details:</span><p className="mt-1 whitespace-pre-wrap text-foreground">{viewItem.project_details}</p></div>
-              {viewItem.project_links && <div><span className="font-medium text-muted-foreground">Links:</span> <span className="text-foreground">{viewItem.project_links}</span></div>}
-            </div>
+            <>
+              <div className="bg-gradient-to-br from-primary/10 via-accent/5 to-transparent px-6 pt-6 pb-4">
+                <DialogHeader>
+                  <DialogTitle className="text-xl font-bold">{viewItem.name}</DialogTitle>
+                  <DialogDescription className="text-xs">{format(new Date(viewItem.created_at), "PPP 'at' p")}</DialogDescription>
+                </DialogHeader>
+              </div>
+              <div className="grid gap-3 px-6 pb-6 pt-2">
+                <div className="rounded-xl border bg-muted/30 p-4 flex items-center gap-4">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary text-sm font-bold">📋</div>
+                  <div>
+                    <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Plan</p>
+                    <p className="text-sm font-semibold text-foreground">{viewItem.plan_name}</p>
+                  </div>
+                </div>
+                <div className="rounded-xl border bg-muted/30 p-4 flex items-center gap-4">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary text-sm font-bold">💬</div>
+                  <div>
+                    <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Contact</p>
+                    <p className="text-sm font-semibold text-foreground">{viewItem.contact_id}</p>
+                  </div>
+                </div>
+                <div className="rounded-xl border bg-muted/30 p-4">
+                  <div className="mb-2 flex items-center gap-3">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary text-sm font-bold">📝</div>
+                    <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Project Details</p>
+                  </div>
+                  <p className="whitespace-pre-wrap text-sm text-foreground leading-relaxed pl-12">{viewItem.project_details}</p>
+                </div>
+                {viewItem.project_links && (
+                  <div className="rounded-xl border bg-muted/30 p-4 flex items-center gap-4">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary text-sm font-bold">🔗</div>
+                    <div className="min-w-0">
+                      <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Links</p>
+                      <p className="text-sm font-semibold text-foreground truncate">{viewItem.project_links}</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </>
           )}
         </DialogContent>
       </Dialog>

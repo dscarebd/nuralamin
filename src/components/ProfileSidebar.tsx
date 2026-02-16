@@ -74,14 +74,14 @@ export default function ProfileSidebar() {
   const displaySocials = socials.length > 0 ? socials : defaultSocials;
 
   return (
-    <aside className="relative flex h-full flex-col items-center gap-4 rounded-2xl border bg-card p-6">
+    <aside className="relative flex h-full flex-col items-center gap-3 rounded-2xl border bg-card px-6 py-4">
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
         className="rounded-full bg-gradient-to-br from-primary to-accent p-1"
       >
-        <Avatar className="h-32 w-32">
+        <Avatar className="h-24 w-24">
           <AvatarImage src={profile?.photo_url || profilePhoto} alt={name} />
           <AvatarFallback className="text-2xl">{name.slice(0, 2).toUpperCase()}</AvatarFallback>
         </Avatar>
@@ -107,7 +107,7 @@ export default function ProfileSidebar() {
         ))}
       </motion.div>
 
-      <motion.div custom={4} variants={fadeUp} initial="hidden" animate="visible" className="flex w-full flex-col gap-3">
+      <motion.div custom={4} variants={fadeUp} initial="hidden" animate="visible" className="flex w-full flex-col gap-2">
         <a href={`mailto:${email}`} className="group relative flex cursor-pointer items-center gap-3 overflow-hidden rounded-xl border border-border/60 bg-secondary p-3 transition-shadow hover:shadow-[0_-2px_20px_-4px_rgba(239,68,68,0.25)]">
           <div className="absolute inset-x-0 top-0 h-[2px] scale-x-0 bg-gradient-to-r from-transparent via-red-400 to-transparent transition-transform duration-300 group-hover:scale-x-100" />
           <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-red-500 text-white"><Mail className="h-4 w-4" /></div>

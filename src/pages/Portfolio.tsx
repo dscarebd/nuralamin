@@ -165,7 +165,7 @@ export default function Portfolio() {
         <Dialog open={!!selectedProject} onOpenChange={(open) => !open && setSelectedProject(null)}>
           <DialogContent className="max-w-5xl animate-enter overflow-hidden p-0">
             {selectedProject && (
-              <div className="flex flex-col sm:flex-row sm:min-h-[420px]">
+              <div className="flex flex-col sm:flex-row">
                 {/* Left: Image */}
                 <div className="sm:w-1/2">
                   <div className="w-full overflow-hidden">

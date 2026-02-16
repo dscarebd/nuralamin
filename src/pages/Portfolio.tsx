@@ -179,21 +179,19 @@ export default function Portfolio() {
 
         {/* Project Detail Dialog */}
         <Dialog open={!!selectedProject} onOpenChange={(open) => !open && setSelectedProject(null)}>
-          <DialogContent className="max-w-5xl animate-enter overflow-hidden p-0">
+          <DialogContent className="max-w-2xl animate-enter overflow-hidden p-0">
             {selectedProject && (
-              <div className="flex flex-col sm:flex-row">
-                {/* Left: Image */}
-                <div className="sm:w-1/2">
-                  <div className="h-full w-full overflow-hidden">
-                    <img
-                      src={selectedProject.image}
-                      alt={selectedProject.title}
-                      className="h-full w-full object-cover"
-                    />
-                  </div>
+              <div className="flex flex-col">
+                {/* Top: Image */}
+                <div className="h-48 sm:h-72 w-full overflow-hidden">
+                  <img
+                    src={selectedProject.image}
+                    alt={selectedProject.title}
+                    className="h-full w-full object-cover"
+                  />
                 </div>
 
-                {/* Right: Details */}
+                {/* Bottom: Details */}
                 <div className="flex flex-1 flex-col gap-5 p-6 sm:p-8">
                   <DialogHeader className="space-y-3">
                     <DialogTitle className="text-2xl font-extrabold uppercase tracking-tight text-foreground">

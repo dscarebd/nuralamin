@@ -18,6 +18,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = { Clock, Zap, Rocket };
+const iconColorMap: Record<string, { bg: string; text: string }> = {
+  Clock: { bg: "bg-sky-500/15", text: "text-sky-500" },
+  Zap: { bg: "bg-amber-500/15", text: "text-amber-500" },
+  Rocket: { bg: "bg-rose-500/15", text: "text-rose-500" },
+};
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -139,9 +144,14 @@ export default function Pricing() {
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary px-4 py-1 text-xs font-semibold text-primary-foreground">Most Popular</div>
                 )}
                 <div className="mb-4 flex items-center gap-3">
-                  <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${plan.popular ? "bg-primary/15 text-primary" : "bg-muted text-muted-foreground"}`}>
-                    <Icon className="h-5 w-5" />
-                  </div>
+                  {(() => {
+                    const colors = iconColorMap[plan.icon ?? ""] ?? { bg: "bg-primary/15", text: "text-primary" };
+                    return (
+                      <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${colors.bg}`}>
+                        <Icon className={`h-5 w-5 ${colors.text}`} />
+                      </div>
+                    );
+                  })()}
                   <h2 className="text-lg font-bold text-foreground">{plan.name}</h2>
                 </div>
                 <div className="mb-2 flex items-baseline gap-1">

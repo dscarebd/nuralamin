@@ -30,7 +30,7 @@ export default function MainContent() {
     <main className="flex h-full flex-col gap-6 overflow-y-auto rounded-2xl border bg-card p-8 scrollbar-thin">
       <motion.section variants={fadeUp} initial="hidden" animate="visible">
         <h2 className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground">About</h2>
-        <p className="text-sm leading-relaxed text-muted-foreground">{about}</p>
+        <div className="prose prose-sm dark:prose-invert max-w-none text-sm leading-relaxed text-muted-foreground" dangerouslySetInnerHTML={{ __html: about }} />
       </motion.section>
 
       <div className="h-px bg-border" />
@@ -50,7 +50,7 @@ export default function MainContent() {
                   <span className="shrink-0 rounded-full bg-primary/15 px-3 py-1 text-[11px] font-medium text-primary">{exp.period}</span>
                 </div>
                 <div className="mt-2 rounded-lg border bg-secondary/50 p-3">
-                  <p className="text-sm leading-relaxed text-muted-foreground">{exp.description}</p>
+                  <div className="prose prose-sm dark:prose-invert max-w-none text-sm leading-relaxed text-muted-foreground" dangerouslySetInnerHTML={{ __html: exp.description ?? "" }} />
                 </div>
               </div>
             </motion.div>

@@ -205,7 +205,7 @@ export default function Pricing() {
           <Tabs defaultValue={dbPlans[0]?.id} className="sm:hidden">
             <TabsList className="mb-6 w-full">
               {dbPlans.map((plan) => (
-                <TabsTrigger key={plan.id} value={plan.id} className="flex-1 text-xs">
+                <TabsTrigger key={plan.id} value={plan.id} className="flex-1 text-xs data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                   {plan.name}
                 </TabsTrigger>
               ))}

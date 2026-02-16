@@ -59,8 +59,6 @@ function ProjectCard({ project, onClick }: { project: Project; onClick: () => vo
       <div className="absolute inset-x-0 top-0 z-10 h-[2px] origin-left scale-x-0 bg-gradient-to-r from-primary via-primary/80 to-transparent transition-transform duration-500 ease-out group-hover:scale-x-100" />
       <div className="relative h-40 overflow-hidden">
         <img src={image} alt={project.title} className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
-        <div className="absolute inset-0 bg-primary/0 transition-colors duration-300 group-hover:bg-primary/5" />
-        <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-card/50 to-transparent" />
       </div>
       <div className="flex flex-1 flex-col p-5">
         <span className="mb-2 w-fit rounded-full bg-primary/10 px-2.5 py-0.5 text-[11px] font-medium text-primary transition-colors duration-300 group-hover:bg-primary/20">

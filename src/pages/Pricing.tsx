@@ -176,7 +176,7 @@ export default function Pricing() {
                 <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-amber-500/15"><User className="h-5 w-5 text-amber-500" /></div>
                 <Label htmlFor="name" className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Name *</Label>
               </div>
-              <Input id="name" placeholder="Your full name" className="ml-12 w-[calc(100%-3rem)] border-none bg-transparent px-0 shadow-none focus-visible:ring-0" {...form.register("name")} />
+              <Input id="name" placeholder="Your full name" className="ml-12 w-[calc(100%-3rem)] rounded-lg border border-input bg-background" {...form.register("name")} />
               {form.formState.errors.name && <p className="ml-12 text-xs text-destructive mt-1">{form.formState.errors.name.message}</p>}
             </div>
             <div className="rounded-xl border bg-muted/30 p-4">
@@ -184,7 +184,7 @@ export default function Pricing() {
                 <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-500/15"><MessageCircle className="h-5 w-5 text-emerald-500" /></div>
                 <Label htmlFor="contact_id" className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">WhatsApp or Telegram ID *</Label>
               </div>
-              <Input id="contact_id" placeholder="@username or phone number" className="ml-12 w-[calc(100%-3rem)] border-none bg-transparent px-0 shadow-none focus-visible:ring-0" {...form.register("contact_id")} />
+              <Input id="contact_id" placeholder="@username or phone number" className="ml-12 w-[calc(100%-3rem)] rounded-lg border border-input bg-background" {...form.register("contact_id")} />
               {form.formState.errors.contact_id && <p className="ml-12 text-xs text-destructive mt-1">{form.formState.errors.contact_id.message}</p>}
             </div>
             <div className="rounded-xl border bg-muted/30 p-4">
@@ -192,7 +192,7 @@ export default function Pricing() {
                 <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-violet-500/15"><FileText className="h-5 w-5 text-violet-500" /></div>
                 <Label htmlFor="project_details" className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Project Details *</Label>
               </div>
-              <Textarea id="project_details" placeholder="Describe your project..." rows={3} className="ml-12 w-[calc(100%-3rem)] border-none bg-transparent px-0 shadow-none focus-visible:ring-0 resize-none" {...form.register("project_details")} />
+              <Textarea id="project_details" placeholder="Describe your project..." rows={3} className="ml-12 w-[calc(100%-3rem)] rounded-lg border border-input bg-background resize-none" {...form.register("project_details")} />
               {form.formState.errors.project_details && <p className="ml-12 text-xs text-destructive mt-1">{form.formState.errors.project_details.message}</p>}
             </div>
             <div className="rounded-xl border bg-muted/30 p-4">
@@ -200,7 +200,7 @@ export default function Pricing() {
                 <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-sky-500/15"><Link2 className="h-5 w-5 text-sky-500" /></div>
                 <Label htmlFor="project_links" className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Project Links (optional)</Label>
               </div>
-              <Input id="project_links" placeholder="Reference URLs, designs, etc." className="ml-12 w-[calc(100%-3rem)] border-none bg-transparent px-0 shadow-none focus-visible:ring-0" {...form.register("project_links")} />
+              <Input id="project_links" placeholder="Reference URLs, designs, etc." className="ml-12 w-[calc(100%-3rem)] rounded-lg border border-input bg-background" {...form.register("project_links")} />
             </div>
             <Button type="submit" className="mt-2 w-full gap-2 rounded-xl" disabled={submitting}>
               <Send className="h-4 w-4" /> {submitting ? "Submitting..." : "Submit Request"}

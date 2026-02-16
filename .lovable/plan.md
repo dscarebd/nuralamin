@@ -1,101 +1,55 @@
 
-# Admin Panel for Portfolio Website
 
-## Overview
-Build a fully functional admin panel backed by Supabase database, allowing you to manage all website content (profile info, social links, experience, portfolio projects, pricing plans) through a dashboard UI -- similar to WordPress.
+# Fix: RLS Policies Blocking Public Data
 
-## What You'll Get
+## Problem
+All RLS policies on every table were created as **RESTRICTIVE** instead of **PERMISSIVE**. In PostgreSQL:
+- **PERMISSIVE** (default): Access is granted if ANY policy passes
+- **RESTRICTIVE**: Access is granted only if ALL policies pass
 
-### 1. Supabase Backend Setup
-- **Authentication**: Email/password login for admin access
-- **Database tables** for all dynamic content:
-  - `profile` -- name, title, about text, phone, email, location, photo URL
-  - `social_links` -- platform, URL, display order
-  - `experiences` -- title, company, period, description, display order
-  - `projects` -- title, category, description, tech stack, image, link, budget, date
-  - `pricing_plans` -- name, price, description, features, popular flag, order
-  - `site_settings` -- footer text, CTA text, and other misc settings
-- **RLS policies**: Only authenticated admin can read/write; public can read
-- **Seed data**: Pre-populate tables with your current hardcoded content
+Since the "Admins can manage" policy fails for unauthenticated visitors, the "Public can read" policy is effectively blocked -- making the entire site appear empty.
 
-### 2. Admin Panel UI (`/admin`)
-- **Login page** (`/admin/login`) -- email/password form
-- **Dashboard layout** with sidebar navigation:
-  - **Profile** -- Edit name, title, about, contact info, photo
-  - **Social Links** -- Add/edit/delete/reorder social media links
-  - **Experience** -- Add/edit/delete/reorder work experience entries
-  - **Portfolio** -- Add/edit/delete projects with image upload
-  - **Pricing** -- Edit plan names, prices, features, toggle popular
-  - **Settings** -- Footer text, CTA text, Telegram link
-- Each section has inline editing with save/cancel
-- Toast notifications on save
+## Solution
+Drop all existing RLS policies and recreate them as **PERMISSIVE** (the default). This is a single database migration affecting all 6 tables:
+- `profile`
+- `social_links`
+- `experiences`
+- `projects`
+- `pricing_plans`
+- `site_settings`
 
-### 3. Frontend Updates
-- Replace all hardcoded data arrays in `ProfileSidebar`, `MainContent`, `Portfolio`, and `Pricing` with data fetched from Supabase using TanStack Query
-- Loading skeletons while data loads
-- Graceful fallback if database is empty
+No code changes are needed -- the frontend hooks are correct. Once the policies are fixed, data will immediately appear on the site.
 
 ## Technical Details
 
-### New Files (~15 files)
+### Database Migration (1 migration)
+For each table, the migration will:
+1. Drop the existing RESTRICTIVE "Public can read" policy
+2. Drop the existing RESTRICTIVE "Admins can manage" policy  
+3. Recreate both as PERMISSIVE policies
+
+Example pattern per table:
 ```text
-src/integrations/supabase/        -- Supabase client setup
-src/contexts/AuthContext.tsx       -- Auth state management
-src/pages/admin/Login.tsx          -- Admin login page
-src/pages/admin/Dashboard.tsx      -- Admin dashboard layout
-src/pages/admin/ProfileEditor.tsx  -- Profile editing
-src/pages/admin/SocialEditor.tsx   -- Social links editor
-src/pages/admin/ExperienceEditor.tsx
-src/pages/admin/ProjectsEditor.tsx
-src/pages/admin/PricingEditor.tsx
-src/pages/admin/SettingsEditor.tsx
-src/components/admin/AdminSidebar.tsx
-src/components/admin/ProtectedRoute.tsx
-src/hooks/useProfile.ts           -- Data hooks for each table
-src/hooks/useProjects.ts
-src/hooks/usePricing.ts
-(+ Supabase migrations)
+DROP POLICY "Public can read X" ON public.X;
+DROP POLICY "Admins can manage X" ON public.X;
+
+CREATE POLICY "Public can read X" ON public.X
+  FOR SELECT USING (true);  -- PERMISSIVE by default
+
+CREATE POLICY "Admins can manage X" ON public.X
+  FOR ALL USING (has_role(auth.uid(), 'admin'))
+  WITH CHECK (has_role(auth.uid(), 'admin'));
 ```
 
-### Modified Files
-- `src/App.tsx` -- Add admin routes
-- `src/components/ProfileSidebar.tsx` -- Fetch data from Supabase
-- `src/components/MainContent.tsx` -- Fetch data from Supabase
-- `src/pages/Portfolio.tsx` -- Fetch data from Supabase
-- `src/pages/Pricing.tsx` -- Fetch data from Supabase
+The `profile` table has separate INSERT/UPDATE/DELETE policies that will also be recreated as PERMISSIVE.
 
-### Database Schema
+### What This Fixes
+- Experience section will show all 4 entries
+- Profile sidebar will show name, title, contact info
+- Portfolio projects will display
+- Pricing plans will appear
+- All site settings (footer text, etc.) will load
 
-```text
-profile
-  id, name, title, about, phone, email, location,
-  photo_url, company_name, company_url, company2_name,
-  company2_url, profile_url
+### No Data Was Lost
+All your content (experiences, profile, projects, pricing) is safely stored in the database. Only the access rules need fixing.
 
-social_links
-  id, platform, url, display_order
-
-experiences
-  id, title, company, period, description, display_order
-
-projects
-  id, title, category, description, tech (text[]),
-  image_url, link, budget, date, display_order
-
-pricing_plans
-  id, name, icon, price, unit, description,
-  features (text[]), popular, display_order
-
-site_settings
-  id, key, value
-```
-
-### Implementation Order
-1. Enable Supabase Cloud on the project
-2. Create all database tables and seed with current data
-3. Set up authentication and RLS policies
-4. Build admin login page
-5. Build admin dashboard with sidebar navigation
-6. Build each editor section (profile, socials, experience, projects, pricing)
-7. Update public-facing pages to read from database
-8. Test end-to-end

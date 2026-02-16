@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Separator } from "@/components/ui/separator";
 import { Menu } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -61,7 +62,8 @@ export default function FloatingHeader() {
                   <img src={headerLogo} alt={name} className="h-[40px] dark:invert" />
                 </SheetTitle>
               </SheetHeader>
-              <nav className="mt-6 flex flex-col gap-2">
+              <Separator className="my-3" />
+              <nav className="flex flex-col gap-2">
                 {navItems.map((item) => (
                   <NavLink
                     key={item.to}

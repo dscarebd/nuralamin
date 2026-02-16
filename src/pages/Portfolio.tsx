@@ -1,6 +1,12 @@
 import { motion } from "framer-motion";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import imgEcommerce from "@/assets/project-ecommerce.jpg";
+import imgTaskapp from "@/assets/project-taskapp.jpg";
+import imgPortfolio from "@/assets/project-portfolio.jpg";
+import imgRestaurant from "@/assets/project-restaurant.jpg";
+import imgFitness from "@/assets/project-fitness.jpg";
+import imgLms from "@/assets/project-lms.jpg";
 
 const projects = [
   {
@@ -9,6 +15,7 @@ const projects = [
     description: "A full-featured e-commerce platform built with React and Node.js, featuring product management, cart system, and payment integration.",
     tech: ["React", "Node.js", "MongoDB", "Stripe"],
     link: "#",
+    image: imgEcommerce,
   },
   {
     title: "Task Management App",
@@ -16,6 +23,7 @@ const projects = [
     description: "A cross-platform task management application built with React Native, featuring real-time sync, push notifications, and team collaboration.",
     tech: ["React Native", "Firebase", "TypeScript"],
     link: "#",
+    image: imgTaskapp,
   },
   {
     title: "Portfolio Website Builder",
@@ -23,6 +31,7 @@ const projects = [
     description: "A drag-and-drop portfolio builder that allows creatives to showcase their work with custom themes and domains.",
     tech: ["Next.js", "PostgreSQL", "Tailwind CSS"],
     link: "#",
+    image: imgPortfolio,
   },
   {
     title: "Restaurant Ordering System",
@@ -30,6 +39,7 @@ const projects = [
     description: "An online ordering system for restaurants with real-time order tracking, menu management, and delivery integration.",
     tech: ["React", "Express", "Socket.io", "MySQL"],
     link: "#",
+    image: imgRestaurant,
   },
   {
     title: "Fitness Tracker App",
@@ -37,6 +47,7 @@ const projects = [
     description: "A health and fitness tracking app with workout plans, progress charts, and social features for motivation.",
     tech: ["React Native", "GraphQL", "AWS"],
     link: "#",
+    image: imgFitness,
   },
   {
     title: "Learning Management System",
@@ -44,6 +55,7 @@ const projects = [
     description: "An LMS platform with video courses, quizzes, certificates, and student progress analytics for educational institutions.",
     tech: ["Next.js", "Supabase", "Tailwind CSS"],
     link: "#",
+    image: imgLms,
   },
 ];
 
@@ -91,9 +103,14 @@ export default function Portfolio() {
               variants={fadeUp}
               whileHover={{ y: -4 }}
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              className="group relative flex flex-col overflow-hidden rounded-xl border border-border/60 bg-card p-5 transition-shadow hover:shadow-[0_4px_24px_-4px_hsl(var(--primary)/0.2)]"
+              className="group relative flex flex-col overflow-hidden rounded-xl border border-border/60 bg-card transition-shadow hover:shadow-[0_4px_24px_-4px_hsl(var(--primary)/0.2)]"
             >
-              <div className="absolute inset-x-0 top-0 h-[2px] scale-x-0 bg-gradient-to-r from-transparent via-primary to-transparent transition-transform duration-300 group-hover:scale-x-100" />
+              <div className="absolute inset-x-0 top-0 z-10 h-[2px] scale-x-0 bg-gradient-to-r from-transparent via-primary to-transparent transition-transform duration-300 group-hover:scale-x-100" />
+              <div className="relative h-40 overflow-hidden">
+                <img src={project.image} alt={project.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                <div className="absolute inset-0 bg-gradient-to-t from-card to-transparent" />
+              </div>
+              <div className="flex flex-1 flex-col p-5">
               <span className="mb-2 w-fit rounded-full bg-primary/10 px-2.5 py-0.5 text-[11px] font-medium text-primary">
                 {project.category}
               </span>
@@ -114,6 +131,7 @@ export default function Portfolio() {
               >
                 View Project <ExternalLink className="h-3 w-3" />
               </a>
+              </div>
             </motion.div>
           ))}
         </motion.div>

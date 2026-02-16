@@ -90,15 +90,29 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
         </span>
         <h3 className="mb-1 text-base font-bold text-foreground">{project.title}</h3>
         <div className="mb-4 flex-1">
-          <p className={`text-sm leading-relaxed text-muted-foreground ${!expanded ? "line-clamp-2" : ""}`}>
-            {project.description}
-          </p>
-          <button
-            onClick={() => setExpanded(!expanded)}
-            className="mt-1 text-xs font-medium text-primary hover:underline"
-          >
-            {expanded ? "See Less" : "See More"}
-          </button>
+          {expanded ? (
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              {project.description}{" "}
+              <button
+                onClick={() => setExpanded(false)}
+                className="inline text-xs font-medium text-primary hover:underline"
+              >
+                See Less
+              </button>
+            </p>
+          ) : (
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              <span className="line-clamp-2">
+                {project.description}{" "}
+              </span>
+              <button
+                onClick={() => setExpanded(true)}
+                className="-mt-1 inline text-xs font-medium text-primary hover:underline"
+              >
+                See More
+              </button>
+            </p>
+          )}
         </div>
         <div className="mb-3 flex flex-wrap gap-1.5">
           {project.tech.map((t) => (

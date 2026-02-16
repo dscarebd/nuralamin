@@ -55,6 +55,7 @@ export default function Pricing() {
   const [thankYouOpen, setThankYouOpen] = useState(false);
   const [submittedData, setSubmittedData] = useState<ContactForm | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [shakeForm, setShakeForm] = useState(false);
   const hasSubmitted = useRef(false);
 
   const notifyTelegram = useCallback(async (data: Record<string, string | undefined>, status: "submitted" | "not_requested") => {
@@ -245,9 +246,17 @@ export default function Pricing() {
             <DialogHeader>
               <DialogTitle className="text-xl font-bold">Get Started with {selectedPlan}</DialogTitle>
               <DialogDescription className="text-xs">Fill in your details and we'll get back to you shortly.</DialogDescription>
-            </DialogHeader>
+          </DialogHeader>
           </div>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-3 px-6 pb-6 pt-2">
+          <form onSubmit={(e) => {
+            if (isBudgetTooLow || isFormIncomplete) {
+              e.preventDefault();
+              setShakeForm(true);
+              setTimeout(() => setShakeForm(false), 500);
+              return;
+            }
+            form.handleSubmit(onSubmit)(e);
+          }} className={`grid gap-3 px-6 pb-6 pt-2 ${shakeForm ? "animate-[shake_0.4s_ease-in-out]" : ""}`}>
             <div className="rounded-xl border bg-muted/30 p-4">
               <div className="mb-2 flex items-center gap-3">
                 <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-amber-500/15"><User className="h-5 w-5 text-amber-500" /></div>

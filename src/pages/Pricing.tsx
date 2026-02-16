@@ -1,6 +1,8 @@
 import { useState, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 import { Check, Clock, Zap, Rocket, Send, User, MessageCircle, FileText, Link2, PartyPopper, DollarSign } from "lucide-react";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -151,6 +153,44 @@ export default function Pricing() {
     return `https://t.me/nuralamin_official?text=${encodeURIComponent(msg)}`;
   };
 
+  const renderPlanCard = (plan: typeof dbPlans[number], i: number) => {
+    const Icon = iconMap[plan.icon ?? ""] ?? Clock;
+    const colors = iconColorMap[plan.icon ?? ""] ?? { bg: "bg-primary/15", text: "text-primary" };
+    return (
+      <motion.div key={plan.id} custom={i} variants={fadeUp} initial="hidden" animate="visible"
+        className={`group relative flex flex-col rounded-2xl border bg-card p-6 transition-shadow hover:shadow-lg ${plan.popular ? "border-primary shadow-[0_0_30px_-8px_hsl(var(--primary)/0.3)]" : "border-border"}`}>
+        {plan.popular && (
+          <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary px-4 py-1 text-xs font-semibold text-primary-foreground">Most Popular</div>
+        )}
+        <div className="mb-4 flex items-center gap-3">
+          <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${colors.bg}`}>
+            <Icon className={`h-5 w-5 ${colors.text}`} />
+          </div>
+          <h2 className="text-lg font-bold text-foreground">{plan.name}</h2>
+        </div>
+        <div className="mb-2 flex items-baseline gap-1">
+          <span className="text-3xl font-extrabold text-foreground">{plan.price}</span>
+          <span className="text-sm text-muted-foreground">/Start From</span>
+        </div>
+        <p className="mb-6 text-sm text-muted-foreground">{plan.description}</p>
+        <ul className="mb-8 flex flex-1 flex-col gap-3">
+          {(plan.features ?? []).map((feature) => (
+            <li key={feature} className="flex items-start gap-2 text-sm text-foreground">
+              <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" /> {feature}
+            </li>
+          ))}
+        </ul>
+        <Button
+          onClick={() => openForm(plan.name, plan.price)}
+          className={`w-full rounded-xl ${plan.popular ? "bg-gradient-to-r from-primary to-accent text-primary-foreground hover:opacity-90" : ""}`}
+          variant={plan.popular ? "default" : "outline"}
+        >
+          Get Started
+        </Button>
+      </motion.div>
+    );
+  };
+
   return (
     <div className="min-h-screen bg-background px-4 py-10 sm:px-8">
       <div className="mx-auto max-w-5xl">
@@ -160,48 +200,27 @@ export default function Pricing() {
           <p className="mt-3 text-muted-foreground">Flexible plans tailored to your project needs. Let's build something amazing together.</p>
         </motion.div>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {dbPlans.map((plan, i) => {
-            const Icon = iconMap[plan.icon ?? ""] ?? Clock;
-            return (
-              <motion.div key={plan.id} custom={i} variants={fadeUp} initial="hidden" animate="visible"
-                className={`group relative flex flex-col rounded-2xl border bg-card p-6 transition-shadow hover:shadow-lg ${plan.popular ? "border-primary shadow-[0_0_30px_-8px_hsl(var(--primary)/0.3)]" : "border-border"}`}>
-                {plan.popular && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary px-4 py-1 text-xs font-semibold text-primary-foreground">Most Popular</div>
-                )}
-                <div className="mb-4 flex items-center gap-3">
-                  {(() => {
-                    const colors = iconColorMap[plan.icon ?? ""] ?? { bg: "bg-primary/15", text: "text-primary" };
-                    return (
-                      <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${colors.bg}`}>
-                        <Icon className={`h-5 w-5 ${colors.text}`} />
-                      </div>
-                    );
-                  })()}
-                  <h2 className="text-lg font-bold text-foreground">{plan.name}</h2>
-                </div>
-                <div className="mb-2 flex items-baseline gap-1">
-                  <span className="text-3xl font-extrabold text-foreground">{plan.price}</span>
-                  <span className="text-sm text-muted-foreground">/Start From</span>
-                </div>
-                <p className="mb-6 text-sm text-muted-foreground">{plan.description}</p>
-                <ul className="mb-8 flex flex-1 flex-col gap-3">
-                  {(plan.features ?? []).map((feature) => (
-                    <li key={feature} className="flex items-start gap-2 text-sm text-foreground">
-                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" /> {feature}
-                    </li>
-                  ))}
-                </ul>
-                <Button
-                  onClick={() => openForm(plan.name, plan.price)}
-                  className={`w-full rounded-xl ${plan.popular ? "bg-gradient-to-r from-primary to-accent text-primary-foreground hover:opacity-90" : ""}`}
-                  variant={plan.popular ? "default" : "outline"}
-                >
-                  Get Started
-                </Button>
-              </motion.div>
-            );
-          })}
+        {/* Mobile: Tabbed view */}
+        {dbPlans.length > 0 && (
+          <Tabs defaultValue={dbPlans[0]?.id} className="sm:hidden">
+            <TabsList className="mb-6 w-full">
+              {dbPlans.map((plan) => (
+                <TabsTrigger key={plan.id} value={plan.id} className="flex-1 text-xs">
+                  {plan.name}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+            {dbPlans.map((plan, i) => (
+              <TabsContent key={plan.id} value={plan.id}>
+                {renderPlanCard(plan, i)}
+              </TabsContent>
+            ))}
+          </Tabs>
+        )}
+
+        {/* Desktop: Grid view */}
+        <div className="hidden gap-6 sm:grid sm:grid-cols-2 lg:grid-cols-3">
+          {dbPlans.map((plan, i) => renderPlanCard(plan, i))}
         </div>
 
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6, duration: 0.5 }} className="mt-12 rounded-2xl border bg-card p-8 text-center">

@@ -5,6 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { Plus, Trash2 } from "lucide-react";
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from "@dnd-kit/core";
+import { SortableContext, verticalListSortingStrategy, arrayMove } from "@dnd-kit/sortable";
+import SortableItem from "@/components/admin/SortableItem";
+import { useReorder } from "@/hooks/useReorder";
 
 export default function SocialEditor() {
   const { toast } = useToast();
@@ -19,6 +23,21 @@ export default function SocialEditor() {
 
   const [newPlatform, setNewPlatform] = useState("");
   const [newUrl, setNewUrl] = useState("");
+  const reorderMutation = useReorder("social_links", "social_links");
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+    useSensor(KeyboardSensor)
+  );
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+    const oldIndex = links.findIndex((l) => l.id === active.id);
+    const newIndex = links.findIndex((l) => l.id === over.id);
+    const reordered = arrayMove(links, oldIndex, newIndex);
+    reorderMutation.mutate(reordered.map((item, i) => ({ id: item.id, display_order: i + 1 })));
+  };
 
   const addMutation = useMutation({
     mutationFn: async () => {
@@ -51,15 +70,21 @@ export default function SocialEditor() {
     <div>
       <h1 className="mb-6 text-2xl font-bold text-foreground">Social Links</h1>
       <div className="max-w-2xl space-y-4">
-        {links.map((link) => (
-          <div key={link.id} className="flex items-center gap-3 rounded-lg border bg-card p-3">
-            <Input defaultValue={link.platform} className="w-32" onBlur={(e) => updateMutation.mutate({ id: link.id, platform: e.target.value, url: link.url })} />
-            <Input defaultValue={link.url} className="flex-1" onBlur={(e) => updateMutation.mutate({ id: link.id, platform: link.platform, url: e.target.value })} />
-            <Button variant="ghost" size="icon" onClick={() => deleteMutation.mutate(link.id)}>
-              <Trash2 className="h-4 w-4 text-destructive" />
-            </Button>
-          </div>
-        ))}
+        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+          <SortableContext items={links.map((l) => l.id)} strategy={verticalListSortingStrategy}>
+            {links.map((link) => (
+              <SortableItem key={link.id} id={link.id}>
+                <div className="flex items-center gap-3 rounded-r-lg border border-l-0 bg-card p-3">
+                  <Input defaultValue={link.platform} className="w-32" onBlur={(e) => updateMutation.mutate({ id: link.id, platform: e.target.value, url: link.url })} />
+                  <Input defaultValue={link.url} className="flex-1" onBlur={(e) => updateMutation.mutate({ id: link.id, platform: link.platform, url: e.target.value })} />
+                  <Button variant="ghost" size="icon" onClick={() => deleteMutation.mutate(link.id)}>
+                    <Trash2 className="h-4 w-4 text-destructive" />
+                  </Button>
+                </div>
+              </SortableItem>
+            ))}
+          </SortableContext>
+        </DndContext>
         <div className="flex items-center gap-3 rounded-lg border border-dashed bg-card p-3">
           <Input placeholder="Platform" value={newPlatform} onChange={(e) => setNewPlatform(e.target.value)} className="w-32" />
           <Input placeholder="URL" value={newUrl} onChange={(e) => setNewUrl(e.target.value)} className="flex-1" />

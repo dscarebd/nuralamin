@@ -89,32 +89,11 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
           {project.category}
         </span>
         <h3 className="mb-1 text-base font-bold text-foreground">{project.title}</h3>
-        <div className="mb-4 flex-1 text-sm leading-relaxed text-muted-foreground">
-          {expanded ? (
-            <span>
-              {project.description}{" "}
-              <button
-                onClick={() => setExpanded(false)}
-                className="inline text-xs font-medium text-primary hover:underline"
-              >
-                See Less
-              </button>
-            </span>
-          ) : (
-            <span className="relative">
-              <span className="line-clamp-2">
-                {project.description}
-                {/* Invisible spacer to reserve space for See More */}
-                <span className="invisible">{" "}See More</span>
-              </span>
-              <button
-                onClick={() => setExpanded(true)}
-                className="absolute bottom-0 right-0 bg-card pl-1 text-xs font-medium text-primary hover:underline"
-              >
-                See More
-              </button>
-            </span>
-          )}
+        <div
+          onClick={() => setExpanded(!expanded)}
+          className="mb-4 flex-1 cursor-pointer text-sm leading-relaxed text-muted-foreground"
+        >
+          <p className={expanded ? "" : "line-clamp-2"}>{project.description}</p>
         </div>
         <div className="mb-3 flex flex-wrap gap-1.5">
           {project.tech.map((t) => (

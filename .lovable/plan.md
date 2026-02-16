@@ -1,15 +1,19 @@
 
 
-## Change Portfolio Dialog Layout to Top-Bottom (Stacked)
+## Add Founder Detail Cards to Profile Sidebar
 
-Currently the project detail dialog uses a side-by-side layout (image left, details right) on desktop. Based on your reference screenshot, you'd like to switch to a stacked layout where the image is on top and the details are below.
+Add two new contact-style cards below the existing Location card in the sidebar, matching the same design pattern (icon, label, value, hover glow).
 
 ### Changes
 
-**`src/pages/Portfolio.tsx`**
-- Change the dialog inner layout from `flex-col sm:flex-row` to just `flex-col` so the image always sits above the details
-- Remove the `sm:w-1/2` constraint on the image section so it spans full width
-- Limit the image height (e.g., `max-h-72`) so it doesn't take too much vertical space
-- Keep the details section below with its current metadata and button styling
-- Adjust dialog max-width if needed for a cleaner vertical presentation
+**`src/components/ProfileSidebar.tsx`**
+- Add two new cards after the Location card inside the existing contact cards `motion.div`:
+  1. **"Founder: An-Nur Digital"** -- uses a `Briefcase` icon with a blue/indigo color scheme and matching hover glow
+  2. **"Founder: Quran Insight"** -- uses a `Briefcase` icon with a teal/cyan color scheme and matching hover glow
+- Each card follows the exact same structure as the phone/email/location cards:
+  - Rounded icon circle on the left
+  - Small uppercase label ("Founder")
+  - Bold value text ("An-Nur Digital" / "Quran Insight")
+  - Top accent line on hover
+  - Colored shadow on hover
 

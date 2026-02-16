@@ -168,7 +168,7 @@ export default function Portfolio() {
               <div className="flex flex-col sm:flex-row sm:min-h-[420px]">
                 {/* Left: Image */}
                 <div className="sm:w-[45%]">
-                  <div className="h-52 w-full overflow-hidden sm:h-full">
+                  <div className="aspect-video w-full overflow-hidden sm:aspect-auto sm:h-full">
                     <img
                       src={selectedProject.image}
                       alt={selectedProject.title}

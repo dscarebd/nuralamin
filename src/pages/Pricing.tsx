@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, Check, Clock, Zap, Rocket, Send, User, MessageCircle, FileText, Link2, PartyPopper } from "lucide-react";
+import { ArrowLeft, Check, Clock, Zap, Rocket, Send, User, MessageCircle, FileText, Link2, PartyPopper, DollarSign } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -32,6 +32,7 @@ const contactSchema = z.object({
   contact_id: z.string().trim().min(1, "WhatsApp or Telegram ID is required").max(100),
   project_details: z.string().trim().min(1, "Project details are required").max(2000),
   project_links: z.string().trim().max(500).optional(),
+  budget: z.string().trim().min(1, "Budget is required"),
 });
 
 type ContactForm = z.infer<typeof contactSchema>;
@@ -42,6 +43,7 @@ export default function Pricing() {
   const { toast } = useToast();
 
   const [selectedPlan, setSelectedPlan] = useState("");
+  const [selectedPlanPrice, setSelectedPlanPrice] = useState(0);
   const [formOpen, setFormOpen] = useState(false);
   const [thankYouOpen, setThankYouOpen] = useState(false);
   const [submittedData, setSubmittedData] = useState<ContactForm | null>(null);
@@ -53,16 +55,28 @@ export default function Pricing() {
 
   const form = useForm<ContactForm>({
     resolver: zodResolver(contactSchema),
-    defaultValues: { name: "", contact_id: "", project_details: "", project_links: "" },
+    defaultValues: { name: "", contact_id: "", project_details: "", project_links: "", budget: "" },
   });
 
-  const openForm = (planName: string) => {
+  const parsePrice = (price: string) => {
+    const num = parseInt(price.replace(/[^0-9]/g, ""), 10);
+    return isNaN(num) ? 0 : num;
+  };
+
+  const openForm = (planName: string, planPrice: string) => {
     setSelectedPlan(planName);
-    form.reset();
+    const minBudget = parsePrice(planPrice);
+    setSelectedPlanPrice(minBudget);
+    form.reset({ name: "", contact_id: "", project_details: "", project_links: "", budget: "" });
     setFormOpen(true);
   };
 
   const onSubmit = async (data: ContactForm) => {
+    const budgetNum = parseInt(data.budget.replace(/[^0-9]/g, ""), 10);
+    if (isNaN(budgetNum) || budgetNum < selectedPlanPrice) {
+      form.setError("budget", { message: `Budget must be at least $${selectedPlanPrice}` });
+      return;
+    }
     setSubmitting(true);
     const { error } = await supabase.from("contact_requests").insert({
       name: data.name,
@@ -70,6 +84,7 @@ export default function Pricing() {
       project_details: data.project_details,
       project_links: data.project_links || null,
       plan_name: selectedPlan,
+      budget: `$${budgetNum}`,
     });
     setSubmitting(false);
 
@@ -89,6 +104,7 @@ export default function Pricing() {
       `Hi, I'm ${submittedData.name}.`,
       `I'm interested in the "${selectedPlan}" plan.`,
       ``,
+      `💰 Budget: ${submittedData.budget}`,
       `📋 Project Details:`,
       submittedData.project_details,
       submittedData.project_links ? `\n🔗 Links: ${submittedData.project_links}` : "",
@@ -141,7 +157,7 @@ export default function Pricing() {
                   ))}
                 </ul>
                 <Button
-                  onClick={() => openForm(plan.name)}
+                  onClick={() => openForm(plan.name, plan.price)}
                   className={`w-full rounded-xl ${plan.popular ? "bg-gradient-to-r from-primary to-accent text-primary-foreground hover:opacity-90" : ""}`}
                   variant={plan.popular ? "default" : "outline"}
                 >
@@ -201,6 +217,14 @@ export default function Pricing() {
                 <Label htmlFor="project_links" className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Project Links (optional)</Label>
               </div>
               <Input id="project_links" placeholder="Reference URLs, designs, etc." className="ml-12 w-[calc(100%-3rem)] rounded-lg border border-input bg-background" {...form.register("project_links")} />
+            </div>
+            <div className="rounded-xl border bg-muted/30 p-4">
+              <div className="mb-2 flex items-center gap-3">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-rose-500/15"><DollarSign className="h-5 w-5 text-rose-500" /></div>
+                <Label htmlFor="budget" className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Budget * (min ${selectedPlanPrice})</Label>
+              </div>
+              <Input id="budget" type="number" min={selectedPlanPrice} placeholder={`Minimum $${selectedPlanPrice}`} className="ml-12 w-[calc(100%-3rem)] rounded-lg border border-input bg-background" {...form.register("budget")} />
+              {form.formState.errors.budget && <p className="ml-12 text-xs text-destructive mt-1">{form.formState.errors.budget.message}</p>}
             </div>
             <Button type="submit" className="mt-2 w-full gap-2 rounded-xl" disabled={submitting}>
               <Send className="h-4 w-4" /> {submitting ? "Submitting..." : "Submit Request"}

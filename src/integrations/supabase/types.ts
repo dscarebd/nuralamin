@@ -16,6 +16,7 @@ export type Database = {
     Tables: {
       contact_requests: {
         Row: {
+          budget: string | null
           contact_id: string
           created_at: string
           id: string
@@ -26,6 +27,7 @@ export type Database = {
           project_links: string | null
         }
         Insert: {
+          budget?: string | null
           contact_id: string
           created_at?: string
           id?: string
@@ -36,6 +38,7 @@ export type Database = {
           project_links?: string | null
         }
         Update: {
+          budget?: string | null
           contact_id?: string
           created_at?: string
           id?: string

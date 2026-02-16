@@ -23,7 +23,7 @@ export default function FloatingHeader() {
 
   return (
     <div className="sticky top-0 z-50 w-full px-4 pt-3 md:px-8">
-      <header className="mx-auto flex h-12 max-w-5xl items-center justify-between rounded-2xl border border-border bg-background/70 px-4 shadow-lg shadow-black/5 backdrop-blur-xl md:px-6">
+      <header className="mx-auto flex h-14 max-w-5xl items-center justify-between rounded-2xl border border-border bg-background/70 px-4 shadow-lg shadow-black/5 backdrop-blur-xl md:px-6">
         {/* Left: Avatar + Name */}
         <NavLink to="/" className="flex items-center gap-2.5">
           <Avatar className="h-8 w-8">

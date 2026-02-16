@@ -23,7 +23,7 @@ export default function FloatingHeader() {
   const photo = profile?.photo_url || profilePhoto;
 
   return (
-    <div className="sticky top-0 z-50 w-full px-4 pt-3 md:px-8">
+    <div className="sticky top-0 z-50 w-full pt-3">
       <header className="mx-auto flex h-16 max-w-5xl items-center justify-between rounded-2xl border border-border bg-background/70 px-5 shadow-lg shadow-black/5 backdrop-blur-xl md:px-8">
         {/* Left: Avatar + Name */}
         <NavLink to="/" className="flex items-center gap-2.5">

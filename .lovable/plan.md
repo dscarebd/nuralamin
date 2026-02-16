@@ -1,24 +1,33 @@
 
 
-## Fix: Remove Bottom Gap in Project Detail Popup
+## Fix: White Screen on Page Navigation
 
 ### Problem
-The dialog's inner container has a `sm:min-h-[420px]` minimum height, but since the image uses `object-contain` (no cropping), it doesn't fill that height, leaving a visible gap at the bottom.
+All internal navigation links use plain HTML `<a href="...">` tags, which trigger a **full browser page reload**. This causes the white flash because the entire app is destroyed and rebuilt from scratch each time you click "Hire Me" or "Back to Profile."
 
 ### Solution
-Remove the `sm:min-h-[420px]` constraint so the dialog sizes itself naturally based on the image and content. The image will dictate the left column height, and the right column will match it.
+Replace all internal `<a href="...">` tags with React Router's `<Link>` component, which performs instant **client-side navigation** -- no reload, no white screen. Then wrap routes with Framer Motion's `AnimatePresence` for smooth fade transitions.
 
-### Technical Details
+### Changes
 
-**File: `src/pages/Portfolio.tsx`**
+**1. `src/App.tsx`** -- Add animated route transitions
+- Import `AnimatePresence` from framer-motion and `useLocation` from react-router-dom
+- Wrap `<Routes>` with `<AnimatePresence mode="wait">` keyed by location
+- Wrap each route's element with a motion wrapper for fade-in/fade-out
 
-- Change the inner flex container from:
-  ```
-  className="flex flex-col sm:flex-row sm:min-h-[420px]"
-  ```
-  to:
-  ```
-  className="flex flex-col sm:flex-row"
-  ```
+**2. `src/components/ProfileSidebar.tsx`** -- Fix "Hire Me" button
+- Replace `<a href="/portfolio">` with `<Link to="/portfolio">` from react-router-dom
+- This makes the "Hire Me" button navigate instantly without a reload
 
-This single change removes the forced minimum height, eliminating the bottom gap while keeping the two-column layout intact.
+**3. `src/pages/Portfolio.tsx`** -- Fix back buttons
+- Replace `<a href="/">` (back arrow) with `<Link to="/">`
+- Replace `<a href="/">Back to Profile</a>` with `<Link to="/">Back to Profile</Link>`
+- Both navigation points will now be instant client-side transitions
+
+**4. `src/pages/NotFound.tsx`** -- Fix "Return to Home" link
+- Replace `<a href="/">` with `<Link to="/">`
+
+### Result
+- Zero white screen flashes
+- Instant page switches with a subtle fade transition
+- No new dependencies needed (framer-motion and react-router-dom are already installed)

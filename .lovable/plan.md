@@ -1,30 +1,24 @@
 
 
-## Project Detail Popup
+## Fix: Remove Bottom Gap in Project Detail Popup
 
-When a user clicks on any project card, a dialog/popup will open showing the full project details in a clean layout.
+### Problem
+The dialog's inner container has a `sm:min-h-[420px]` minimum height, but since the image uses `object-contain` (no cropping), it doesn't fill that height, leaving a visible gap at the bottom.
 
-### What will change
-
-**File: `src/pages/Portfolio.tsx`**
-
-1. Remove the click-to-expand description behavior (remove `expanded` state and `onClick` on description)
-2. Lift state to the parent `Portfolio` component with a `selectedProject` state (stores the clicked project or `null`)
-3. Make the entire card clickable (via `onClick` on the card) to set the selected project
-4. Add a `Dialog` component (already available in the project) that opens when `selectedProject` is set, displaying:
-   - Large project image at the top
-   - Category badge
-   - Project title
-   - Full description text (no truncation)
-   - Tech stack tags
-   - "View Project" link button
-   - Close button (built into Dialog)
+### Solution
+Remove the `sm:min-h-[420px]` constraint so the dialog sizes itself naturally based on the image and content. The image will dictate the left column height, and the right column will match it.
 
 ### Technical Details
 
-- Import `Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription` from `@/components/ui/dialog`
-- The `ProjectCard` will accept an `onClick` prop instead of managing its own expanded state
-- Description on the card stays truncated at 2 lines (no toggle)
-- The dialog will use `max-w-2xl` for a comfortable reading width
-- The card's "View Project" link click will use `e.stopPropagation()` to prevent opening the dialog when clicking the link directly
+**File: `src/pages/Portfolio.tsx`**
 
+- Change the inner flex container from:
+  ```
+  className="flex flex-col sm:flex-row sm:min-h-[420px]"
+  ```
+  to:
+  ```
+  className="flex flex-col sm:flex-row"
+  ```
+
+This single change removes the forced minimum height, eliminating the bottom gap while keeping the two-column layout intact.

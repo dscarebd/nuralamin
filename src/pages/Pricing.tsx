@@ -103,7 +103,7 @@ export default function Pricing() {
               variants={fadeUp}
               initial="hidden"
               animate="visible"
-              className={`group relative flex flex-col rounded-2xl border bg-secondary p-6 transition-shadow hover:shadow-lg ${
+              className={`group relative flex flex-col rounded-2xl border bg-card p-6 transition-shadow hover:shadow-lg ${
                 plan.popular
                   ? "border-primary shadow-[0_0_30px_-8px_hsl(var(--primary)/0.3)]"
                   : "border-border"

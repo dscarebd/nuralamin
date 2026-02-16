@@ -128,10 +128,9 @@ export default function Pricing() {
                 <h2 className="text-lg font-bold text-foreground">{plan.name}</h2>
               </div>
 
-              <p className="mb-1 text-xs font-medium uppercase tracking-wider text-muted-foreground">Start From</p>
               <div className="mb-2 flex items-baseline gap-1">
                 <span className="text-3xl font-extrabold text-foreground">{plan.price}</span>
-                <span className="text-sm text-muted-foreground">{plan.unit}</span>
+                <span className="text-sm text-muted-foreground">/Start From</span>
               </div>
 
               <p className="mb-6 text-sm text-muted-foreground">{plan.description}</p>

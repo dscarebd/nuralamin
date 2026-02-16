@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, Check, Clock, Zap, Rocket, Send } from "lucide-react";
+import { ArrowLeft, Check, Clock, Zap, Rocket, Send, User, MessageCircle, FileText, Link2, PartyPopper } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -173,7 +173,7 @@ export default function Pricing() {
           <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-3 px-6 pb-6 pt-2">
             <div className="rounded-xl border bg-muted/30 p-4">
               <div className="mb-2 flex items-center gap-3">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary text-sm font-bold">👤</div>
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-amber-500/15"><User className="h-5 w-5 text-amber-500" /></div>
                 <Label htmlFor="name" className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Name *</Label>
               </div>
               <Input id="name" placeholder="Your full name" className="ml-12 w-[calc(100%-3rem)] border-none bg-transparent px-0 shadow-none focus-visible:ring-0" {...form.register("name")} />
@@ -181,7 +181,7 @@ export default function Pricing() {
             </div>
             <div className="rounded-xl border bg-muted/30 p-4">
               <div className="mb-2 flex items-center gap-3">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary text-sm font-bold">💬</div>
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-500/15"><MessageCircle className="h-5 w-5 text-emerald-500" /></div>
                 <Label htmlFor="contact_id" className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">WhatsApp or Telegram ID *</Label>
               </div>
               <Input id="contact_id" placeholder="@username or phone number" className="ml-12 w-[calc(100%-3rem)] border-none bg-transparent px-0 shadow-none focus-visible:ring-0" {...form.register("contact_id")} />
@@ -189,7 +189,7 @@ export default function Pricing() {
             </div>
             <div className="rounded-xl border bg-muted/30 p-4">
               <div className="mb-2 flex items-center gap-3">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary text-sm font-bold">📝</div>
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-violet-500/15"><FileText className="h-5 w-5 text-violet-500" /></div>
                 <Label htmlFor="project_details" className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Project Details *</Label>
               </div>
               <Textarea id="project_details" placeholder="Describe your project..." rows={3} className="ml-12 w-[calc(100%-3rem)] border-none bg-transparent px-0 shadow-none focus-visible:ring-0 resize-none" {...form.register("project_details")} />
@@ -197,7 +197,7 @@ export default function Pricing() {
             </div>
             <div className="rounded-xl border bg-muted/30 p-4">
               <div className="mb-2 flex items-center gap-3">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary text-sm font-bold">🔗</div>
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-sky-500/15"><Link2 className="h-5 w-5 text-sky-500" /></div>
                 <Label htmlFor="project_links" className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Project Links (optional)</Label>
               </div>
               <Input id="project_links" placeholder="Reference URLs, designs, etc." className="ml-12 w-[calc(100%-3rem)] border-none bg-transparent px-0 shadow-none focus-visible:ring-0" {...form.register("project_links")} />
@@ -213,7 +213,7 @@ export default function Pricing() {
       <Dialog open={thankYouOpen} onOpenChange={setThankYouOpen}>
         <DialogContent className="sm:max-w-sm p-0 overflow-hidden rounded-2xl text-center">
           <div className="bg-gradient-to-br from-primary/10 via-accent/5 to-transparent px-6 pt-8 pb-4">
-            <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 text-3xl">🎉</div>
+            <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-500/15"><PartyPopper className="h-8 w-8 text-emerald-500" /></div>
             <DialogHeader>
               <DialogTitle className="text-center text-xl font-bold">Thank You!</DialogTitle>
               <DialogDescription className="text-center">

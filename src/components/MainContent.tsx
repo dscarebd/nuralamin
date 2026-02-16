@@ -58,9 +58,6 @@ export default function MainContent() {
         </div>
       </motion.section>
 
-      <motion.footer variants={fadeUp} initial="hidden" animate="visible" className="py-6 text-center text-xs text-muted-foreground">
-        {footerText}
-      </motion.footer>
     </main>
   );
 }

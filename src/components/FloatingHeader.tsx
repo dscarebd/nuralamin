@@ -79,7 +79,7 @@ export default function FloatingHeader() {
               </nav>
 
               {/* Contact card */}
-              <div className="mt-auto rounded-lg bg-secondary/50 p-4">
+              <div className="mt-auto rounded-lg border border-border bg-secondary/50 p-4">
                 <p className="mb-3 text-sm font-medium text-foreground">Need any help?</p>
                 <Button asChild size="sm" className="w-full gap-2">
                   <a href="https://t.me/nuralamin_official" target="_blank" rel="noopener noreferrer">

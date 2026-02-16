@@ -1,27 +1,50 @@
 
 
-## Fix Header Left-Side Gap on Portfolio Page
+## Instant Page Switching with Data Prefetching
 
-**Root Cause**: In `App.tsx`, the `FloatingHeader` is rendered outside the scrollable `<div className="flex-1 overflow-auto">`, while the page content is inside it. On desktop, the scrollbar reduces the available width for the content area but not the header, causing both `max-w-5xl` containers to center at slightly different positions.
+**Problem**: When switching between pages (Home, Portfolio, Pricing), content takes time to load because each page independently fetches its data from the backend only when visited.
 
-**Solution**: Move the `FloatingHeader` inside the scrollable container. Since the header uses `sticky` positioning, it will still stick to the top of the scroll area -- same visual behavior, but now it shares the same available width as the content, so both align perfectly.
+**Solution**: Prefetch all page data on initial app load so it's already cached when navigating. Combined with keeping the existing page transitions smooth, this makes page switches feel instant.
+
+### How It Works
+
+React Query (already in use) caches fetched data. By triggering all data fetches once on app startup, every subsequent page visit reads from the in-memory cache -- no loading delay.
 
 ### Changes
 
-**File: `src/App.tsx`** (lines 61-64)
+**1. Create `src/hooks/usePrefetchData.ts` (new file)**
+- A custom hook that calls `queryClient.prefetchQuery()` for all public data queries: profile, social links, experiences, projects, pricing plans, and site settings.
+- Runs once on app mount using `useEffect`.
 
-Move `<FloatingHeader />` from outside the scrollable div to inside it:
+**2. Update `src/App.tsx`**
+- Call `usePrefetchData()` inside `AppLayout` so all data is fetched in the background as soon as the app loads.
 
-```text
-Before:
-  <FloatingHeader />
-  <div className="flex-1 overflow-auto">
-    ...content...
+**3. Update `src/hooks/usePublicData.ts`**
+- Add `staleTime: 1000 * 60 * 5` (5 minutes) to all query hooks so React Query serves cached data instantly instead of refetching on every page navigation.
 
-After:
-  <div className="flex-1 overflow-auto">
-    <FloatingHeader />
-    ...content...
+### Technical Details
+
+The prefetch hook will look like:
+
+```typescript
+import { useQueryClient } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+
+export function usePrefetchData() {
+  const queryClient = useQueryClient();
+  
+  useEffect(() => {
+    // Prefetch all public data queries in parallel
+    queryClient.prefetchQuery({ queryKey: ["profile"], queryFn: ... });
+    queryClient.prefetchQuery({ queryKey: ["social_links"], queryFn: ... });
+    queryClient.prefetchQuery({ queryKey: ["experiences"], queryFn: ... });
+    queryClient.prefetchQuery({ queryKey: ["projects"], queryFn: ... });
+    queryClient.prefetchQuery({ queryKey: ["pricing_plans"], queryFn: ... });
+    queryClient.prefetchQuery({ queryKey: ["site_settings"], queryFn: ... });
+  }, []);
+}
 ```
 
-This is a single-line move with no other changes needed. The `sticky top-0 z-50` classes on the header already handle staying visible at the top of any scroll container.
+Each `useQuery` hook in `usePublicData.ts` will get `staleTime: 5 * 60 * 1000` so cached results are served immediately without triggering background refetches during normal browsing.
+

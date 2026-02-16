@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { Trash2, Eye, Inbox, CheckCheck } from "lucide-react";
+import { Trash2, Eye, Inbox, CheckCheck, ClipboardList, MessageCircle, FileText, Link2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 
@@ -153,14 +153,14 @@ export default function RequestsEditor() {
               </div>
               <div className="grid gap-3 px-6 pb-6 pt-2">
                 <div className="rounded-xl border bg-muted/30 p-4 flex items-center gap-4">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary text-sm font-bold">📋</div>
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-amber-500/15"><ClipboardList className="h-5 w-5 text-amber-500" /></div>
                   <div>
                     <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Plan</p>
                     <p className="text-sm font-semibold text-foreground">{viewItem.plan_name}</p>
                   </div>
                 </div>
                 <div className="rounded-xl border bg-muted/30 p-4 flex items-center gap-4">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary text-sm font-bold">💬</div>
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-500/15"><MessageCircle className="h-5 w-5 text-emerald-500" /></div>
                   <div>
                     <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Contact</p>
                     <p className="text-sm font-semibold text-foreground">{viewItem.contact_id}</p>
@@ -168,14 +168,14 @@ export default function RequestsEditor() {
                 </div>
                 <div className="rounded-xl border bg-muted/30 p-4">
                   <div className="mb-2 flex items-center gap-3">
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary text-sm font-bold">📝</div>
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-violet-500/15"><FileText className="h-5 w-5 text-violet-500" /></div>
                     <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Project Details</p>
                   </div>
                   <p className="whitespace-pre-wrap text-sm text-foreground leading-relaxed pl-12">{viewItem.project_details}</p>
                 </div>
                 {viewItem.project_links && (
                   <div className="rounded-xl border bg-muted/30 p-4 flex items-center gap-4">
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary text-sm font-bold">🔗</div>
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-sky-500/15"><Link2 className="h-5 w-5 text-sky-500" /></div>
                     <div className="min-w-0">
                       <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Links</p>
                       <p className="text-sm font-semibold text-foreground truncate">{viewItem.project_links}</p>

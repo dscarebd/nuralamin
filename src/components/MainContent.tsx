@@ -28,14 +28,14 @@ export default function MainContent() {
 
   return (
     <main className="flex h-full flex-col gap-6 overflow-y-auto rounded-2xl border bg-card p-8 scrollbar-thin">
-      <motion.section variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }}>
+      <motion.section variants={fadeUp} initial="hidden" animate="visible">
         <h2 className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground">About</h2>
         <p className="text-sm leading-relaxed text-muted-foreground">{about}</p>
       </motion.section>
 
       <div className="h-px bg-border" />
 
-      <motion.section initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={stagger}>
+      <motion.section initial="hidden" animate="visible" variants={stagger}>
         <motion.h2 variants={fadeUp} className="mb-6 text-xs font-semibold uppercase tracking-widest text-muted-foreground">Experience</motion.h2>
         <div className="relative space-y-8 pl-6 before:absolute before:left-[5px] before:top-2 before:h-[calc(100%-2rem)] before:w-px before:bg-border">
           {experiences.map((exp, i) => (
@@ -58,7 +58,7 @@ export default function MainContent() {
         </div>
       </motion.section>
 
-      <motion.footer variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="py-6 text-center text-xs text-muted-foreground">
+      <motion.footer variants={fadeUp} initial="hidden" animate="visible" className="py-6 text-center text-xs text-muted-foreground">
         {footerText}
       </motion.footer>
     </main>

@@ -93,34 +93,34 @@ export default function Portfolio() {
 
   return (
     <div className="min-h-screen bg-background px-4 py-8 md:px-8">
-      <div className="mx-auto max-w-5xl">
-        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mb-10">
-          <h1 className="text-2xl font-bold text-foreground">My Portfolio</h1>
-          <p className="text-sm text-muted-foreground">Projects I've built and contributed to</p>
-        </motion.div>
+      <Tabs defaultValue="website" className="mx-auto max-w-5xl">
+        <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+            <h1 className="text-2xl font-bold text-foreground">My Portfolio</h1>
+            <p className="text-sm text-muted-foreground">Projects I've built and contributed to</p>
+          </motion.div>
 
-        <Tabs defaultValue="website" className="w-full">
-          <TabsList className="mb-6">
+          <TabsList>
             <TabsTrigger value="website">Website</TabsTrigger>
             <TabsTrigger value="mobile">Mobile App</TabsTrigger>
           </TabsList>
+        </div>
 
-          <TabsContent value="website">
-            <motion.div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" variants={stagger} initial="hidden" animate="visible">
-              {websiteProjects.map((project) => (
-                <ProjectCard key={project.id} project={project} onClick={() => setSelectedProject(project)} />
-              ))}
-            </motion.div>
-          </TabsContent>
+        <TabsContent value="website">
+          <motion.div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" variants={stagger} initial="hidden" animate="visible">
+            {websiteProjects.map((project) => (
+              <ProjectCard key={project.id} project={project} onClick={() => setSelectedProject(project)} />
+            ))}
+          </motion.div>
+        </TabsContent>
 
-          <TabsContent value="mobile">
-            <motion.div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" variants={stagger} initial="hidden" animate="visible">
-              {mobileProjects.map((project) => (
-                <ProjectCard key={project.id} project={project} onClick={() => setSelectedProject(project)} />
-              ))}
-            </motion.div>
-          </TabsContent>
-        </Tabs>
+        <TabsContent value="mobile">
+          <motion.div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" variants={stagger} initial="hidden" animate="visible">
+            {mobileProjects.map((project) => (
+              <ProjectCard key={project.id} project={project} onClick={() => setSelectedProject(project)} />
+            ))}
+          </motion.div>
+        </TabsContent>
 
         <Dialog open={!!selectedProject} onOpenChange={(open) => !open && setSelectedProject(null)}>
           <DialogContent className="max-w-2xl animate-enter overflow-hidden p-0">
@@ -164,7 +164,7 @@ export default function Portfolio() {
         </motion.div>
 
         
-      </div>
+      </Tabs>
     </div>
   );
 }

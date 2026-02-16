@@ -63,7 +63,7 @@ function AppLayout() {
       <div className="flex-1 overflow-auto">
         <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>
-            <Route path="/" element={<motion.div {...pageTransition} className="h-full overflow-hidden"><Index /></motion.div>} />
+            <Route path="/" element={<motion.div {...pageTransition} className="lg:h-full lg:overflow-hidden"><Index /></motion.div>} />
             <Route path="/portfolio" element={<motion.div {...pageTransition}><Portfolio /></motion.div>} />
             <Route path="/pricing" element={<motion.div {...pageTransition}><Pricing /></motion.div>} />
             <Route path="*" element={<motion.div {...pageTransition}><NotFound /></motion.div>} />

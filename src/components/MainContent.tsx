@@ -1,4 +1,5 @@
 import { Phone, Mail, MapPin } from "lucide-react";
+import { motion } from "framer-motion";
 
 const experiences = [
   {
@@ -27,12 +28,27 @@ const experiences = [
   },
 ];
 
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" as const } },
+};
+
+const stagger = {
+  visible: { transition: { staggerChildren: 0.08 } },
+};
+
 export default function MainContent() {
   return (
     <main className="flex flex-col gap-6">
       {/* Contact Cards */}
-      <section className="grid gap-3 grid-cols-2">
-        <a
+      <motion.section
+        className="grid gap-3 grid-cols-2"
+        variants={stagger}
+        initial="hidden"
+        animate="visible"
+      >
+        <motion.a
+          variants={fadeUp}
           href="tel:01754392770"
           className="flex items-center gap-3 rounded-xl border bg-card p-4 transition-colors hover:bg-secondary"
         >
@@ -43,8 +59,9 @@ export default function MainContent() {
             <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Mobile</p>
             <p className="text-sm font-semibold text-foreground">01754392770</p>
           </div>
-        </a>
-        <a
+        </motion.a>
+        <motion.a
+          variants={fadeUp}
           href="mailto:sharif.logohut@gmail.com"
           className="flex items-center gap-3 rounded-xl border bg-card p-4 transition-colors hover:bg-secondary"
         >
@@ -55,8 +72,8 @@ export default function MainContent() {
             <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Email</p>
             <p className="text-sm font-semibold text-foreground truncate">sharif.logohut@gmail.com</p>
           </div>
-        </a>
-        <div className="col-span-2 flex items-center gap-3 rounded-xl border bg-card p-4">
+        </motion.a>
+        <motion.div variants={fadeUp} className="col-span-2 flex items-center gap-3 rounded-xl border bg-card p-4">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
             <MapPin className="h-5 w-5" />
           </div>
@@ -64,25 +81,35 @@ export default function MainContent() {
             <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Location</p>
             <p className="text-sm font-semibold text-foreground">Uttara, Dhaka, Bangladesh</p>
           </div>
-        </div>
-      </section>
+        </motion.div>
+      </motion.section>
 
       {/* About */}
-      <section>
+      <motion.section
+        variants={fadeUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-50px" }}
+      >
         <h2 className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground">About</h2>
         <p className="text-sm leading-relaxed text-muted-foreground">
           Assalamu Alaykum, I'm Shariful Islam — a Brand Designer with over 5 years of experience. I work full-time, so communication with me is always easy and responsive. Design is not just my job, it's my passion. I truly enjoy bringing ideas to life and telling your brand's story the right way. I focus on long-term collaboration and always aim to deliver results that satisfy and build trust.
         </p>
-      </section>
+      </motion.section>
 
       <div className="h-px bg-border" />
 
       {/* Experience */}
-      <section>
-        <h2 className="mb-6 text-xs font-semibold uppercase tracking-widest text-muted-foreground">Experience</h2>
+      <motion.section
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-50px" }}
+        variants={stagger}
+      >
+        <motion.h2 variants={fadeUp} className="mb-6 text-xs font-semibold uppercase tracking-widest text-muted-foreground">Experience</motion.h2>
         <div className="relative space-y-8 pl-6 before:absolute before:left-[5px] before:top-2 before:h-[calc(100%-2rem)] before:w-px before:bg-border">
           {experiences.map((exp, i) => (
-            <div key={i} className="relative">
+            <motion.div key={i} className="relative" variants={fadeUp}>
               <div className="absolute -left-6 top-1.5 h-3 w-3 rounded-full bg-primary" />
               <div className="flex flex-col gap-1">
                 <div className="flex items-start justify-between gap-2">
@@ -98,15 +125,21 @@ export default function MainContent() {
                   <p className="text-sm leading-relaxed text-muted-foreground">{exp.description}</p>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
-      </section>
+      </motion.section>
 
       {/* Footer */}
-      <footer className="py-6 text-center text-xs text-muted-foreground">
+      <motion.footer
+        variants={fadeUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        className="py-6 text-center text-xs text-muted-foreground"
+      >
         © 2026 Shariful Islam
-      </footer>
+      </motion.footer>
     </main>
   );
 }

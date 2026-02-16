@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Download, Facebook, Instagram, Send, MessageCircle, Share2 } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -16,33 +17,49 @@ const socials = [
 
 const PROFILE_URL = "https://mycardbd.app/shariflogohut";
 
+const fadeUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.1, duration: 0.5, ease: "easeOut" as const },
+  }),
+};
+
 export default function ProfileSidebar() {
   const [qrOpen, setQrOpen] = useState(false);
 
   return (
     <aside className="flex flex-col items-center gap-6 rounded-2xl border bg-card p-8">
       {/* Profile Photo */}
-      <div className="rounded-full bg-gradient-to-br from-primary to-accent p-1">
+      <motion.div
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="rounded-full bg-gradient-to-br from-primary to-accent p-1"
+      >
         <Avatar className="h-32 w-32">
           <AvatarImage src={profilePhoto} alt="Shariful Islam" />
           <AvatarFallback className="text-2xl">SI</AvatarFallback>
         </Avatar>
-      </div>
+      </motion.div>
 
       {/* Name & Title */}
-      <div className="text-center">
+      <motion.div custom={1} variants={fadeUp} initial="hidden" animate="visible" className="text-center">
         <h1 className="text-2xl font-bold text-foreground">Shariful Islam</h1>
         <p className="text-sm text-muted-foreground">Brand Designer</p>
-      </div>
+      </motion.div>
 
       {/* Save Contact */}
-      <Button onClick={downloadVCard} className="w-full gap-2 rounded-xl">
-        <Download className="h-4 w-4" />
-        Save Contact
-      </Button>
+      <motion.div custom={2} variants={fadeUp} initial="hidden" animate="visible" className="w-full">
+        <Button onClick={downloadVCard} className="w-full gap-2 rounded-xl">
+          <Download className="h-4 w-4" />
+          Save Contact
+        </Button>
+      </motion.div>
 
       {/* Social Icons */}
-      <div className="flex items-center gap-3">
+      <motion.div custom={3} variants={fadeUp} initial="hidden" animate="visible" className="flex items-center gap-3">
         {socials.map((s) => (
           <a
             key={s.label}
@@ -58,10 +75,10 @@ export default function ProfileSidebar() {
         <span className="flex h-10 w-10 items-center justify-center rounded-full border bg-secondary text-xs font-semibold text-muted-foreground">
           +5
         </span>
-      </div>
+      </motion.div>
 
       {/* QR Section */}
-      <div className="flex w-full flex-col items-center gap-3 rounded-xl border bg-secondary p-4">
+      <motion.div custom={4} variants={fadeUp} initial="hidden" animate="visible" className="flex w-full flex-col items-center gap-3 rounded-xl border bg-secondary p-4">
         <p className="text-xs font-medium text-muted-foreground">Scan to Connect</p>
         <div className="rounded-lg bg-foreground p-2">
           <QRCodeSVG value={PROFILE_URL} size={100} bgColor="hsl(210,40%,98%)" fgColor="hsl(222,47%,11%)" />
@@ -73,7 +90,7 @@ export default function ProfileSidebar() {
           <Share2 className="h-3 w-3" />
           Share Profile
         </button>
-      </div>
+      </motion.div>
 
       {/* QR Modal */}
       <Dialog open={qrOpen} onOpenChange={setQrOpen}>
@@ -91,8 +108,6 @@ export default function ProfileSidebar() {
               size="sm"
               variant="outline"
               onClick={() => {
-                const canvas = document.querySelector<HTMLElement>(".qr-download canvas");
-                // fallback: copy link
                 navigator.clipboard.writeText(PROFILE_URL);
               }}
             >

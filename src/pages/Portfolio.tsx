@@ -142,7 +142,7 @@ export default function Portfolio() {
           </div>
         </motion.div>
 
-        <footer className="py-8 text-center text-xs text-muted-foreground">{footerText}</footer>
+        
       </div>
     </div>
   );

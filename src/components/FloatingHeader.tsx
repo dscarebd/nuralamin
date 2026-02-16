@@ -22,8 +22,8 @@ export default function FloatingHeader() {
   const photo = profile?.photo_url || profilePhoto;
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/70 backdrop-blur-xl">
-      <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4 md:px-8">
+    <div className="sticky top-0 z-50 w-full px-4 pt-3 md:px-8">
+      <header className="mx-auto flex h-12 max-w-5xl items-center justify-between rounded-full border border-border/40 bg-background/70 px-4 shadow-lg shadow-black/5 backdrop-blur-xl md:px-6">
         {/* Left: Avatar + Name */}
         <NavLink to="/" className="flex items-center gap-2.5">
           <Avatar className="h-8 w-8">
@@ -80,7 +80,7 @@ export default function FloatingHeader() {
             </SheetContent>
           </Sheet>
         </div>
-      </div>
-    </header>
+      </header>
+    </div>
   );
 }

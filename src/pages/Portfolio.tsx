@@ -232,7 +232,7 @@ export default function Portfolio() {
           </p>
           <div className="flex justify-center gap-3">
             <Button asChild>
-              <a href="mailto:hey@nuralamin.com">Get in Touch</a>
+              <a href="https://t.me/nuralamin_official" target="_blank" rel="noopener noreferrer">Get in Touch</a>
             </Button>
             <Button asChild variant="outline">
               <a href="/">Back to Profile</a>

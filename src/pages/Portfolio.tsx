@@ -4,6 +4,7 @@ import { ArrowLeft, ExternalLink } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import ThemeToggle from "@/components/ThemeToggle";
 import imgEcommerce from "@/assets/project-ecommerce.jpg";
 import imgTaskapp from "@/assets/project-taskapp.jpg";
 import imgPortfolio from "@/assets/project-portfolio.jpg";
@@ -144,10 +145,11 @@ export default function Portfolio() {
               <ArrowLeft className="h-4 w-4" />
             </Link>
           </Button>
-          <div>
+          <div className="flex-1">
             <h1 className="text-2xl font-bold text-foreground">My Portfolio</h1>
             <p className="text-sm text-muted-foreground">Projects I've built and contributed to</p>
           </div>
+          <ThemeToggle />
         </motion.div>
 
         {/* Projects Grid */}

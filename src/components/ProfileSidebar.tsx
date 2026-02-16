@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Link } from "react-router-dom";
 import { downloadVCard } from "@/lib/vcard";
+import ThemeToggle from "@/components/ThemeToggle";
 import profilePhoto from "@/assets/profile-photo.jpg";
 
 const WhatsAppIcon = ({ className }: { className?: string }) => (
@@ -38,7 +39,8 @@ export default function ProfileSidebar() {
   const [qrOpen, setQrOpen] = useState(false);
 
   return (
-    <aside className="flex flex-col items-center gap-6 rounded-2xl border bg-card p-8">
+    <aside className="relative flex flex-col items-center gap-6 rounded-2xl border bg-card p-8">
+      <ThemeToggle className="absolute right-3 top-3" />
       {/* Profile Photo */}
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}

@@ -50,5 +50,19 @@ export function usePrefetchData() {
         return map;
       },
     });
+    queryClient.prefetchQuery({
+      queryKey: ["blog_posts"],
+      queryFn: async () => {
+        const { data } = await supabase.from("blog_posts").select("*").eq("is_published", true).order("published_at", { ascending: false });
+        return data ?? [];
+      },
+    });
+    queryClient.prefetchQuery({
+      queryKey: ["blog_categories"],
+      queryFn: async () => {
+        const { data } = await supabase.from("blog_categories").select("*").order("display_order");
+        return data ?? [];
+      },
+    });
   }, [queryClient]);
 }

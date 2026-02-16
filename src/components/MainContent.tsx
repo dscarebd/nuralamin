@@ -49,10 +49,12 @@ export default function MainContent() {
       >
         <motion.a
           variants={fadeUp}
+          whileHover={{ scale: 1.03, y: -2 }}
+          transition={{ type: "spring", stiffness: 300, damping: 20 }}
           href="tel:01754392770"
-          className="flex items-center gap-3 rounded-xl border bg-card p-4 transition-colors hover:bg-secondary"
+          className="flex items-center gap-3 rounded-xl border bg-card p-4"
         >
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-400">
             <Phone className="h-5 w-5" />
           </div>
           <div className="min-w-0">
@@ -62,10 +64,12 @@ export default function MainContent() {
         </motion.a>
         <motion.a
           variants={fadeUp}
+          whileHover={{ scale: 1.03, y: -2 }}
+          transition={{ type: "spring", stiffness: 300, damping: 20 }}
           href="mailto:sharif.logohut@gmail.com"
-          className="flex items-center gap-3 rounded-xl border bg-card p-4 transition-colors hover:bg-secondary"
+          className="flex items-center gap-3 rounded-xl border bg-card p-4"
         >
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-500/15 text-red-400">
             <Mail className="h-5 w-5" />
           </div>
           <div className="min-w-0">
@@ -73,8 +77,13 @@ export default function MainContent() {
             <p className="text-sm font-semibold text-foreground truncate">sharif.logohut@gmail.com</p>
           </div>
         </motion.a>
-        <motion.div variants={fadeUp} className="col-span-2 flex items-center gap-3 rounded-xl border bg-card p-4">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+        <motion.div
+          variants={fadeUp}
+          whileHover={{ scale: 1.02, y: -2 }}
+          transition={{ type: "spring", stiffness: 300, damping: 20 }}
+          className="col-span-2 flex items-center gap-3 rounded-xl border bg-card p-4"
+        >
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-orange-500/15 text-orange-400">
             <MapPin className="h-5 w-5" />
           </div>
           <div className="min-w-0">

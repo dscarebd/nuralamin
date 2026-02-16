@@ -15,11 +15,11 @@ const WhatsAppIcon = ({ className }: { className?: string }) => (
 );
 
 const socials = [
-  { icon: Facebook, href: "https://facebook.com/nuralamin", label: "Facebook" },
-  { icon: Instagram, href: "https://instagram.com/nuralamin", label: "Instagram" },
-  { icon: Send, href: "https://t.me/nuralamin", label: "Telegram" },
-  { icon: Youtube, href: "https://youtube.com/@nuralamin", label: "YouTube" },
-  { icon: WhatsAppIcon, href: "https://wa.me/8801825668550", label: "WhatsApp" },
+  { icon: Facebook, href: "https://facebook.com/nuralamin", label: "Facebook", hoverBg: "hover:bg-[#1877F2]" },
+  { icon: Instagram, href: "https://instagram.com/nuralamin", label: "Instagram", hoverBg: "hover:bg-gradient-to-br hover:from-[#F58529] hover:via-[#DD2A7B] hover:to-[#8134AF]" },
+  { icon: Send, href: "https://t.me/nuralamin", label: "Telegram", hoverBg: "hover:bg-[#26A5E4]" },
+  { icon: Youtube, href: "https://youtube.com/@nuralamin", label: "YouTube", hoverBg: "hover:bg-[#FF0000]" },
+  { icon: WhatsAppIcon, href: "https://wa.me/8801825668550", label: "WhatsApp", hoverBg: "hover:bg-[#25D366]" },
 ];
 
 const PROFILE_URL = "https://mycardbd.app/shariflogohut";
@@ -74,7 +74,7 @@ export default function ProfileSidebar() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={s.label}
-            className="flex h-10 w-10 items-center justify-center rounded-full border bg-secondary text-muted-foreground transition-colors hover:bg-primary hover:text-primary-foreground"
+            className={`flex h-10 w-10 items-center justify-center rounded-full border bg-secondary text-muted-foreground transition-all duration-300 hover:text-white hover:border-transparent ${s.hoverBg}`}
           >
             <s.icon className="h-4 w-4" />
           </a>

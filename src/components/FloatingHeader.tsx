@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Separator } from "@/components/ui/separator";
-import { Menu } from "lucide-react";
+import { Menu, Send } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -56,7 +56,7 @@ export default function FloatingHeader() {
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-64">
+            <SheetContent side="right" className="flex w-64 flex-col">
               <SheetHeader>
                 <SheetTitle className="text-left">
                   <img src={headerLogo} alt={name} className="h-[40px] dark:invert" />
@@ -77,6 +77,17 @@ export default function FloatingHeader() {
                   </NavLink>
                 ))}
               </nav>
+
+              {/* Contact card */}
+              <div className="mt-auto rounded-lg bg-secondary/50 p-4">
+                <p className="mb-3 text-sm font-medium text-foreground">Need any help?</p>
+                <Button asChild size="sm" className="w-full gap-2">
+                  <a href="https://t.me/nuralamin_official" target="_blank" rel="noopener noreferrer">
+                    <Send className="h-4 w-4" />
+                    Chat on Telegram
+                  </a>
+                </Button>
+              </div>
             </SheetContent>
           </Sheet>
         </div>

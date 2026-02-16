@@ -36,30 +36,42 @@ function AppLayout() {
   const location = useLocation();
   const isAdmin = location.pathname.startsWith("/admin");
 
-  return (
-    <>
-      {!isAdmin && <FloatingHeader />}
+  if (isAdmin) {
+    return (
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
-          <Route path="/" element={<motion.div {...pageTransition}><Index /></motion.div>} />
-          <Route path="/portfolio" element={<motion.div {...pageTransition}><Portfolio /></motion.div>} />
-          <Route path="/pricing" element={<motion.div {...pageTransition}><Pricing /></motion.div>} />
-        <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path="/admin" element={<ProtectedRoute><Dashboard /></ProtectedRoute>}>
-          <Route index element={<DashboardHome />} />
-          <Route path="profile" element={<ProfileEditor />} />
-          <Route path="socials" element={<SocialEditor />} />
-          <Route path="experience" element={<ExperienceEditor />} />
-          <Route path="projects" element={<ProjectsEditor />} />
-          <Route path="pricing" element={<PricingEditor />} />
-          <Route path="requests" element={<RequestsEditor />} />
-          <Route path="settings" element={<SettingsEditor />} />
-        </Route>
-        <Route path="*" element={<motion.div {...pageTransition}><NotFound /></motion.div>} />
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin" element={<ProtectedRoute><Dashboard /></ProtectedRoute>}>
+            <Route index element={<DashboardHome />} />
+            <Route path="profile" element={<ProfileEditor />} />
+            <Route path="socials" element={<SocialEditor />} />
+            <Route path="experience" element={<ExperienceEditor />} />
+            <Route path="projects" element={<ProjectsEditor />} />
+            <Route path="pricing" element={<PricingEditor />} />
+            <Route path="requests" element={<RequestsEditor />} />
+            <Route path="settings" element={<SettingsEditor />} />
+          </Route>
+          <Route path="*" element={<motion.div {...pageTransition}><NotFound /></motion.div>} />
         </Routes>
       </AnimatePresence>
-      {!isAdmin && <FloatingFooter />}
-    </>
+    );
+  }
+
+  return (
+    <div className="flex h-screen flex-col">
+      <FloatingHeader />
+      <div className="flex-1 overflow-hidden">
+        <AnimatePresence mode="wait">
+          <Routes location={location} key={location.pathname}>
+            <Route path="/" element={<motion.div {...pageTransition} className="h-full"><Index /></motion.div>} />
+            <Route path="/portfolio" element={<motion.div {...pageTransition}><Portfolio /></motion.div>} />
+            <Route path="/pricing" element={<motion.div {...pageTransition}><Pricing /></motion.div>} />
+            <Route path="*" element={<motion.div {...pageTransition}><NotFound /></motion.div>} />
+          </Routes>
+        </AnimatePresence>
+      </div>
+      <FloatingFooter />
+    </div>
   );
 }
 

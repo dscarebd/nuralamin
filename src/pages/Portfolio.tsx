@@ -1,4 +1,5 @@
-import { motion } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import imgEcommerce from "@/assets/project-ecommerce.jpg";
@@ -68,6 +69,57 @@ const stagger = {
   visible: { transition: { staggerChildren: 0.1 } },
 };
 
+function ProjectCard({ project, index }: { project: typeof projects[0]; index: number }) {
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <motion.div
+      variants={fadeUp}
+      whileHover={{ y: -4 }}
+      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      className="group relative flex flex-col overflow-hidden rounded-xl border border-border/60 bg-card transition-shadow hover:shadow-[0_4px_24px_-4px_hsl(var(--primary)/0.2)]"
+    >
+      <div className="absolute inset-x-0 top-0 z-10 h-[2px] scale-x-0 bg-gradient-to-r from-transparent via-primary to-transparent transition-transform duration-300 group-hover:scale-x-100" />
+      <div className="relative h-40 overflow-hidden">
+        <img src={project.image} alt={project.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
+        <div className="absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-card/40 to-transparent" />
+      </div>
+      <div className="flex flex-1 flex-col p-5">
+        <span className="mb-2 w-fit rounded-full bg-primary/10 px-2.5 py-0.5 text-[11px] font-medium text-primary">
+          {project.category}
+        </span>
+        <h3 className="mb-1 text-base font-bold text-foreground">{project.title}</h3>
+        <div className="mb-4 flex-1">
+          <p className={`text-sm leading-relaxed text-muted-foreground ${!expanded ? "line-clamp-2" : ""}`}>
+            {project.description}
+          </p>
+          <button
+            onClick={() => setExpanded(!expanded)}
+            className="mt-1 text-xs font-medium text-primary hover:underline"
+          >
+            {expanded ? "See Less" : "See More"}
+          </button>
+        </div>
+        <div className="mb-3 flex flex-wrap gap-1.5">
+          {project.tech.map((t) => (
+            <span key={t} className="rounded-md bg-secondary px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+              {t}
+            </span>
+          ))}
+        </div>
+        <a
+          href={project.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+        >
+          View Project <ExternalLink className="h-3 w-3" />
+        </a>
+      </div>
+    </motion.div>
+  );
+}
+
 export default function Portfolio() {
   return (
     <div className="min-h-screen bg-background px-4 py-8 md:px-8">
@@ -97,43 +149,9 @@ export default function Portfolio() {
           initial="hidden"
           animate="visible"
         >
-          {projects.map((project, i) => (
-            <motion.div
-              key={i}
-              variants={fadeUp}
-              whileHover={{ y: -4 }}
-              transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              className="group relative flex flex-col overflow-hidden rounded-xl border border-border/60 bg-card transition-shadow hover:shadow-[0_4px_24px_-4px_hsl(var(--primary)/0.2)]"
-            >
-              <div className="absolute inset-x-0 top-0 z-10 h-[2px] scale-x-0 bg-gradient-to-r from-transparent via-primary to-transparent transition-transform duration-300 group-hover:scale-x-100" />
-              <div className="relative h-40 overflow-hidden">
-                <img src={project.image} alt={project.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
-                <div className="absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-card/40 to-transparent" />
-              </div>
-              <div className="flex flex-1 flex-col p-5">
-              <span className="mb-2 w-fit rounded-full bg-primary/10 px-2.5 py-0.5 text-[11px] font-medium text-primary">
-                {project.category}
-              </span>
-              <h3 className="mb-1 text-base font-bold text-foreground">{project.title}</h3>
-              <p className="mb-4 flex-1 text-sm leading-relaxed text-muted-foreground">{project.description}</p>
-              <div className="mb-3 flex flex-wrap gap-1.5">
-                {project.tech.map((t) => (
-                  <span key={t} className="rounded-md bg-secondary px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
-                    {t}
-                  </span>
-                ))}
-              </div>
-              <a
-                href={project.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1 text-xs font-medium text-primary hover:underline"
-              >
-                View Project <ExternalLink className="h-3 w-3" />
-              </a>
-              </div>
-            </motion.div>
-          ))}
+           {projects.map((project, i) => (
+              <ProjectCard key={i} project={project} index={i} />
+            ))}
         </motion.div>
 
         {/* Contact CTA */}

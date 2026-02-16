@@ -89,9 +89,9 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
           {project.category}
         </span>
         <h3 className="mb-1 text-base font-bold text-foreground">{project.title}</h3>
-        <div className="mb-4 flex-1">
+        <div className="mb-4 flex-1 text-sm leading-relaxed text-muted-foreground">
           {expanded ? (
-            <p className="text-sm leading-relaxed text-muted-foreground">
+            <span>
               {project.description}{" "}
               <button
                 onClick={() => setExpanded(false)}
@@ -99,19 +99,21 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
               >
                 See Less
               </button>
-            </p>
+            </span>
           ) : (
-            <p className="text-sm leading-relaxed text-muted-foreground">
+            <span className="relative">
               <span className="line-clamp-2">
-                {project.description}{" "}
+                {project.description}
+                {/* Invisible spacer to reserve space for See More */}
+                <span className="invisible">{" "}See More</span>
               </span>
               <button
                 onClick={() => setExpanded(true)}
-                className="-mt-1 inline text-xs font-medium text-primary hover:underline"
+                className="absolute bottom-0 right-0 bg-card pl-1 text-xs font-medium text-primary hover:underline"
               >
                 See More
               </button>
-            </p>
+            </span>
           )}
         </div>
         <div className="mb-3 flex flex-wrap gap-1.5">

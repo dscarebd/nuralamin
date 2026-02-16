@@ -35,6 +35,7 @@ const pageTransition = {
 function AppLayout() {
   const location = useLocation();
   const isAdmin = location.pathname.startsWith("/admin");
+  const isHome = location.pathname === "/";
 
   if (isAdmin) {
     return (
@@ -69,8 +70,18 @@ function AppLayout() {
             <Route path="*" element={<motion.div {...pageTransition}><NotFound /></motion.div>} />
           </Routes>
         </AnimatePresence>
-        <FloatingFooter />
+        {/* Footer inside scroll area: visible on mobile/tablet always, and on desktop for non-home pages */}
+        {!isHome && <FloatingFooter />}
+        <div className="lg:hidden">
+          {isHome && <FloatingFooter />}
+        </div>
       </div>
+      {/* Footer outside scroll area: desktop home only */}
+      {isHome && (
+        <div className="hidden lg:block">
+          <FloatingFooter />
+        </div>
+      )}
     </div>
   );
 }

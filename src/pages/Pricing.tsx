@@ -76,9 +76,11 @@ export default function Pricing() {
     defaultValues: { name: "", contact_id: "", project_details: "", project_links: "", budget: "" },
   });
 
-  const watchedBudget = form.watch("budget");
+  const watchedValues = form.watch(["name", "contact_id", "project_details", "budget"]);
+  const [watchedName, watchedContactId, watchedDetails, watchedBudget] = watchedValues;
   const budgetNum = parseInt((watchedBudget || "").replace(/[^0-9]/g, ""), 10);
   const isBudgetTooLow = budgetNum > 0 && budgetNum < selectedPlanPrice;
+  const isFormIncomplete = !watchedName?.trim() || !watchedContactId?.trim() || !watchedDetails?.trim() || !watchedBudget?.trim();
 
   const parsePrice = (price: string) => {
     const num = parseInt(price.replace(/[^0-9]/g, ""), 10);
@@ -286,7 +288,7 @@ export default function Pricing() {
               {form.formState.errors.budget && <p className="ml-12 text-xs text-destructive mt-1">{form.formState.errors.budget.message}</p>}
               {isBudgetTooLow && <p className="ml-12 text-xs text-amber-500 mt-1">⚠️ Budget must be at least ${selectedPlanPrice}</p>}
             </div>
-            <Button type="submit" className="mt-2 w-full gap-2 rounded-xl" disabled={submitting || isBudgetTooLow}>
+            <Button type="submit" className="mt-2 w-full gap-2 rounded-xl" disabled={submitting || isBudgetTooLow || isFormIncomplete}>
               <Send className="h-4 w-4" /> {submitting ? "Submitting..." : "Submit Request"}
             </Button>
           </form>

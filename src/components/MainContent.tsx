@@ -51,7 +51,7 @@ export default function MainContent() {
           variants={fadeUp}
           whileHover={{ scale: 1.02, y: -2 }}
           transition={{ type: "spring", stiffness: 300, damping: 20 }}
-          href="tel:01754392770"
+          href="tel:01825668550"
           className="group relative flex cursor-pointer items-center gap-3 overflow-hidden rounded-xl border border-border/60 bg-card p-4 transition-shadow hover:shadow-[0_-2px_20px_-4px_rgba(34,197,94,0.25)]"
         >
           <div className="absolute inset-x-0 top-0 h-[2px] scale-x-0 bg-gradient-to-r from-transparent via-emerald-400 to-transparent transition-transform duration-300 group-hover:scale-x-100" />
@@ -60,14 +60,14 @@ export default function MainContent() {
           </div>
           <div className="min-w-0">
             <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Mobile</p>
-            <p className="text-sm font-semibold text-foreground">01754392770</p>
+            <p className="text-sm font-semibold text-foreground">01825668550</p>
           </div>
         </motion.a>
         <motion.a
           variants={fadeUp}
           whileHover={{ scale: 1.02, y: -2 }}
           transition={{ type: "spring", stiffness: 300, damping: 20 }}
-          href="mailto:sharif.logohut@gmail.com"
+          href="mailto:hey@nuralamin.com"
           className="group relative flex cursor-pointer items-center gap-3 overflow-hidden rounded-xl border border-border/60 bg-card p-4 transition-shadow hover:shadow-[0_-2px_20px_-4px_rgba(239,68,68,0.25)]"
         >
           <div className="absolute inset-x-0 top-0 h-[2px] scale-x-0 bg-gradient-to-r from-transparent via-red-400 to-transparent transition-transform duration-300 group-hover:scale-x-100" />
@@ -76,7 +76,7 @@ export default function MainContent() {
           </div>
           <div className="min-w-0">
             <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Email</p>
-            <p className="text-sm font-semibold text-foreground truncate">sharif.logohut@gmail.com</p>
+            <p className="text-sm font-semibold text-foreground truncate">hey@nuralamin.com</p>
           </div>
         </motion.a>
         <motion.div
@@ -150,7 +150,7 @@ export default function MainContent() {
         viewport={{ once: true }}
         className="py-6 text-center text-xs text-muted-foreground"
       >
-        © 2026 Shariful Islam
+        © 2026 NUR AL AMIN
       </motion.footer>
     </main>
   );

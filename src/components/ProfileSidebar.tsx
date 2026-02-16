@@ -39,14 +39,14 @@ export default function ProfileSidebar() {
         className="rounded-full bg-gradient-to-br from-primary to-accent p-1"
       >
         <Avatar className="h-32 w-32">
-          <AvatarImage src={profilePhoto} alt="Shariful Islam" />
-          <AvatarFallback className="text-2xl">SI</AvatarFallback>
+          <AvatarImage src={profilePhoto} alt="NUR AL AMIN" />
+          <AvatarFallback className="text-2xl">NA</AvatarFallback>
         </Avatar>
       </motion.div>
 
       {/* Name & Title */}
       <motion.div custom={1} variants={fadeUp} initial="hidden" animate="visible" className="text-center">
-        <h1 className="text-2xl font-bold text-foreground">Shariful Islam</h1>
+        <h1 className="text-2xl font-bold text-foreground">NUR AL AMIN</h1>
         <p className="text-sm text-muted-foreground">Brand Designer</p>
       </motion.div>
 

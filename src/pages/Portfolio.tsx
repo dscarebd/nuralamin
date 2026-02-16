@@ -151,7 +151,7 @@ export default function Portfolio() {
 
         {/* Project Detail Dialog */}
         <Dialog open={!!selectedProject} onOpenChange={(open) => !open && setSelectedProject(null)}>
-          <DialogContent className="max-w-2xl overflow-hidden p-0">
+          <DialogContent className="max-w-2xl animate-enter overflow-hidden p-0">
             {selectedProject && (
               <>
                 <div className="relative h-56 w-full overflow-hidden">

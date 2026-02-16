@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Link } from "react-router-dom";
 import { downloadVCard } from "@/lib/vcard";
 import profilePhoto from "@/assets/profile-photo.jpg";
 
@@ -60,10 +61,10 @@ export default function ProfileSidebar() {
       {/* Hire Me */}
       <motion.div custom={2} variants={fadeUp} initial="hidden" animate="visible" className="w-full">
         <Button asChild className="w-full gap-2 rounded-xl">
-          <a href="/portfolio">
+          <Link to="/portfolio">
             <Briefcase className="h-4 w-4" />
             Hire Me
-          </a>
+          </Link>
         </Button>
       </motion.div>
 

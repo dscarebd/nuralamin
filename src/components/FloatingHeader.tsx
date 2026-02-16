@@ -33,23 +33,22 @@ export default function FloatingHeader() {
           <span className="text-sm font-bold text-foreground">{name}</span>
         </NavLink>
 
-        {/* Center: Desktop nav */}
-        <nav className="hidden items-center gap-1 md:flex">
-          {navItems.map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              end={item.to === "/"}
-              className="rounded-lg px-3 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-              activeClassName="bg-primary/10 text-primary"
-            >
-              {item.label}
-            </NavLink>
-          ))}
-        </nav>
-
-        {/* Right: Theme toggle + mobile menu */}
+        {/* Right: Desktop nav + Theme toggle + mobile menu */}
         <div className="flex items-center gap-2">
+          <nav className="hidden items-center gap-1 md:flex">
+            {navItems.map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                end={item.to === "/"}
+                className="rounded-lg px-3 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                activeClassName="bg-primary/10 text-primary"
+              >
+                {item.label}
+              </NavLink>
+            ))}
+          </nav>
+
           <ThemeToggle />
 
           {/* Mobile hamburger */}

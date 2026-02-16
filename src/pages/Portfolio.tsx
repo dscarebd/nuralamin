@@ -168,11 +168,11 @@ export default function Portfolio() {
               <div className="flex flex-col sm:flex-row">
                 {/* Left: Image */}
                 <div className="sm:w-1/2">
-                  <div className="w-full overflow-hidden">
+                  <div className="h-full w-full overflow-hidden">
                     <img
                       src={selectedProject.image}
                       alt={selectedProject.title}
-                      className="h-auto w-full object-contain"
+                      className="h-full w-full object-cover"
                     />
                   </div>
                 </div>

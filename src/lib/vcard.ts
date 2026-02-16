@@ -3,7 +3,7 @@ export function downloadVCard() {
 VERSION:3.0
 FN:NUR AL AMIN
 N:Amin;Nur Al;;;
-TITLE:Brand Designer
+TITLE:Website and App Developer
 TEL;TYPE=CELL:+8801825668550
 EMAIL:hey@nuralamin.com
 ADR;TYPE=HOME:;;Uttara, Dhaka;;1000;;Bangladesh

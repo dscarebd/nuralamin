@@ -47,7 +47,7 @@ export default function ProfileSidebar() {
       {/* Name & Title */}
       <motion.div custom={1} variants={fadeUp} initial="hidden" animate="visible" className="text-center">
         <h1 className="text-2xl font-bold text-foreground">NUR AL AMIN</h1>
-        <p className="text-sm text-muted-foreground">Brand Designer</p>
+        <p className="text-sm text-muted-foreground">Website and App Developer</p>
       </motion.div>
 
       {/* Save Contact */}

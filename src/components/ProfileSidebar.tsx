@@ -156,6 +156,16 @@ export default function ProfileSidebar() {
         </a>
       </motion.div>
 
+      {/* View Portfolio */}
+      <motion.div custom={5} variants={fadeUp} initial="hidden" animate="visible" className="w-full">
+        <Button asChild variant="outline" className="w-full gap-2 rounded-xl">
+          <Link to="/portfolio">
+            <Briefcase className="h-4 w-4" />
+            View My Portfolio
+          </Link>
+        </Button>
+      </motion.div>
+
       {/* QR Modal */}
       <Dialog open={qrOpen} onOpenChange={setQrOpen}>
         <DialogContent className="max-w-xs border bg-card">

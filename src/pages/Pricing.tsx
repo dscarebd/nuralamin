@@ -163,32 +163,46 @@ export default function Pricing() {
 
       {/* Contact Form Dialog */}
       <Dialog open={formOpen} onOpenChange={setFormOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Get Started with {selectedPlan}</DialogTitle>
-            <DialogDescription>Fill in your details and we'll get back to you shortly.</DialogDescription>
-          </DialogHeader>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="name">Name *</Label>
-              <Input id="name" placeholder="Your full name" {...form.register("name")} />
-              {form.formState.errors.name && <p className="text-xs text-destructive">{form.formState.errors.name.message}</p>}
+        <DialogContent className="sm:max-w-lg p-0 overflow-hidden rounded-2xl">
+          <div className="bg-gradient-to-br from-primary/10 via-accent/5 to-transparent px-6 pt-6 pb-4">
+            <DialogHeader>
+              <DialogTitle className="text-xl font-bold">Get Started with {selectedPlan}</DialogTitle>
+              <DialogDescription className="text-xs">Fill in your details and we'll get back to you shortly.</DialogDescription>
+            </DialogHeader>
+          </div>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-3 px-6 pb-6 pt-2">
+            <div className="rounded-xl border bg-muted/30 p-4">
+              <div className="mb-2 flex items-center gap-3">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary text-sm font-bold">👤</div>
+                <Label htmlFor="name" className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Name *</Label>
+              </div>
+              <Input id="name" placeholder="Your full name" className="ml-12 w-[calc(100%-3rem)] border-none bg-transparent px-0 shadow-none focus-visible:ring-0" {...form.register("name")} />
+              {form.formState.errors.name && <p className="ml-12 text-xs text-destructive mt-1">{form.formState.errors.name.message}</p>}
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="contact_id">WhatsApp or Telegram ID *</Label>
-              <Input id="contact_id" placeholder="@username or phone number" {...form.register("contact_id")} />
-              {form.formState.errors.contact_id && <p className="text-xs text-destructive">{form.formState.errors.contact_id.message}</p>}
+            <div className="rounded-xl border bg-muted/30 p-4">
+              <div className="mb-2 flex items-center gap-3">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary text-sm font-bold">💬</div>
+                <Label htmlFor="contact_id" className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">WhatsApp or Telegram ID *</Label>
+              </div>
+              <Input id="contact_id" placeholder="@username or phone number" className="ml-12 w-[calc(100%-3rem)] border-none bg-transparent px-0 shadow-none focus-visible:ring-0" {...form.register("contact_id")} />
+              {form.formState.errors.contact_id && <p className="ml-12 text-xs text-destructive mt-1">{form.formState.errors.contact_id.message}</p>}
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="project_details">Project Details *</Label>
-              <Textarea id="project_details" placeholder="Describe your project..." rows={4} {...form.register("project_details")} />
-              {form.formState.errors.project_details && <p className="text-xs text-destructive">{form.formState.errors.project_details.message}</p>}
+            <div className="rounded-xl border bg-muted/30 p-4">
+              <div className="mb-2 flex items-center gap-3">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary text-sm font-bold">📝</div>
+                <Label htmlFor="project_details" className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Project Details *</Label>
+              </div>
+              <Textarea id="project_details" placeholder="Describe your project..." rows={3} className="ml-12 w-[calc(100%-3rem)] border-none bg-transparent px-0 shadow-none focus-visible:ring-0 resize-none" {...form.register("project_details")} />
+              {form.formState.errors.project_details && <p className="ml-12 text-xs text-destructive mt-1">{form.formState.errors.project_details.message}</p>}
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="project_links">Project Links (optional)</Label>
-              <Input id="project_links" placeholder="Reference URLs, designs, etc." {...form.register("project_links")} />
+            <div className="rounded-xl border bg-muted/30 p-4">
+              <div className="mb-2 flex items-center gap-3">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary text-sm font-bold">🔗</div>
+                <Label htmlFor="project_links" className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Project Links (optional)</Label>
+              </div>
+              <Input id="project_links" placeholder="Reference URLs, designs, etc." className="ml-12 w-[calc(100%-3rem)] border-none bg-transparent px-0 shadow-none focus-visible:ring-0" {...form.register("project_links")} />
             </div>
-            <Button type="submit" className="w-full gap-2" disabled={submitting}>
+            <Button type="submit" className="mt-2 w-full gap-2 rounded-xl" disabled={submitting}>
               <Send className="h-4 w-4" /> {submitting ? "Submitting..." : "Submit Request"}
             </Button>
           </form>
@@ -197,20 +211,23 @@ export default function Pricing() {
 
       {/* Thank You Dialog */}
       <Dialog open={thankYouOpen} onOpenChange={setThankYouOpen}>
-        <DialogContent className="sm:max-w-sm text-center">
-          <DialogHeader>
-            <DialogTitle className="text-center">🎉 Thank You!</DialogTitle>
-            <DialogDescription className="text-center">
-              Your request has been submitted successfully. We'll review your details soon!
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-3 pt-2">
-            <Button asChild className="w-full gap-2">
+        <DialogContent className="sm:max-w-sm p-0 overflow-hidden rounded-2xl text-center">
+          <div className="bg-gradient-to-br from-primary/10 via-accent/5 to-transparent px-6 pt-8 pb-4">
+            <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 text-3xl">🎉</div>
+            <DialogHeader>
+              <DialogTitle className="text-center text-xl font-bold">Thank You!</DialogTitle>
+              <DialogDescription className="text-center">
+                Your request has been submitted successfully. We'll review your details soon!
+              </DialogDescription>
+            </DialogHeader>
+          </div>
+          <div className="space-y-3 px-6 pb-6 pt-2">
+            <Button asChild className="w-full gap-2 rounded-xl">
               <a href={buildTelegramLink()} target="_blank" rel="noopener noreferrer">
                 <Send className="h-4 w-4" /> Contact on Telegram
               </a>
             </Button>
-            <Button variant="outline" className="w-full" onClick={() => setThankYouOpen(false)}>
+            <Button variant="outline" className="w-full rounded-xl" onClick={() => setThankYouOpen(false)}>
               Close
             </Button>
           </div>

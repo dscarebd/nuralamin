@@ -2,11 +2,53 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import {
   FolderOpen, Briefcase, DollarSign, Link2, Eye, Users, FileText, MessageCircle,
-  TrendingUp, Globe, Clock, BarChart3, ArrowUpRight, ArrowDownRight,
+  TrendingUp, Globe, Clock, BarChart3, ArrowUpRight, ArrowDownRight, CalendarIcon, Filter,
 } from "lucide-react";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import { format, subDays, startOfDay, endOfDay, differenceInDays, subMonths } from "date-fns";
+import { Button } from "@/components/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { cn } from "@/lib/utils";
+
+type DateRange = { from: Date; to: Date };
+type PresetKey = "today" | "7d" | "30d" | "90d" | "all" | "custom";
+
+const presets: { key: PresetKey; label: string }[] = [
+  { key: "today", label: "Today" },
+  { key: "7d", label: "7 Days" },
+  { key: "30d", label: "30 Days" },
+  { key: "90d", label: "90 Days" },
+  { key: "all", label: "All Time" },
+  { key: "custom", label: "Custom" },
+];
+
+function getPresetRange(key: PresetKey): DateRange | null {
+  const now = new Date();
+  const today = startOfDay(now);
+  switch (key) {
+    case "today": return { from: today, to: endOfDay(now) };
+    case "7d": return { from: subDays(today, 6), to: endOfDay(now) };
+    case "30d": return { from: subDays(today, 29), to: endOfDay(now) };
+    case "90d": return { from: subDays(today, 89), to: endOfDay(now) };
+    case "all": return null;
+    default: return null;
+  }
+}
 
 export default function DashboardHome() {
+  const [activePreset, setActivePreset] = useState<PresetKey>("7d");
+  const [customRange, setCustomRange] = useState<{ from?: Date; to?: Date }>({});
+  const [calendarOpen, setCalendarOpen] = useState(false);
+
+  const dateRange = useMemo<DateRange | null>(() => {
+    if (activePreset === "custom" && customRange.from && customRange.to) {
+      return { from: startOfDay(customRange.from), to: endOfDay(customRange.to) };
+    }
+    if (activePreset === "custom") return null;
+    return getPresetRange(activePreset);
+  }, [activePreset, customRange]);
+
   const { data: projects } = useQuery({ queryKey: ["projects"], queryFn: async () => { const { data } = await supabase.from("projects").select("id"); return data ?? []; }});
   const { data: experiences } = useQuery({ queryKey: ["experiences"], queryFn: async () => { const { data } = await supabase.from("experiences").select("id"); return data ?? []; }});
   const { data: plans } = useQuery({ queryKey: ["pricing_plans"], queryFn: async () => { const { data } = await supabase.from("pricing_plans").select("id"); return data ?? []; }});
@@ -14,7 +56,6 @@ export default function DashboardHome() {
   const { data: blogPosts } = useQuery({ queryKey: ["admin_blog_posts"], queryFn: async () => { const { data } = await supabase.from("blog_posts").select("id, is_published, title, created_at"); return data ?? []; }});
   const { data: contactRequests } = useQuery({ queryKey: ["admin_contact_requests"], queryFn: async () => { const { data } = await supabase.from("contact_requests").select("*").order("created_at", { ascending: false }); return data ?? []; }});
 
-  // Page views data
   const { data: pageViews } = useQuery({
     queryKey: ["admin_page_views"],
     queryFn: async () => {
@@ -29,38 +70,44 @@ export default function DashboardHome() {
 
   const analytics = useMemo(() => {
     if (!pageViews) return null;
-    
+
     const now = new Date();
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const last7Days = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
-    const last30Days = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
-    const prev7Days = new Date(last7Days.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const today = startOfDay(now);
 
+    // Filtered views based on selected range
+    const filtered = dateRange
+      ? pageViews.filter(v => { const d = new Date(v.created_at); return d >= dateRange.from && d <= dateRange.to; })
+      : pageViews;
+
+    // Previous period for comparison
+    const rangeDays = dateRange ? differenceInDays(dateRange.to, dateRange.from) + 1 : 0;
+    const prevFiltered = dateRange
+      ? pageViews.filter(v => { const d = new Date(v.created_at); const prevStart = subDays(dateRange.from, rangeDays); return d >= prevStart && d < dateRange.from; })
+      : [];
+
+    const uniqueFiltered = new Set(filtered.map(v => v.visitor_id)).size;
+    const change = prevFiltered.length > 0 ? Math.round(((filtered.length - prevFiltered.length) / prevFiltered.length) * 100) : (filtered.length > 0 ? 100 : 0);
+
+    // Today stats (always show)
     const todayViews = pageViews.filter(v => new Date(v.created_at) >= today);
-    const week = pageViews.filter(v => new Date(v.created_at) >= last7Days);
-    const prevWeek = pageViews.filter(v => { const d = new Date(v.created_at); return d >= prev7Days && d < last7Days; });
-    const month = pageViews.filter(v => new Date(v.created_at) >= last30Days);
-
     const uniqueToday = new Set(todayViews.map(v => v.visitor_id)).size;
-    const uniqueWeek = new Set(week.map(v => v.visitor_id)).size;
-    const uniqueMonth = new Set(month.map(v => v.visitor_id)).size;
     const totalUnique = new Set(pageViews.map(v => v.visitor_id)).size;
 
-    const weekChange = prevWeek.length > 0 ? Math.round(((week.length - prevWeek.length) / prevWeek.length) * 100) : 100;
-
-    // Top pages
+    // Top pages for selected range
     const pageCounts: Record<string, number> = {};
-    week.forEach(v => { pageCounts[v.page_path] = (pageCounts[v.page_path] || 0) + 1; });
+    filtered.forEach(v => { pageCounts[v.page_path] = (pageCounts[v.page_path] || 0) + 1; });
     const topPages = Object.entries(pageCounts).sort((a, b) => b[1] - a[1]).slice(0, 5);
 
-    // Daily views for last 7 days
+    // Daily views for chart - show days in selected range (max 30 bars)
+    const chartDays = dateRange ? Math.min(rangeDays, 30) : 7;
+    const chartEnd = dateRange ? dateRange.to : endOfDay(now);
     const dailyViews: { day: string; views: number; visitors: number }[] = [];
-    for (let i = 6; i >= 0; i--) {
-      const d = new Date(today.getTime() - i * 24 * 60 * 60 * 1000);
-      const next = new Date(d.getTime() + 24 * 60 * 60 * 1000);
-      const dayViews = pageViews.filter(v => { const vd = new Date(v.created_at); return vd >= d && vd < next; });
+    for (let i = chartDays - 1; i >= 0; i--) {
+      const d = startOfDay(subDays(chartEnd, i));
+      const next = endOfDay(d);
+      const dayViews = pageViews.filter(v => { const vd = new Date(v.created_at); return vd >= d && vd <= next; });
       dailyViews.push({
-        day: d.toLocaleDateString("en", { weekday: "short" }),
+        day: format(d, chartDays > 14 ? "d MMM" : "EEE"),
         views: dayViews.length,
         visitors: new Set(dayViews.map(v => v.visitor_id)).size,
       });
@@ -68,12 +115,11 @@ export default function DashboardHome() {
 
     return {
       todayViews: todayViews.length, uniqueToday,
-      weekViews: week.length, uniqueWeek, weekChange,
-      monthViews: month.length, uniqueMonth,
+      filteredViews: filtered.length, uniqueFiltered, change,
       totalViews: pageViews.length, totalUnique,
       topPages, dailyViews,
     };
-  }, [pageViews]);
+  }, [pageViews, dateRange]);
 
   const unreadRequests = contactRequests?.filter(r => !r.is_read).length ?? 0;
   const publishedPosts = blogPosts?.filter(p => p.is_published).length ?? 0;
@@ -87,10 +133,13 @@ export default function DashboardHome() {
     { label: "Requests", count: contactRequests?.length ?? 0, icon: MessageCircle, color: "text-rose-500", badge: unreadRequests > 0 ? `${unreadRequests} new` : undefined },
   ];
 
+  const rangeLabel = activePreset === "custom" && customRange.from && customRange.to
+    ? `${format(customRange.from, "MMM d")} – ${format(customRange.to, "MMM d, yyyy")}`
+    : presets.find(p => p.key === activePreset)?.label ?? "";
+
   const trafficStats = analytics ? [
     { label: "Today's Views", count: analytics.todayViews, sub: `${analytics.uniqueToday} unique`, icon: Eye, color: "text-sky-500" },
-    { label: "This Week", count: analytics.weekViews, sub: `${analytics.uniqueWeek} unique`, icon: TrendingUp, color: "text-emerald-500", change: analytics.weekChange },
-    { label: "This Month", count: analytics.monthViews, sub: `${analytics.uniqueMonth} unique`, icon: BarChart3, color: "text-amber-500" },
+    { label: rangeLabel + " Views", count: analytics.filteredViews, sub: `${analytics.uniqueFiltered} unique`, icon: TrendingUp, color: "text-emerald-500", change: analytics.change },
     { label: "Total Visitors", count: analytics.totalUnique, sub: `${analytics.totalViews} views`, icon: Users, color: "text-primary" },
   ] : [];
 
@@ -113,10 +162,56 @@ export default function DashboardHome() {
       {/* Traffic Stats */}
       {analytics && (
         <div>
-          <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-            <Globe className="h-4 w-4" /> Visitor Analytics
-          </h2>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+            <h2 className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+              <Globe className="h-4 w-4" /> Visitor Analytics
+            </h2>
+            {/* Date Range Filter */}
+            <div className="flex flex-wrap items-center gap-1.5">
+              {presets.filter(p => p.key !== "custom").map((p) => (
+                <Button
+                  key={p.key}
+                  variant={activePreset === p.key ? "default" : "outline"}
+                  size="sm"
+                  className="h-7 px-2.5 text-xs"
+                  onClick={() => { setActivePreset(p.key); setCustomRange({}); }}
+                >
+                  {p.label}
+                </Button>
+              ))}
+              <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant={activePreset === "custom" ? "default" : "outline"}
+                    size="sm"
+                    className="h-7 gap-1 px-2.5 text-xs"
+                  >
+                    <CalendarIcon className="h-3 w-3" />
+                    {activePreset === "custom" && customRange.from && customRange.to
+                      ? `${format(customRange.from, "MMM d")} – ${format(customRange.to, "MMM d")}`
+                      : "Custom"}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="end">
+                  <Calendar
+                    mode="range"
+                    selected={customRange.from ? { from: customRange.from, to: customRange.to } : undefined}
+                    onSelect={(range) => {
+                      setCustomRange({ from: range?.from, to: range?.to });
+                      if (range?.from && range?.to) {
+                        setActivePreset("custom");
+                        setCalendarOpen(false);
+                      }
+                    }}
+                    disabled={(date) => date > new Date()}
+                    numberOfMonths={2}
+                    className="p-3 pointer-events-auto"
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {trafficStats.map((s) => (
               <div key={s.label} className="rounded-xl border bg-card p-5">
                 <div className="flex items-start justify-between">
@@ -143,35 +238,35 @@ export default function DashboardHome() {
         </div>
       )}
 
-      {/* Weekly Chart + Top Pages */}
+      {/* Chart + Top Pages */}
       {analytics && (
         <div className="grid gap-4 lg:grid-cols-2">
-          {/* Simple bar chart */}
           <div className="rounded-xl border bg-card p-5">
-            <h3 className="mb-4 text-sm font-semibold text-foreground">Last 7 Days</h3>
-            <div className="flex items-end gap-2" style={{ height: 120 }}>
+            <h3 className="mb-4 text-sm font-semibold text-foreground">
+              {rangeLabel} — Daily Views
+            </h3>
+            <div className="flex items-end gap-1" style={{ height: 120 }}>
               {analytics.dailyViews.map((d, i) => (
-                <div key={i} className="flex flex-1 flex-col items-center gap-1">
+                <div key={i} className="flex flex-1 flex-col items-center gap-1 min-w-0">
                   <span className="text-[10px] font-medium text-muted-foreground">{d.views}</span>
                   <div
                     className="w-full rounded-t-md bg-primary/80 transition-all hover:bg-primary"
                     style={{ height: `${(d.views / maxDailyViews) * 80}px`, minHeight: d.views > 0 ? 4 : 0 }}
                   />
-                  <span className="text-[10px] text-muted-foreground">{d.day}</span>
+                  <span className="text-[9px] text-muted-foreground truncate w-full text-center">{d.day}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Top pages */}
           <div className="rounded-xl border bg-card p-5">
-            <h3 className="mb-4 text-sm font-semibold text-foreground">Top Pages (This Week)</h3>
+            <h3 className="mb-4 text-sm font-semibold text-foreground">Top Pages ({rangeLabel})</h3>
             {analytics.topPages.length === 0 ? (
-              <p className="text-sm text-muted-foreground">No page views yet</p>
+              <p className="text-sm text-muted-foreground">No page views in this period</p>
             ) : (
               <div className="space-y-3">
                 {analytics.topPages.map(([path, count]) => {
-                  const pct = analytics.weekViews > 0 ? (count / analytics.weekViews) * 100 : 0;
+                  const pct = analytics.filteredViews > 0 ? (count / analytics.filteredViews) * 100 : 0;
                   return (
                     <div key={path} className="space-y-1">
                       <div className="flex items-center justify-between text-sm">
@@ -225,7 +320,6 @@ export default function DashboardHome() {
             <p className="p-5 text-sm text-muted-foreground">No recent activity</p>
           ) : (
             <div className="divide-y divide-border">
-              {/* Recent contact requests */}
               {(contactRequests ?? []).slice(0, 5).map((req) => (
                 <div key={req.id} className="flex items-center gap-3 px-5 py-3">
                   <div className={`flex h-8 w-8 items-center justify-center rounded-full ${req.is_read ? "bg-muted" : "bg-rose-500/10"}`}>
@@ -242,7 +336,6 @@ export default function DashboardHome() {
                   </span>
                 </div>
               ))}
-              {/* Recent blog posts */}
               {(blogPosts ?? []).slice(0, 3).map((post) => (
                 <div key={post.id} className="flex items-center gap-3 px-5 py-3">
                   <div className="flex h-8 w-8 items-center justify-center rounded-full bg-sky-500/10">

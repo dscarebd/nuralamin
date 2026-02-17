@@ -30,6 +30,7 @@ type Project = {
   description: string | null;
   tech: string[] | null;
   image_url: string | null;
+  gallery_images?: string[] | null;
   link: string | null;
   budget: string | null;
   date: string | null;
@@ -84,6 +85,7 @@ export default function Portfolio() {
   const { data: dbProjects = [] } = useProjects();
   const { data: settings } = useSiteSettings();
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [activeImage, setActiveImage] = useState<string | null>(null);
 
   const websiteProjects = dbProjects.filter((p) => p.category !== "Mobile App");
   const mobileProjects = dbProjects.filter((p) => p.category === "Mobile App");
@@ -122,30 +124,53 @@ export default function Portfolio() {
           </motion.div>
         </TabsContent>
 
-        <Dialog open={!!selectedProject} onOpenChange={(open) => !open && setSelectedProject(null)}>
+        <Dialog open={!!selectedProject} onOpenChange={(open) => { if (!open) { setSelectedProject(null); setActiveImage(null); } }}>
           <DialogContent className="max-w-2xl animate-enter overflow-hidden p-0">
-            {selectedProject && (
-              <div className="flex flex-col">
-                <div className="aspect-video w-full overflow-hidden">
-                  <img src={selectedProject.image_url || fallbackImages[selectedProject.title] || imgEcommerce} alt={selectedProject.title} className="h-full w-full object-cover" />
-                </div>
-                <div className="flex flex-1 flex-col gap-5 p-6 sm:p-8">
-                  <DialogHeader className="space-y-3">
-                    <DialogTitle className="text-2xl font-extrabold uppercase tracking-tight text-foreground">{selectedProject.title}</DialogTitle>
-                    <DialogDescription className="text-sm leading-relaxed">{selectedProject.description}</DialogDescription>
-                  </DialogHeader>
-                  <div className="space-y-3 border-t border-border pt-4 text-sm">
-                    <div className="flex gap-6"><span className="w-24 shrink-0 font-semibold text-foreground">Category</span><span className="text-muted-foreground">{selectedProject.category}</span></div>
-                    <div className="flex gap-6"><span className="w-24 shrink-0 font-semibold text-foreground">Date</span><span className="text-muted-foreground">{selectedProject.date}</span></div>
-                    <div className="flex gap-6"><span className="w-24 shrink-0 font-semibold text-foreground">Budget</span><span className="text-muted-foreground">{selectedProject.budget}</span></div>
-                    <div className="flex gap-6"><span className="w-24 shrink-0 font-semibold text-foreground">Tech Stack</span><span className="text-muted-foreground">{(selectedProject.tech ?? []).join(", ")}</span></div>
+            {selectedProject && (() => {
+              const mainImg = activeImage || selectedProject.image_url || fallbackImages[selectedProject.title] || imgEcommerce;
+              const gallery = ((selectedProject as any).gallery_images ?? []) as string[];
+              return (
+                <div className="flex flex-col">
+                  <div className="aspect-video w-full overflow-hidden">
+                    <img src={mainImg} alt={selectedProject.title} className="h-full w-full object-cover" />
                   </div>
-                  <Button asChild size="lg" className="mt-auto w-full">
-                    <a href={selectedProject.link ?? "#"} target="_blank" rel="noopener noreferrer">View Project <ExternalLink className="ml-1 h-4 w-4" /></a>
-                  </Button>
+                  {gallery.length > 0 && (
+                    <div className="flex gap-2 overflow-x-auto px-6 pt-3 sm:px-8">
+                      <button
+                        onClick={() => setActiveImage(null)}
+                        className={`h-14 w-14 shrink-0 overflow-hidden rounded-md border-2 transition-all ${!activeImage ? "border-primary" : "border-transparent opacity-70 hover:opacity-100"}`}
+                      >
+                        <img src={selectedProject.image_url || fallbackImages[selectedProject.title] || imgEcommerce} alt="Main" className="h-full w-full object-cover" />
+                      </button>
+                      {gallery.map((url, i) => (
+                        <button
+                          key={i}
+                          onClick={() => setActiveImage(url)}
+                          className={`h-14 w-14 shrink-0 overflow-hidden rounded-md border-2 transition-all ${activeImage === url ? "border-primary" : "border-transparent opacity-70 hover:opacity-100"}`}
+                        >
+                          <img src={url} alt={`Gallery ${i + 1}`} className="h-full w-full object-cover" />
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                  <div className="flex flex-1 flex-col gap-5 p-6 sm:p-8">
+                    <DialogHeader className="space-y-3">
+                      <DialogTitle className="text-2xl font-extrabold uppercase tracking-tight text-foreground">{selectedProject.title}</DialogTitle>
+                      <DialogDescription className="text-sm leading-relaxed">{selectedProject.description}</DialogDescription>
+                    </DialogHeader>
+                    <div className="space-y-3 border-t border-border pt-4 text-sm">
+                      <div className="flex gap-6"><span className="w-24 shrink-0 font-semibold text-foreground">Category</span><span className="text-muted-foreground">{selectedProject.category}</span></div>
+                      <div className="flex gap-6"><span className="w-24 shrink-0 font-semibold text-foreground">Date</span><span className="text-muted-foreground">{selectedProject.date}</span></div>
+                      <div className="flex gap-6"><span className="w-24 shrink-0 font-semibold text-foreground">Budget</span><span className="text-muted-foreground">{selectedProject.budget}</span></div>
+                      <div className="flex gap-6"><span className="w-24 shrink-0 font-semibold text-foreground">Tech Stack</span><span className="text-muted-foreground">{(selectedProject.tech ?? []).join(", ")}</span></div>
+                    </div>
+                    <Button asChild size="lg" className="mt-auto w-full">
+                      <a href={selectedProject.link ?? "#"} target="_blank" rel="noopener noreferrer">View Project <ExternalLink className="ml-1 h-4 w-4" /></a>
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            )}
+              );
+            })()}
           </DialogContent>
         </Dialog>
 

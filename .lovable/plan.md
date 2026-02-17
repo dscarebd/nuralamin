@@ -1,33 +1,24 @@
 
 
-## Portfolio Popup: Image Carousel/Slider
+## Fix: Cards Overlapping Footer on Desktop Home
 
-Replace the current thumbnail-button gallery in the portfolio dialog with a proper image carousel/slider using the existing Embla Carousel component.
+### Problem
+On the desktop home page, both the ProfileSidebar and MainContent cards extend to the full height of their container. However, the FloatingHeader sits inside the same container, pushing the cards down so their bottom portions get hidden behind the footer.
 
-### What Changes
+### Solution
+Restructure the desktop home layout so the header and content area are in a flex column. The header takes its natural height, and the Index page fills only the remaining space. Both cards will be internally scrollable.
 
-**`src/pages/Portfolio.tsx`** - Dialog image section (lines 133-155)
+### Changes
 
-Currently the dialog shows a single main image with small thumbnail buttons below. This will be replaced with:
+**1. `src/App.tsx`** -- Make the content wrapper a flex column on desktop home, so the header and route content stack properly:
+- Add `lg:flex lg:flex-col` to the content wrapper when on home page
+- Give the route's `motion.div` a `lg:flex-1 lg:min-h-0` instead of `lg:h-full` so it fills remaining space after the header
 
-1. A full-width carousel that includes the main project image + all gallery images as slides
-2. Left/right arrow navigation buttons overlaid on the image area
-3. Dot indicators at the bottom of the carousel showing the current slide
-4. The thumbnail row is removed entirely -- navigation happens via arrows and dots
+**2. `src/pages/Index.tsx`** -- Replace `lg:h-full` with `lg:flex-1 lg:min-h-0` on the outer div so it properly fills the remaining flex space without overflowing.
 
-### Implementation Details
+### Technical Details
 
-- Import `Carousel`, `CarouselContent`, `CarouselItem`, `CarouselPrevious`, `CarouselNext` from the existing `@/components/ui/carousel`
-- Build an `allImages` array: `[mainImage, ...galleryImages]`
-- If only one image exists (no gallery), show it as a plain image (no carousel controls)
-- If multiple images exist, wrap them in the Carousel component with:
-  - `CarouselPrevious` and `CarouselNext` repositioned inside the image area (not outside) using custom classes like `left-2 top-1/2` and `right-2 top-1/2`
-  - Semi-transparent background on arrows for visibility over images
-  - Optional: dot indicators below the carousel showing which slide is active
-- Remove the `activeImage` state since the carousel handles its own slide tracking
-- Each slide shows an `aspect-video` image, same as the current main image
+The root cause is that `h-full` means "100% of parent height," but the parent also contains the header. Using `flex-1` with `min-h-0` in a flex column ensures the content takes exactly the remaining space after the header, preventing overflow.
 
-### UI Result
-
-The dialog will look like the reference screenshot: a large image area with left/right arrows to slide between the main image and gallery images, followed by the project title, description, details, and "View Project" button below.
+No content will be removed or shrunk -- both cards will simply stop at the footer boundary and scroll internally to show all content.
 

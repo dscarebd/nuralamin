@@ -310,6 +310,37 @@ export default function DashboardHome() {
         </div>
       </div>
 
+      {/* Request Status Summary */}
+      {contactRequests && contactRequests.length > 0 && (() => {
+        const statusConfig: { key: string; label: string; color: string; bg: string }[] = [
+          { key: "pending", label: "Pending", color: "text-muted-foreground", bg: "bg-muted" },
+          { key: "approved", label: "Approved", color: "text-emerald-500", bg: "bg-emerald-500/10" },
+          { key: "working", label: "Working", color: "text-blue-500", bg: "bg-blue-500/10" },
+          { key: "delivered", label: "Delivered", color: "text-violet-500", bg: "bg-violet-500/10" },
+          { key: "rejected", label: "Rejected", color: "text-rose-500", bg: "bg-rose-500/10" },
+        ];
+        const counts: Record<string, number> = {};
+        statusConfig.forEach(s => { counts[s.key] = 0; });
+        contactRequests.forEach((r: any) => { const st = r.status || "pending"; counts[st] = (counts[st] || 0) + 1; });
+        return (
+          <div>
+            <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+              <Filter className="h-4 w-4" /> Request Status
+            </h2>
+            <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-5">
+              {statusConfig.map((s) => (
+                <div key={s.key} className="rounded-xl border bg-card p-4 text-center">
+                  <div className={`mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-full ${s.bg}`}>
+                    <span className={`text-lg font-bold ${s.color}`}>{counts[s.key]}</span>
+                  </div>
+                  <p className="text-xs font-medium text-muted-foreground">{s.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      })()}
+
       {/* Recent Activity */}
       <div>
         <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground">

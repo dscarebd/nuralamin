@@ -97,8 +97,8 @@ export default function RequestsEditor() {
       const { error } = await supabase.from("contact_requests").update({ status } as any).eq("id", id);
       if (error) throw error;
 
-      // Send Telegram notification for approved/delivered
-      if (status === "approved" || status === "delivered") {
+      // Send Telegram notification for status changes (except pending)
+      if (status !== "pending") {
         const request = requests.find((r) => r.id === id);
         if (request) {
           supabase.functions.invoke("notify-telegram", {

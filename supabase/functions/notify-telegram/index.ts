@@ -32,6 +32,8 @@ serve(async (req) => {
     if (type === "status_change") {
       const statusEmoji: Record<string, string> = {
         approved: "✅",
+        rejected: "❌",
+        working: "🔧",
         delivered: "📦",
       };
       const emoji = statusEmoji[status] || "🔔";

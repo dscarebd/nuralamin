@@ -9,9 +9,8 @@ import { useToast } from "@/hooks/use-toast";
 export default function AdminLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isSignUp, setIsSignUp] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { signIn, signUp } = useAuth();
+  const { signIn } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -19,21 +18,11 @@ export default function AdminLogin() {
     e.preventDefault();
     setLoading(true);
 
-    if (isSignUp) {
-      const { error } = await signUp(email, password);
-      if (error) {
-        toast({ title: "Error", description: error.message, variant: "destructive" });
-      } else {
-        toast({ title: "Account created", description: "Please check your email to verify your account." });
-        setIsSignUp(false);
-      }
+    const { error } = await signIn(email, password);
+    if (error) {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
     } else {
-      const { error } = await signIn(email, password);
-      if (error) {
-        toast({ title: "Error", description: error.message, variant: "destructive" });
-      } else {
-        navigate("/admin");
-      }
+      navigate("/abdullah");
     }
     setLoading(false);
   };
@@ -43,7 +32,7 @@ export default function AdminLogin() {
       <div className="w-full max-w-sm space-y-6 rounded-2xl border bg-card p-8">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-foreground">Admin Panel</h1>
-          <p className="text-sm text-muted-foreground">{isSignUp ? "Create your admin account" : "Sign in to manage your site"}</p>
+          <p className="text-sm text-muted-foreground">Sign in to manage your site</p>
         </div>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
@@ -55,15 +44,9 @@ export default function AdminLogin() {
             <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} />
           </div>
           <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? "Please wait..." : isSignUp ? "Create Account" : "Sign In"}
+            {loading ? "Please wait..." : "Sign In"}
           </Button>
         </form>
-        <p className="text-center text-sm text-muted-foreground">
-          {isSignUp ? "Already have an account?" : "First time?"}{" "}
-          <button onClick={() => setIsSignUp(!isSignUp)} className="text-primary hover:underline">
-            {isSignUp ? "Sign in" : "Create account"}
-          </button>
-        </p>
       </div>
     </div>
   );

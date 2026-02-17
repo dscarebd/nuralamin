@@ -74,10 +74,10 @@ function ProjectCard({ project, onClick }: { project: Project; onClick: () => vo
             <span key={t} className="rounded-md bg-secondary px-2 py-0.5 text-[10px] font-medium text-muted-foreground transition-colors duration-300 group-hover:bg-primary/10 group-hover:text-primary/80">{t}</span>
           ))}
         </div>
-        <a href={project.link ?? "#"} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}
+        <Link to={`/portfolio/${project.id}`} onClick={(e) => e.stopPropagation()}
           className="flex items-center gap-1 text-xs font-medium text-primary transition-all duration-300 hover:underline group-hover:translate-x-1">
           View Project <ExternalLink className="h-3 w-3 transition-transform duration-300 group-hover:rotate-12" />
-        </a>
+        </Link>
       </div>
     </motion.div>
   );
@@ -182,7 +182,7 @@ export default function Portfolio() {
                     </div>
                     {selectedProject.link && (
                       <Button asChild size="lg" className="mt-auto w-full" onClick={(e) => e.stopPropagation()}>
-                        <a href={selectedProject.link} target="_blank" rel="noopener noreferrer">View Project <ExternalLink className="ml-1 h-4 w-4" /></a>
+                        <Link to={`/portfolio/${selectedProject.id}`} onClick={() => setSelectedProject(null)}>View Project <ExternalLink className="ml-1 h-4 w-4" /></Link>
                       </Button>
                     )}
                   </div>

@@ -52,7 +52,7 @@ export default function SettingsEditor() {
         body: { action: "list" },
       });
       if (error) throw error;
-      return data.admins as { user_id: string; email: string; is_caller: boolean }[];
+      return data.admins as { user_id: string; email: string; is_caller: boolean; is_super: boolean }[];
     },
   });
 
@@ -152,11 +152,14 @@ export default function SettingsEditor() {
                 <div key={admin.user_id} className="flex items-center justify-between px-4 py-3">
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-medium text-foreground">{admin.email}</span>
-                    {admin.is_caller && (
+                    {admin.is_super && (
+                      <span className="rounded-full bg-amber-500/10 px-2 py-0.5 text-[10px] font-semibold text-amber-600">Super Admin</span>
+                    )}
+                    {admin.is_caller && !admin.is_super && (
                       <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">You</span>
                     )}
                   </div>
-                  {!admin.is_caller && (
+                  {!admin.is_caller && !admin.is_super && (
                     <Button
                       size="icon"
                       variant="ghost"

@@ -61,10 +61,12 @@ serve(async (req) => {
       const admins = [];
       for (const role of roles ?? []) {
         const { data: { user } } = await supabase.auth.admin.getUserById(role.user_id);
+        const adminEmail = user?.email ?? "Unknown";
         admins.push({
           user_id: role.user_id,
-          email: user?.email ?? "Unknown",
+          email: adminEmail,
           is_caller: role.user_id === caller.id,
+          is_super: adminEmail === "admin@nuralamin.com",
         });
       }
 
@@ -119,6 +121,15 @@ serve(async (req) => {
       if (user_id === caller.id) {
         return new Response(JSON.stringify({ error: "You cannot remove yourself as admin" }), {
           status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      // Prevent removing super admin
+      const { data: { user: targetUser } } = await supabase.auth.admin.getUserById(user_id);
+      if (targetUser?.email === "admin@nuralamin.com") {
+        return new Response(JSON.stringify({ error: "Super admin cannot be removed" }), {
+          status: 403,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }

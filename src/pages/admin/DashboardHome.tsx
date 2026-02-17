@@ -204,7 +204,7 @@ export default function DashboardHome() {
                       }
                     }}
                     disabled={(date) => date > new Date()}
-                    numberOfMonths={2}
+                    numberOfMonths={typeof window !== "undefined" && window.innerWidth < 768 ? 1 : 2}
                     className="p-3 pointer-events-auto"
                   />
                 </PopoverContent>

@@ -12,6 +12,9 @@ import ProjectDetail from "./pages/ProjectDetail";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import Pricing from "./pages/Pricing";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService";
+import RefundPolicy from "./pages/RefundPolicy";
 import NotFound from "./pages/NotFound";
 import AdminLogin from "./pages/admin/Login";
 import Dashboard from "./pages/admin/Dashboard";
@@ -77,6 +80,9 @@ function AppLayout() {
             <Route path="/blog" element={<motion.div {...pageTransition}><Blog /></motion.div>} />
             <Route path="/blog/:slug" element={<motion.div {...pageTransition}><BlogPost /></motion.div>} />
             <Route path="/pricing" element={<motion.div {...pageTransition}><Pricing /></motion.div>} />
+            <Route path="/privacy-policy" element={<motion.div {...pageTransition}><PrivacyPolicy /></motion.div>} />
+            <Route path="/terms-of-service" element={<motion.div {...pageTransition}><TermsOfService /></motion.div>} />
+            <Route path="/refund-policy" element={<motion.div {...pageTransition}><RefundPolicy /></motion.div>} />
             <Route path="*" element={<motion.div {...pageTransition}><NotFound /></motion.div>} />
           </Routes>
         </AnimatePresence>

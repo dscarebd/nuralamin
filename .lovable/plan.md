@@ -1,32 +1,33 @@
 
 
-## Fix: Blog Full Page Gallery, Portfolio Gallery, and View Project Button
+## Portfolio Popup: Image Carousel/Slider
 
-Three bugs to fix from the recent multi-image upload feature:
+Replace the current thumbnail-button gallery in the portfolio dialog with a proper image carousel/slider using the existing Embla Carousel component.
 
-### Issue 1: Blog Full Page Missing Gallery Images
-**File:** `src/pages/BlogPost.tsx`
+### What Changes
 
-The full blog post page (`/blog/:slug`) never renders `gallery_images`. It only shows the cover image and content. Need to add a gallery section after the content, displaying images in a 2-column grid (same as the blog popup dialog does).
+**`src/pages/Portfolio.tsx`** - Dialog image section (lines 133-155)
 
-### Issue 2: Portfolio Popup Not Showing Gallery
-**File:** `src/pages/Portfolio.tsx`
+Currently the dialog shows a single main image with small thumbnail buttons below. This will be replaced with:
 
-The portfolio dialog uses `(selectedProject as any).gallery_images` with a type cast, but the `Project` type already has `gallery_images` as optional. The data from `useProjects()` returns the DB type which includes `gallery_images`. The issue is that the local `Project` type definition (line 26-37) has `gallery_images` as optional, which should be fine. Let me check if the data is actually being fetched -- the `useProjects` hook uses `select("*")` so `gallery_images` should come through. The dialog code at line 131 casts to `any` unnecessarily but should still work. This might be a data issue (no gallery images uploaded for projects yet), but the code structure looks correct. Will clean up the type cast regardless.
+1. A full-width carousel that includes the main project image + all gallery images as slides
+2. Left/right arrow navigation buttons overlaid on the image area
+3. Dot indicators at the bottom of the carousel showing the current slide
+4. The thumbnail row is removed entirely -- navigation happens via arrows and dots
 
-### Issue 3: "View Project" Button Not Working in Portfolio Popup
-**File:** `src/pages/Portfolio.tsx` (line 167-169)
+### Implementation Details
 
-The "View Project" button wraps an `<a>` tag. If `selectedProject.link` is `null`, the href becomes `"#"` which navigates nowhere meaningful. But the bigger issue is likely that clicking the button area triggers the dialog close. The `Button asChild` with a link should work. Need to verify the button renders correctly -- possibly the dialog's `onOpenChange` intercepts the click. Will ensure proper `target="_blank"` behavior and that the link opens in a new tab.
+- Import `Carousel`, `CarouselContent`, `CarouselItem`, `CarouselPrevious`, `CarouselNext` from the existing `@/components/ui/carousel`
+- Build an `allImages` array: `[mainImage, ...galleryImages]`
+- If only one image exists (no gallery), show it as a plain image (no carousel controls)
+- If multiple images exist, wrap them in the Carousel component with:
+  - `CarouselPrevious` and `CarouselNext` repositioned inside the image area (not outside) using custom classes like `left-2 top-1/2` and `right-2 top-1/2`
+  - Semi-transparent background on arrows for visibility over images
+  - Optional: dot indicators below the carousel showing which slide is active
+- Remove the `activeImage` state since the carousel handles its own slide tracking
+- Each slide shows an `aspect-video` image, same as the current main image
 
-### Changes
+### UI Result
 
-**`src/pages/BlogPost.tsx`:**
-- After the content `div` (line 94-97), add a gallery images section
-- Render `post.gallery_images` in a 2-column responsive grid with rounded corners
-- Only show if gallery_images array has items
+The dialog will look like the reference screenshot: a large image area with left/right arrows to slide between the main image and gallery images, followed by the project title, description, details, and "View Project" button below.
 
-**`src/pages/Portfolio.tsx`:**
-- Remove `(selectedProject as any)` casts -- use the proper type since `gallery_images` is already in the `Project` type
-- Ensure the "View Project" button link works by adding `onClick` with `e.stopPropagation()` or using proper anchor behavior
-- Make the dialog scrollable (add `max-h-[85vh]` and `overflow-y-auto`) to match blog dialog style, since gallery images could make the dialog taller than the viewport

@@ -1,41 +1,49 @@
 
-## Blog Dialog: Match Portfolio Popup Style
 
-The user wants the blog popup dialog to have the same rounded corners, padding, and scroll behavior as the portfolio popup -- where the image and metadata card stays fixed and only the blog content scrolls.
+## Multi-Image Upload for Blog and Portfolio
 
-### Changes
+Add the ability for admins to upload multiple images per blog post and portfolio project, with a gallery displayed in the popup dialogs.
 
-**`src/pages/Blog.tsx`** (Dialog section, lines 224-296)
-- Add `rounded-lg` with top/bottom padding to the dialog's inner image container so corners are visible
-- Make the dialog a fixed-height layout where the cover image and metadata (title, category, date, tags) remain fixed/static
-- Only the blog content section scrolls (`overflow-y-auto` with `max-h`)
-- The "Read Full Post" button stays pinned at the bottom, outside the scroll area
-- Add `rounded-lg` to the image inside the dialog to match the portfolio's rounded look
+### Database Changes
 
-### Layout Structure
+Add a `gallery_images` column (text array, nullable) to both tables:
+- `blog_posts.gallery_images` -- text[] DEFAULT '{}'
+- `projects.gallery_images` -- text[] DEFAULT '{}'
 
-```text
-+--------------------------------------------+
-|  [Cover Image - rounded-lg, aspect-video]  |  <- Fixed
-+--------------------------------------------+
-|  Category Badge                            |  <- Fixed
-|  TITLE (bold, uppercase)                   |
-|  Excerpt                                   |
-|  ----------------------------------------  |
-|  Date / Category / Tags (metadata)         |
-|  ----------------------------------------  |
-|  Blog content (SCROLLABLE ONLY THIS PART)  |  <- Scrolls
-|  ...                                       |
-|  ----------------------------------------  |
-|  [Read Full Post] button                   |  <- Fixed
-+--------------------------------------------+
-```
+### New Component: MultiImageUpload
+
+Create `src/components/admin/MultiImageUpload.tsx`:
+- Accepts `value: string[]` and `onChange: (urls: string[]) => void`
+- Shows a grid of uploaded image thumbnails with individual remove (X) buttons
+- An "Add Image" button that triggers file upload (reuses the same upload logic as ImageUpload)
+- Supports both file upload and pasting a URL
+- Uses the existing `uploads` storage bucket with the specified folder
+
+### Admin Editor Changes
+
+**BlogEditor.tsx:**
+- Add `gallery_images: string[]` to `BlogPostForm`
+- Add `<MultiImageUpload>` below the cover image field, labeled "Gallery Images"
+- Save/load the array to/from the database
+
+**ProjectsEditor.tsx:**
+- Add `gallery_images: string[]` to `ProjectForm`
+- Add `<MultiImageUpload>` below the existing single image field, labeled "Gallery Images"
+- Save/load the array to/from the database
+
+### Public Dialog Changes
+
+**Portfolio.tsx** (project dialog):
+- After the main project image, if `gallery_images` has items, show a horizontal scrollable row of thumbnails
+- Clicking a thumbnail swaps the main displayed image
+
+**Blog.tsx** (blog post dialog):
+- After the cover image inside the scrollable area, show the gallery images as a grid (2 columns)
+- Each image is clickable to view larger (or just displayed inline)
 
 ### Technical Details
 
-- The `DialogContent` already has `p-0` and `max-w-2xl` which is correct
-- Add `rounded-lg` to the image wrapper and use `overflow-hidden rounded-t-lg` for the top image
-- Wrap only the `dangerouslySetInnerHTML` content div in a scrollable container with `max-h-[40vh] overflow-y-auto` (already partially done, just needs refinement)
-- Keep the metadata section and button outside the scroll container so they stay fixed
-- Add consistent padding (`p-6 sm:p-8`) matching the portfolio dialog
-- The image gets rounded top corners via `rounded-t-lg` on the container, matching the dialog's overall `rounded-lg`
+- Migration: single SQL adding both columns
+- MultiImageUpload component: grid layout, upload to `uploads` bucket, drag-and-drop not required (simple click-to-add)
+- Gallery display: simple horizontal scroll in portfolio, vertical grid in blog
+- No changes to the standalone BlogPost page (it can also show gallery if desired)

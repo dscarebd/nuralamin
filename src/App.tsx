@@ -8,6 +8,7 @@ import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
 import Portfolio from "./pages/Portfolio";
+import ProjectDetail from "./pages/ProjectDetail";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import Pricing from "./pages/Pricing";
@@ -72,6 +73,7 @@ function AppLayout() {
           <Routes location={location} key={location.pathname}>
             <Route path="/" element={<motion.div {...pageTransition} className="lg:h-full lg:overflow-hidden"><Index /></motion.div>} />
             <Route path="/portfolio" element={<motion.div {...pageTransition}><Portfolio /></motion.div>} />
+            <Route path="/portfolio/:id" element={<motion.div {...pageTransition}><ProjectDetail /></motion.div>} />
             <Route path="/blog" element={<motion.div {...pageTransition}><Blog /></motion.div>} />
             <Route path="/blog/:slug" element={<motion.div {...pageTransition}><BlogPost /></motion.div>} />
             <Route path="/pricing" element={<motion.div {...pageTransition}><Pricing /></motion.div>} />

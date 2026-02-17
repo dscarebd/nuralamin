@@ -65,6 +65,23 @@ export function useProjects() {
   });
 }
 
+export function useProject(id: string | undefined) {
+  return useQuery({
+    queryKey: ["project", id],
+    enabled: !!id,
+    staleTime: 5 * 60 * 1000,
+    queryFn: async () => {
+      const { data, error } = await supabase.from("projects").select("*").eq("id", id!).maybeSingle();
+      if (error?.message?.includes("JWT")) {
+        await supabase.auth.signOut();
+        const { data: r } = await supabase.from("projects").select("*").eq("id", id!).maybeSingle();
+        return r;
+      }
+      return data;
+    },
+  });
+}
+
 export function usePricingPlans() {
   return useQuery({
     queryKey: ["pricing_plans"],

@@ -1,11 +1,29 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Calendar, Tag, ArrowRight, Pin, Search } from "lucide-react";
+import { Calendar, Tag, ArrowRight, Pin, Search, ExternalLink } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useBlogPosts, useBlogCategories } from "@/hooks/usePublicData";
+
+type BlogPost = {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string | null;
+  content: string | null;
+  cover_image_url: string | null;
+  category_id: string | null;
+  tags: string[] | null;
+  is_featured: boolean;
+  is_published: boolean;
+  published_at: string | null;
+  display_order: number;
+  created_at: string;
+  updated_at: string;
+};
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -21,6 +39,7 @@ export default function Blog() {
   const { data: categories = [] } = useBlogCategories();
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [search, setSearch] = useState("");
+  const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
 
   const searchLower = search.toLowerCase();
   const matchesSearch = (post: typeof posts[0]) =>
@@ -33,6 +52,8 @@ export default function Blog() {
     ? posts.filter((p) => p.category_id === activeCategory && !p.is_featured)
     : posts.filter((p) => !p.is_featured)
   ).filter(matchesSearch);
+
+  const selectedCategory = selectedPost ? categories.find((c) => c.id === selectedPost.category_id) : null;
 
   return (
     <div className="min-h-screen bg-background px-4 py-8 md:px-8">
@@ -105,7 +126,7 @@ export default function Blog() {
                   {featuredPosts.map((post) => {
                     const category = categories.find((c) => c.id === post.category_id);
                     return (
-                      <Link key={post.id} to={`/blog/${post.slug}`} className="group block">
+                      <div key={post.id} onClick={() => setSelectedPost(post)} className="group block cursor-pointer">
                         <div className="overflow-hidden rounded-xl border border-border/60 bg-card transition-all duration-300 hover:border-primary/30">
                           {post.cover_image_url && (
                             <div className="relative h-52 overflow-hidden md:h-64">
@@ -144,7 +165,7 @@ export default function Blog() {
                             </div>
                           </div>
                         </div>
-                      </Link>
+                      </div>
                     );
                   })}
                 </div>
@@ -158,7 +179,7 @@ export default function Blog() {
                   const category = categories.find((c) => c.id === post.category_id);
                   return (
                     <motion.div key={post.id} variants={fadeUp}>
-                      <Link to={`/blog/${post.slug}`} className="group block">
+                      <div onClick={() => setSelectedPost(post)} className="group block cursor-pointer">
                         <div className="overflow-hidden rounded-xl border border-border/60 bg-card transition-all duration-300 hover:border-primary/30">
                           {post.cover_image_url && (
                             <div className="relative h-44 overflow-hidden">
@@ -190,7 +211,7 @@ export default function Blog() {
                             </div>
                           </div>
                         </div>
-                      </Link>
+                      </div>
                     </motion.div>
                   );
                 })}
@@ -199,6 +220,80 @@ export default function Blog() {
           </>
         )}
       </div>
+
+      {/* Blog Post Dialog - Portfolio Style */}
+      <Dialog open={!!selectedPost} onOpenChange={(open) => !open && setSelectedPost(null)}>
+        <DialogContent className="max-w-2xl animate-enter overflow-hidden p-0">
+          {selectedPost && (
+            <div className="flex flex-col">
+              {selectedPost.cover_image_url && (
+                <div className="aspect-video w-full overflow-hidden">
+                  <img src={selectedPost.cover_image_url} alt={selectedPost.title} className="h-full w-full object-cover" />
+                </div>
+              )}
+              <div className="flex flex-1 flex-col gap-5 p-6 sm:p-8">
+                <DialogHeader className="space-y-3">
+                  {selectedCategory && (
+                    <Badge variant="secondary" className="w-fit bg-primary/10 text-primary">
+                      {selectedCategory.name}
+                    </Badge>
+                  )}
+                  <DialogTitle className="text-2xl font-extrabold uppercase tracking-tight text-foreground">
+                    {selectedPost.title}
+                  </DialogTitle>
+                  {selectedPost.excerpt && (
+                    <DialogDescription className="text-sm leading-relaxed">
+                      {selectedPost.excerpt}
+                    </DialogDescription>
+                  )}
+                </DialogHeader>
+
+                <div className="space-y-3 border-t border-border pt-4 text-sm">
+                  {selectedPost.published_at && (
+                    <div className="flex gap-6">
+                      <span className="w-24 shrink-0 font-semibold text-foreground">Date</span>
+                      <span className="text-muted-foreground">{new Date(selectedPost.published_at).toLocaleDateString()}</span>
+                    </div>
+                  )}
+                  {selectedCategory && (
+                    <div className="flex gap-6">
+                      <span className="w-24 shrink-0 font-semibold text-foreground">Category</span>
+                      <span className="text-muted-foreground">{selectedCategory.name}</span>
+                    </div>
+                  )}
+                  {(selectedPost.tags ?? []).length > 0 && (
+                    <div className="flex gap-6">
+                      <span className="w-24 shrink-0 font-semibold text-foreground">Tags</span>
+                      <div className="flex flex-wrap gap-1.5">
+                        {(selectedPost.tags ?? []).map((tag) => (
+                          <span key={tag} className="rounded-md bg-secondary px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {selectedPost.content && (
+                  <div className="max-h-[40vh] overflow-y-auto border-t border-border pt-4">
+                    <div
+                      className="prose prose-sm max-w-none text-foreground prose-headings:text-foreground prose-p:text-muted-foreground prose-a:text-primary prose-strong:text-foreground"
+                      dangerouslySetInnerHTML={{ __html: selectedPost.content }}
+                    />
+                  </div>
+                )}
+
+                <Button asChild size="lg" className="mt-auto w-full">
+                  <Link to={`/blog/${selectedPost.slug}`}>
+                    Read Full Post <ExternalLink className="ml-1 h-4 w-4" />
+                  </Link>
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

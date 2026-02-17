@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import { motion } from "framer-motion";
+import SEOHead from "@/components/SEOHead";
 import { Link } from "react-router-dom";
 import { Calendar, Tag, ArrowRight, Pin, Search, ExternalLink } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -61,6 +62,17 @@ export default function Blog() {
 
   return (
     <div className="min-h-screen bg-background px-4 py-8 md:px-8">
+      <SEOHead
+        title="Blog - NUR AL AMIN | Web Dev Insights & Tutorials"
+        description="Read insights, tutorials, and updates on web development, app design, and digital trends by NUR AL AMIN."
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "Blog",
+          name: "NUR AL AMIN Blog",
+          description: "Web development insights, tutorials, and industry updates.",
+          url: "https://nuralamin.lovable.app/blog",
+        }}
+      />
       <div className="mx-auto max-w-5xl">
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>

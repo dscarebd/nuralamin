@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
+import SEOHead from "@/components/SEOHead";
 import { Check, Clock, Zap, Rocket, Send, User, MessageCircle, FileText, Link2, PartyPopper, DollarSign } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -200,6 +201,17 @@ export default function Pricing() {
 
   return (
     <div className="min-h-screen bg-background px-4 py-10 sm:px-8">
+      <SEOHead
+        title="Pricing & Services - NUR AL AMIN | Web Developer"
+        description="Affordable web development pricing plans. Hourly, project-based, and monthly retainer options. Get a custom quote for your website or app project."
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "Service",
+          name: "Web & App Development Services",
+          provider: { "@type": "Person", name: "NUR AL AMIN" },
+          url: "https://nuralamin.lovable.app/pricing",
+        }}
+      />
       <div className="mx-auto max-w-5xl">
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mb-12 text-center">

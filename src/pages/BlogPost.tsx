@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
+import SEOHead from "@/components/SEOHead";
 import { motion } from "framer-motion";
 import { ArrowLeft, Calendar, Tag } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -63,6 +64,22 @@ export default function BlogPost() {
 
   return (
     <div className="min-h-screen bg-background px-4 py-8 md:px-8">
+      <SEOHead
+        title={`${post.title} - NUR AL AMIN Blog`}
+        description={post.excerpt || `Read "${post.title}" on NUR AL AMIN's blog.`}
+        ogImage={post.cover_image_url || undefined}
+        ogType="article"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "Article",
+          headline: post.title,
+          description: post.excerpt || "",
+          image: post.cover_image_url || undefined,
+          datePublished: post.published_at || post.created_at,
+          author: { "@type": "Person", name: "NUR AL AMIN" },
+          url: `https://nuralamin.lovable.app/blog/${post.slug}`,
+        }}
+      />
       <motion.article
         className="mx-auto max-w-3xl"
         initial={{ opacity: 0, y: 20 }}

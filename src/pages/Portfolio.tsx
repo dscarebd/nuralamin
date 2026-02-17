@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import Autoplay from "embla-carousel-autoplay";
+import SEOHead from "@/components/SEOHead";
 import { motion } from "framer-motion";
 import { ExternalLink } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -112,6 +113,17 @@ export default function Portfolio() {
 
   return (
     <div className="min-h-screen bg-background px-4 py-8 md:px-8">
+      <SEOHead
+        title="Portfolio - NUR AL AMIN | Web & App Projects"
+        description="Explore NUR AL AMIN's portfolio of custom websites, mobile apps, and digital solutions. View real projects with modern tech stacks."
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          name: "Portfolio - NUR AL AMIN",
+          description: "Web and app development portfolio showcasing real client projects.",
+          url: "https://nuralamin.lovable.app/portfolio",
+        }}
+      />
       <Tabs defaultValue="website" className="mx-auto max-w-5xl">
         <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>

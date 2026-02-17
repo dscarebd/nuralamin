@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext, type CarouselApi } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import { useBlogPosts, useBlogCategories } from "@/hooks/usePublicData";
+import ImageLightbox from "@/components/ImageLightbox";
 
 export default function BlogPost() {
   const { slug } = useParams<{ slug: string }>();
@@ -17,6 +18,8 @@ export default function BlogPost() {
   const category = post ? categories.find((c) => c.id === post.category_id) : null;
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
 
   const allImages = post ? [post.cover_image_url, ...(post.gallery_images ?? [])].filter(Boolean) as string[] : [];
   const hasMultiple = allImages.length > 1;
@@ -108,8 +111,8 @@ export default function BlogPost() {
                 <CarouselContent>
                   {allImages.map((url, i) => (
                     <CarouselItem key={i}>
-                      <div className="aspect-video w-full overflow-hidden">
-                        <img src={url} alt={`${post.title} ${i + 1}`} className="h-full w-full object-cover" />
+                      <div className="aspect-video w-full cursor-pointer overflow-hidden" onClick={() => { setLightboxIndex(i); setLightboxOpen(true); }}>
+                        <img src={url} alt={`${post.title} ${i + 1}`} className="h-full w-full object-cover transition-transform hover:scale-105" />
                       </div>
                     </CarouselItem>
                   ))}
@@ -124,13 +127,14 @@ export default function BlogPost() {
                 </div>
               </Carousel>
             ) : (
-              <div className="aspect-video w-full overflow-hidden">
-                <img src={allImages[0]} alt={post.title} className="h-full w-full object-cover" />
+              <div className="aspect-video w-full cursor-pointer overflow-hidden" onClick={() => { setLightboxIndex(0); setLightboxOpen(true); }}>
+                <img src={allImages[0]} alt={post.title} className="h-full w-full object-cover transition-transform hover:scale-105" />
               </div>
             )}
           </div>
         )}
 
+        <ImageLightbox images={allImages} currentIndex={lightboxIndex} open={lightboxOpen} onClose={() => setLightboxOpen(false)} onIndexChange={setLightboxIndex} />
         <div
           className="prose prose-sm dark:prose-invert max-w-none text-foreground"
           dangerouslySetInnerHTML={{ __html: post.content ?? "" }}

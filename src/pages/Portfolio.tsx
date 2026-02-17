@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext, type CarouselApi } from "@/components/ui/carousel";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useProjects, useSiteSettings } from "@/hooks/usePublicData";
+import ImageLightbox from "@/components/ImageLightbox";
 import imgEcommerce from "@/assets/project-ecommerce.jpg";
 import imgTaskapp from "@/assets/project-taskapp.jpg";
 import imgPortfolio from "@/assets/project-portfolio.jpg";
@@ -90,6 +91,9 @@ export default function Portfolio() {
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [slideCount, setSlideCount] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+  const [lightboxImages, setLightboxImages] = useState<string[]>([]);
 
   useEffect(() => {
     if (!carouselApi) return;
@@ -150,8 +154,8 @@ export default function Portfolio() {
                       <CarouselContent>
                         {allImages.map((url, i) => (
                           <CarouselItem key={i}>
-                            <div className="aspect-video w-full overflow-hidden">
-                              <img src={url} alt={`${selectedProject.title} ${i + 1}`} className="h-full w-full object-cover" />
+                            <div className="aspect-video w-full cursor-pointer overflow-hidden" onClick={() => { setLightboxImages(allImages); setLightboxIndex(i); setLightboxOpen(true); }}>
+                              <img src={url} alt={`${selectedProject.title} ${i + 1}`} className="h-full w-full object-cover transition-transform hover:scale-105" />
                             </div>
                           </CarouselItem>
                         ))}
@@ -165,8 +169,8 @@ export default function Portfolio() {
                       </div>
                     </Carousel>
                   ) : (
-                    <div className="aspect-video w-full overflow-hidden">
-                      <img src={mainImg} alt={selectedProject.title} className="h-full w-full object-cover" />
+                    <div className="aspect-video w-full cursor-pointer overflow-hidden" onClick={() => { setLightboxImages([mainImg]); setLightboxIndex(0); setLightboxOpen(true); }}>
+                      <img src={mainImg} alt={selectedProject.title} className="h-full w-full object-cover transition-transform hover:scale-105" />
                     </div>
                   )}
                   <div className="flex flex-1 flex-col gap-5 p-6 sm:p-8">
@@ -206,7 +210,7 @@ export default function Portfolio() {
           </div>
         </motion.div>
 
-        
+        <ImageLightbox images={lightboxImages} currentIndex={lightboxIndex} open={lightboxOpen} onClose={() => setLightboxOpen(false)} onIndexChange={setLightboxIndex} />
       </Tabs>
     </div>
   );

@@ -1,0 +1,2 @@
+ALTER TABLE public.contact_requests
+ADD COLUMN status text NOT NULL DEFAULT 'pending';

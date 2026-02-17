@@ -106,7 +106,7 @@ export default function Blog() {
                     const category = categories.find((c) => c.id === post.category_id);
                     return (
                       <Link key={post.id} to={`/blog/${post.slug}`} className="group block">
-                        <div className="overflow-hidden rounded-xl border-2 border-primary/20 bg-card transition-all duration-300 hover:border-primary/40 hover:shadow-[0_8px_30px_-8px_hsl(var(--primary)/0.3)]">
+                        <div className="overflow-hidden rounded-xl border border-border/60 bg-card transition-all duration-300 hover:border-primary/30">
                           {post.cover_image_url && (
                             <div className="relative h-52 overflow-hidden md:h-64">
                               <img src={post.cover_image_url} alt={post.title} className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
@@ -159,7 +159,7 @@ export default function Blog() {
                   return (
                     <motion.div key={post.id} variants={fadeUp}>
                       <Link to={`/blog/${post.slug}`} className="group block">
-                        <div className="overflow-hidden rounded-xl border border-border/60 bg-card transition-all duration-300 hover:border-primary/30 hover:shadow-[0_8px_30px_-8px_hsl(var(--primary)/0.25)]">
+                        <div className="overflow-hidden rounded-xl border border-border/60 bg-card transition-all duration-300 hover:border-primary/30">
                           {post.cover_image_url && (
                             <div className="relative h-44 overflow-hidden">
                               <img src={post.cover_image_url} alt={post.title} className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />

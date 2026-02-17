@@ -1,8 +1,11 @@
+import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft, Calendar, Tag } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext, type CarouselApi } from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
 import { useBlogPosts, useBlogCategories } from "@/hooks/usePublicData";
 
 export default function BlogPost() {
@@ -12,6 +15,19 @@ export default function BlogPost() {
 
   const post = posts.find((p) => p.slug === slug);
   const category = post ? categories.find((c) => c.id === post.category_id) : null;
+  const [carouselApi, setCarouselApi] = useState<CarouselApi>();
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const allImages = post ? [post.cover_image_url, ...(post.gallery_images ?? [])].filter(Boolean) as string[] : [];
+  const hasMultiple = allImages.length > 1;
+
+  useEffect(() => {
+    if (!carouselApi) return;
+    const onSelect = () => setCurrentSlide(carouselApi.selectedScrollSnap());
+    onSelect();
+    carouselApi.on("select", onSelect);
+    return () => { carouselApi.off("select", onSelect); };
+  }, [carouselApi]);
 
   if (isLoading) {
     return (
@@ -85,9 +101,33 @@ export default function BlogPost() {
           )}
         </div>
 
-        {post.cover_image_url && (
-          <div className="mb-8 overflow-hidden rounded-xl">
-            <img src={post.cover_image_url} alt={post.title} className="w-full object-cover" />
+        {allImages.length > 0 && (
+          <div className="mb-8 overflow-hidden rounded-xl border border-border/60">
+            {hasMultiple ? (
+              <Carousel setApi={setCarouselApi} plugins={[Autoplay({ delay: 5000, stopOnInteraction: false })]} className="w-full">
+                <CarouselContent>
+                  {allImages.map((url, i) => (
+                    <CarouselItem key={i}>
+                      <div className="aspect-video w-full overflow-hidden">
+                        <img src={url} alt={`${post.title} ${i + 1}`} className="h-full w-full object-cover" />
+                      </div>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious className="left-3 top-1/2 h-10 w-10 -translate-y-1/2 border-none bg-black/40 text-white hover:bg-black/60" />
+                <CarouselNext className="right-3 top-1/2 h-10 w-10 -translate-y-1/2 border-none bg-black/40 text-white hover:bg-black/60" />
+                <div className="flex justify-center gap-1.5 py-3">
+                  {allImages.map((_, i) => (
+                    <button key={i} onClick={() => carouselApi?.scrollTo(i)}
+                      className={`h-2 rounded-full transition-all ${currentSlide === i ? "w-5 bg-primary" : "w-2 bg-muted-foreground/30"}`} />
+                  ))}
+                </div>
+              </Carousel>
+            ) : (
+              <div className="aspect-video w-full overflow-hidden">
+                <img src={allImages[0]} alt={post.title} className="h-full w-full object-cover" />
+              </div>
+            )}
           </div>
         )}
 
@@ -95,17 +135,6 @@ export default function BlogPost() {
           className="prose prose-sm dark:prose-invert max-w-none text-foreground"
           dangerouslySetInnerHTML={{ __html: post.content ?? "" }}
         />
-
-        {(post.gallery_images ?? []).length > 0 && (
-          <div className="mt-8">
-            <h2 className="mb-4 text-lg font-bold text-foreground">Gallery</h2>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              {(post.gallery_images ?? []).map((url, i) => (
-                <img key={i} src={url} alt={`Gallery ${i + 1}`} className="w-full rounded-xl object-cover" />
-              ))}
-            </div>
-          </div>
-        )}
       </motion.article>
     </div>
   );

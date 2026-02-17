@@ -1,5 +1,5 @@
-import { useEffect, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useCallback, useRef } from "react";
+import { motion, AnimatePresence, type PanInfo } from "framer-motion";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 
 interface ImageLightboxProps {
@@ -86,16 +86,24 @@ export default function ImageLightbox({ images, currentIndex, open, onClose, onI
             </button>
           )}
 
-          {/* Image */}
+          {/* Image with swipe */}
           <motion.img
             key={currentIndex}
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0, x: 0, scale: 0.95 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.2 }}
+            drag={hasMultiple ? "x" : false}
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.3}
+            onDragEnd={(_: any, info: PanInfo) => {
+              const swipeThreshold = 50;
+              if (info.offset.x < -swipeThreshold) goNext();
+              else if (info.offset.x > swipeThreshold) goPrev();
+            }}
             src={images[currentIndex]}
             alt={`Image ${currentIndex + 1}`}
-            className="max-h-[90vh] max-w-[90vw] rounded-lg object-contain"
+            className="max-h-[90vh] max-w-[90vw] cursor-grab rounded-lg object-contain active:cursor-grabbing"
             onClick={(e) => e.stopPropagation()}
           />
 

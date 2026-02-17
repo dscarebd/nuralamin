@@ -31,7 +31,9 @@ import PoliciesEditor from "./pages/admin/PoliciesEditor";
 import ProtectedRoute from "./components/admin/ProtectedRoute";
 import FloatingHeader from "./components/FloatingHeader";
 import FloatingFooter from "./components/FloatingFooter";
+import SplashScreen from "./components/SplashScreen";
 import { usePrefetchData } from "./hooks/usePrefetchData";
+import { useImagePreloader } from "./hooks/useImagePreloader";
 
 const queryClient = new QueryClient();
 
@@ -43,6 +45,7 @@ const pageTransition = {
 
 function AppLayout() {
   usePrefetchData();
+  const { ready, progress } = useImagePreloader();
   const location = useLocation();
   const isAdmin = location.pathname.startsWith("/admin");
   const isHome = location.pathname === "/";
@@ -71,36 +74,39 @@ function AppLayout() {
   }
 
   return (
-    <div className="flex h-screen flex-col">
-      <div className={`flex-1 overflow-auto ${isHome ? "lg:overflow-hidden lg:flex lg:flex-col" : ""}`}>
-        <FloatingHeader />
-        <AnimatePresence mode="wait">
-          <Routes location={location} key={location.pathname}>
-            <Route path="/" element={<motion.div {...pageTransition} className="lg:flex-1 lg:min-h-0 lg:overflow-hidden"><Index /></motion.div>} />
-            <Route path="/portfolio" element={<motion.div {...pageTransition}><Portfolio /></motion.div>} />
-            <Route path="/portfolio/:id" element={<motion.div {...pageTransition}><ProjectDetail /></motion.div>} />
-            <Route path="/blog" element={<motion.div {...pageTransition}><Blog /></motion.div>} />
-            <Route path="/blog/:slug" element={<motion.div {...pageTransition}><BlogPost /></motion.div>} />
-            <Route path="/pricing" element={<motion.div {...pageTransition}><Pricing /></motion.div>} />
-            <Route path="/privacy-policy" element={<motion.div {...pageTransition}><PrivacyPolicy /></motion.div>} />
-            <Route path="/terms-of-service" element={<motion.div {...pageTransition}><TermsOfService /></motion.div>} />
-            <Route path="/refund-policy" element={<motion.div {...pageTransition}><RefundPolicy /></motion.div>} />
-            <Route path="*" element={<motion.div {...pageTransition}><NotFound /></motion.div>} />
-          </Routes>
-        </AnimatePresence>
-        {/* Footer inside scroll area: visible on mobile/tablet always, and on desktop for non-home pages */}
-        {!isHome && <FloatingFooter />}
-        <div className="lg:hidden">
-          {isHome && <FloatingFooter />}
+    <>
+      <AnimatePresence>
+        {!ready && <SplashScreen progress={progress} />}
+      </AnimatePresence>
+      <div className="flex h-screen flex-col">
+        <div className={`flex-1 overflow-auto ${isHome ? "lg:overflow-hidden lg:flex lg:flex-col" : ""}`}>
+          <FloatingHeader />
+          <AnimatePresence mode="wait">
+            <Routes location={location} key={location.pathname}>
+              <Route path="/" element={<motion.div {...pageTransition} className="lg:flex-1 lg:min-h-0 lg:overflow-hidden"><Index /></motion.div>} />
+              <Route path="/portfolio" element={<motion.div {...pageTransition}><Portfolio /></motion.div>} />
+              <Route path="/portfolio/:id" element={<motion.div {...pageTransition}><ProjectDetail /></motion.div>} />
+              <Route path="/blog" element={<motion.div {...pageTransition}><Blog /></motion.div>} />
+              <Route path="/blog/:slug" element={<motion.div {...pageTransition}><BlogPost /></motion.div>} />
+              <Route path="/pricing" element={<motion.div {...pageTransition}><Pricing /></motion.div>} />
+              <Route path="/privacy-policy" element={<motion.div {...pageTransition}><PrivacyPolicy /></motion.div>} />
+              <Route path="/terms-of-service" element={<motion.div {...pageTransition}><TermsOfService /></motion.div>} />
+              <Route path="/refund-policy" element={<motion.div {...pageTransition}><RefundPolicy /></motion.div>} />
+              <Route path="*" element={<motion.div {...pageTransition}><NotFound /></motion.div>} />
+            </Routes>
+          </AnimatePresence>
+          {!isHome && <FloatingFooter />}
+          <div className="lg:hidden">
+            {isHome && <FloatingFooter />}
+          </div>
         </div>
+        {isHome && (
+          <div className="hidden lg:block">
+            <FloatingFooter />
+          </div>
+        )}
       </div>
-      {/* Footer outside scroll area: desktop home only */}
-      {isHome && (
-        <div className="hidden lg:block">
-          <FloatingFooter />
-        </div>
-      )}
-    </div>
+    </>
   );
 }
 

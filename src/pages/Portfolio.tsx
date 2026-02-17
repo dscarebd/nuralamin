@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { ExternalLink } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext, type CarouselApi } from "@/components/ui/carousel";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useProjects, useSiteSettings } from "@/hooks/usePublicData";
 import imgEcommerce from "@/assets/project-ecommerce.jpg";
@@ -85,7 +86,18 @@ export default function Portfolio() {
   const { data: dbProjects = [] } = useProjects();
   const { data: settings } = useSiteSettings();
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [activeImage, setActiveImage] = useState<string | null>(null);
+  const [carouselApi, setCarouselApi] = useState<CarouselApi>();
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [slideCount, setSlideCount] = useState(0);
+
+  useEffect(() => {
+    if (!carouselApi) return;
+    const onSelect = () => setCurrentSlide(carouselApi.selectedScrollSnap());
+    setSlideCount(carouselApi.scrollSnapList().length);
+    onSelect();
+    carouselApi.on("select", onSelect);
+    return () => { carouselApi.off("select", onSelect); };
+  }, [carouselApi]);
 
   const websiteProjects = dbProjects.filter((p) => p.category !== "Mobile App");
   const mobileProjects = dbProjects.filter((p) => p.category === "Mobile App");
@@ -124,33 +136,36 @@ export default function Portfolio() {
           </motion.div>
         </TabsContent>
 
-        <Dialog open={!!selectedProject} onOpenChange={(open) => { if (!open) { setSelectedProject(null); setActiveImage(null); } }}>
+        <Dialog open={!!selectedProject} onOpenChange={(open) => { if (!open) setSelectedProject(null); }}>
           <DialogContent className="max-h-[85vh] max-w-2xl animate-enter overflow-y-auto p-0">
             {selectedProject && (() => {
-              const mainImg = activeImage || selectedProject.image_url || fallbackImages[selectedProject.title] || imgEcommerce;
-              const gallery = selectedProject.gallery_images ?? [];
+              const mainImg = selectedProject.image_url || fallbackImages[selectedProject.title] || imgEcommerce;
+              const allImages = [mainImg, ...(selectedProject.gallery_images ?? [])];
+              const hasMultiple = allImages.length > 1;
               return (
                 <div className="flex flex-col">
-                  <div className="aspect-video w-full overflow-hidden">
-                    <img src={mainImg} alt={selectedProject.title} className="h-full w-full object-cover" />
-                  </div>
-                  {gallery.length > 0 && (
-                    <div className="flex gap-2 overflow-x-auto px-6 pt-3 sm:px-8">
-                      <button
-                        onClick={() => setActiveImage(null)}
-                        className={`h-14 w-14 shrink-0 overflow-hidden rounded-md border-2 transition-all ${!activeImage ? "border-primary" : "border-transparent opacity-70 hover:opacity-100"}`}
-                      >
-                        <img src={selectedProject.image_url || fallbackImages[selectedProject.title] || imgEcommerce} alt="Main" className="h-full w-full object-cover" />
-                      </button>
-                      {gallery.map((url, i) => (
-                        <button
-                          key={i}
-                          onClick={() => setActiveImage(url)}
-                          className={`h-14 w-14 shrink-0 overflow-hidden rounded-md border-2 transition-all ${activeImage === url ? "border-primary" : "border-transparent opacity-70 hover:opacity-100"}`}
-                        >
-                          <img src={url} alt={`Gallery ${i + 1}`} className="h-full w-full object-cover" />
-                        </button>
-                      ))}
+                  {hasMultiple ? (
+                    <Carousel setApi={setCarouselApi} className="w-full">
+                      <CarouselContent>
+                        {allImages.map((url, i) => (
+                          <CarouselItem key={i}>
+                            <div className="aspect-video w-full overflow-hidden">
+                              <img src={url} alt={`${selectedProject.title} ${i + 1}`} className="h-full w-full object-cover" />
+                            </div>
+                          </CarouselItem>
+                        ))}
+                      </CarouselContent>
+                      <CarouselPrevious className="left-2 top-1/2 h-8 w-8 -translate-y-1/2 border-none bg-black/40 text-white hover:bg-black/60" />
+                      <CarouselNext className="right-2 top-1/2 h-8 w-8 -translate-y-1/2 border-none bg-black/40 text-white hover:bg-black/60" />
+                      <div className="flex justify-center gap-1.5 py-2">
+                        {allImages.map((_, i) => (
+                          <button key={i} onClick={() => carouselApi?.scrollTo(i)} className={`h-1.5 rounded-full transition-all ${currentSlide === i ? "w-4 bg-primary" : "w-1.5 bg-muted-foreground/30"}`} />
+                        ))}
+                      </div>
+                    </Carousel>
+                  ) : (
+                    <div className="aspect-video w-full overflow-hidden">
+                      <img src={mainImg} alt={selectedProject.title} className="h-full w-full object-cover" />
                     </div>
                   )}
                   <div className="flex flex-1 flex-col gap-5 p-6 sm:p-8">

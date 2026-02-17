@@ -7,12 +7,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Plus, Trash2, Save } from "lucide-react";
 import ImageUpload from "@/components/admin/ImageUpload";
+import MultiImageUpload from "@/components/admin/MultiImageUpload";
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy, arrayMove } from "@dnd-kit/sortable";
 import SortableItem from "@/components/admin/SortableItem";
 import { useReorder } from "@/hooks/useReorder";
 
-type ProjectForm = { title: string; category: string; description: string; tech: string; image_url: string; link: string; budget: string; date: string };
+type ProjectForm = { title: string; category: string; description: string; tech: string; image_url: string; gallery_images: string[]; link: string; budget: string; date: string };
 
 export default function ProjectsEditor() {
   const { toast } = useToast();
@@ -43,7 +44,7 @@ export default function ProjectsEditor() {
   };
 
   const startEdit = (p: typeof projects[0]) => {
-    setEditing({ ...editing, [p.id]: { title: p.title, category: p.category ?? "", description: p.description ?? "", tech: (p.tech ?? []).join(", "), image_url: p.image_url ?? "", link: p.link ?? "", budget: p.budget ?? "", date: p.date ?? "" } });
+    setEditing({ ...editing, [p.id]: { title: p.title, category: p.category ?? "", description: p.description ?? "", tech: (p.tech ?? []).join(", "), image_url: p.image_url ?? "", gallery_images: (p as any).gallery_images ?? [], link: p.link ?? "", budget: p.budget ?? "", date: p.date ?? "" } });
   };
 
   const saveMutation = useMutation({
@@ -51,7 +52,7 @@ export default function ProjectsEditor() {
       const { error } = await supabase.from("projects").update({
         title: data.title, category: data.category, description: data.description,
         tech: data.tech.split(",").map((t) => t.trim()).filter(Boolean),
-        image_url: data.image_url || null, link: data.link, budget: data.budget, date: data.date,
+        image_url: data.image_url || null, gallery_images: data.gallery_images, link: data.link, budget: data.budget, date: data.date,
       }).eq("id", id);
       if (error) throw error;
     },
@@ -103,6 +104,13 @@ export default function ProjectsEditor() {
                           <ImageUpload
                             value={ed.image_url}
                             onChange={(url) => setEditing({ ...editing, [p.id]: { ...ed, image_url: url } })}
+                            folder="projects"
+                          />
+                        </div>
+                        <div className="space-y-1.5">
+                          <MultiImageUpload
+                            value={ed.gallery_images}
+                            onChange={(urls) => setEditing({ ...editing, [p.id]: { ...ed, gallery_images: urls } })}
                             folder="projects"
                           />
                         </div>

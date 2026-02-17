@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast";
 import { Plus, Trash2, Save, PenLine, Eye, EyeOff, FolderPlus, X } from "lucide-react";
 import ImageUpload from "@/components/admin/ImageUpload";
+import MultiImageUpload from "@/components/admin/MultiImageUpload";
 import RichTextEditor from "@/components/admin/RichTextEditor";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
@@ -19,6 +20,7 @@ type BlogPostForm = {
   excerpt: string;
   content: string;
   cover_image_url: string;
+  gallery_images: string[];
   category_id: string;
   tags: string;
   is_published: boolean;
@@ -51,7 +53,7 @@ export default function BlogEditor() {
 
   const [editing, setEditing] = useState<string | null>(null);
   const [form, setForm] = useState<BlogPostForm>({
-    title: "", slug: "", excerpt: "", content: "", cover_image_url: "", category_id: "", tags: "", is_published: false, is_featured: false,
+    title: "", slug: "", excerpt: "", content: "", cover_image_url: "", gallery_images: [], category_id: "", tags: "", is_published: false, is_featured: false,
   });
   const [newCategory, setNewCategory] = useState("");
   const [catDialogOpen, setCatDialogOpen] = useState(false);
@@ -64,6 +66,7 @@ export default function BlogEditor() {
       excerpt: post.excerpt ?? "",
       content: post.content ?? "",
       cover_image_url: post.cover_image_url ?? "",
+      gallery_images: (post as any).gallery_images ?? [],
       category_id: post.category_id ?? "",
       tags: (post.tags ?? []).join(", "),
       is_published: post.is_published,
@@ -79,6 +82,7 @@ export default function BlogEditor() {
         excerpt: data.excerpt || null,
         content: data.content || null,
         cover_image_url: data.cover_image_url || null,
+        gallery_images: data.gallery_images,
         category_id: data.category_id || null,
         tags: data.tags.split(",").map((t) => t.trim()).filter(Boolean),
         is_published: data.is_published,
@@ -247,6 +251,14 @@ export default function BlogEditor() {
                   <ImageUpload
                     value={form.cover_image_url}
                     onChange={(url) => setForm({ ...form, cover_image_url: url })}
+                    folder="blog"
+                  />
+                </div>
+                <div>
+                  <Label className="text-xs text-muted-foreground">Gallery Images</Label>
+                  <MultiImageUpload
+                    value={form.gallery_images}
+                    onChange={(urls) => setForm({ ...form, gallery_images: urls })}
                     folder="blog"
                   />
                 </div>

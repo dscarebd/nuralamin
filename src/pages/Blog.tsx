@@ -287,6 +287,16 @@ export default function Blog() {
                     />
                   </div>
                 )}
+
+                {((selectedPost as any).gallery_images ?? []).length > 0 && (
+                  <div className="mx-6 sm:mx-8 mt-3 grid grid-cols-2 gap-2">
+                    {((selectedPost as any).gallery_images as string[]).map((url, i) => (
+                      <div key={i} className="overflow-hidden rounded-lg">
+                        <img src={url} alt={`Gallery ${i + 1}`} className="h-full w-full object-cover" />
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <div className="shrink-0 border-t border-border p-6 pt-3 sm:px-8">

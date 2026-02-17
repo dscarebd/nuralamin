@@ -10,16 +10,16 @@ import { useState } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 const navItems = [
-  { label: "Dashboard", icon: LayoutDashboard, path: "/admin" },
-  { label: "Profile", icon: User, path: "/admin/profile" },
-  { label: "Social Links", icon: Link2, path: "/admin/socials" },
-  { label: "Experience", icon: Briefcase, path: "/admin/experience" },
-  { label: "Portfolio", icon: FolderOpen, path: "/admin/projects" },
-  { label: "Blog", icon: FileText, path: "/admin/blog" },
-  { label: "Pricing", icon: DollarSign, path: "/admin/pricing" },
-  { label: "Requests", icon: Inbox, path: "/admin/requests" },
-  { label: "Policies", icon: Shield, path: "/admin/policies" },
-  { label: "Settings", icon: Settings, path: "/admin/settings" },
+  { label: "Dashboard", icon: LayoutDashboard, path: "/abdullah" },
+  { label: "Profile", icon: User, path: "/abdullah/profile" },
+  { label: "Social Links", icon: Link2, path: "/abdullah/socials" },
+  { label: "Experience", icon: Briefcase, path: "/abdullah/experience" },
+  { label: "Portfolio", icon: FolderOpen, path: "/abdullah/projects" },
+  { label: "Blog", icon: FileText, path: "/abdullah/blog" },
+  { label: "Pricing", icon: DollarSign, path: "/abdullah/pricing" },
+  { label: "Requests", icon: Inbox, path: "/abdullah/requests" },
+  { label: "Policies", icon: Shield, path: "/abdullah/policies" },
+  { label: "Settings", icon: Settings, path: "/abdullah/settings" },
 ];
 
 export default function AdminSidebar() {
@@ -44,7 +44,7 @@ export default function AdminSidebar() {
   const sidebarContent = (
     <>
       <div className="border-b p-4">
-        <Link to="/admin" className="text-lg font-bold text-foreground" onClick={() => setOpen(false)}>
+        <Link to="/abdullah" className="text-lg font-bold text-foreground" onClick={() => setOpen(false)}>
           Admin Panel
         </Link>
         <p className="text-xs text-muted-foreground">Manage your website</p>

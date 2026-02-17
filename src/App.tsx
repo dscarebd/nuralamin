@@ -49,15 +49,15 @@ function AppLayout() {
   usePageViewTracker();
   const { ready, progress } = useImagePreloader();
   const location = useLocation();
-  const isAdmin = location.pathname.startsWith("/admin");
+  const isAdmin = location.pathname.startsWith("/abdullah");
   const isHome = location.pathname === "/";
 
   if (isAdmin) {
     return (
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
-          <Route path="/admin/login" element={<AdminLogin />} />
-          <Route path="/admin" element={<ProtectedRoute><Dashboard /></ProtectedRoute>}>
+          <Route path="/abdullah/login" element={<AdminLogin />} />
+          <Route path="/abdullah" element={<ProtectedRoute><Dashboard /></ProtectedRoute>}>
             <Route index element={<DashboardHome />} />
             <Route path="profile" element={<ProfileEditor />} />
             <Route path="socials" element={<SocialEditor />} />

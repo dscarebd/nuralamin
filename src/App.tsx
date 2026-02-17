@@ -34,6 +34,7 @@ import FloatingFooter from "./components/FloatingFooter";
 import SplashScreen from "./components/SplashScreen";
 import { usePrefetchData } from "./hooks/usePrefetchData";
 import { useImagePreloader } from "./hooks/useImagePreloader";
+import { usePageViewTracker } from "./hooks/usePageViewTracker";
 
 const queryClient = new QueryClient();
 
@@ -45,6 +46,7 @@ const pageTransition = {
 
 function AppLayout() {
   usePrefetchData();
+  usePageViewTracker();
   const { ready, progress } = useImagePreloader();
   const location = useLocation();
   const isAdmin = location.pathname.startsWith("/admin");

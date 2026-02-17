@@ -1,40 +1,45 @@
 
 
-## Update Brand Colors to Purple Theme
+## Add Work Progress Status to Contact Requests
 
-### What Changes
-Replace the current blue primary color scheme with a purple/violet theme matching your brand identity from the image.
+### Overview
+Add a status tracking system to contact requests so you can mark each request as Approved, Rejected, Working, or Delivered -- giving you a clear view of work progress right from the admin panel.
 
-### Color Palette (extracted from image)
-- **Primary**: Deep purple/violet (~265 deg hue, rich saturation)
-- **Dark mode background**: Deep navy-purple tones
-- **Accents**: Lighter purple for highlights and badges
+### What You'll See
+- A new "Status" column in the requests table showing color-coded badges (e.g., green for Approved, red for Rejected, blue for Working, purple for Delivered)
+- A dropdown in each row to quickly change the status
+- The detail dialog will also show the current status
+- Filter tabs at the top to view requests by status (All, Pending, Approved, Working, Delivered, Rejected)
 
-### Files to Modify
+### Technical Details
 
-**1. `src/index.css`** -- Update all CSS custom properties:
+**1. Database Migration**
+- Add a `status` column to the `contact_requests` table with a default value of `'pending'`
+- Type: `text` with allowed values: `pending`, `approved`, `rejected`, `working`, `delivered`
 
-**Light mode:**
-- `--primary`: Change from blue (213 94% 48%) to purple (~265 84% 55%)
-- `--accent`: Match primary purple
-- `--ring`: Match primary purple
-- `--sidebar-primary` and `--sidebar-ring`: Match primary purple
+```sql
+ALTER TABLE public.contact_requests
+ADD COLUMN status text NOT NULL DEFAULT 'pending';
+```
 
-**Dark mode:**
-- `--primary`: Lighter purple for dark backgrounds (~265 84% 65%)
-- `--background`: Shift to a deep navy-purple (260 40% 10%)
-- `--card`: Slightly lighter navy-purple
-- `--secondary`, `--muted`: Purple-tinted dark tones
-- `--border`, `--input`: Purple-tinted borders
-- `--accent`, `--ring`: Match dark mode primary
-- All sidebar variables: Match the purple scheme
+**2. Update `src/pages/admin/RequestsEditor.tsx`**
+- Add the `status` field to the `ContactRequest` interface
+- Add filter tabs (All / Pending / Approved / Working / Delivered / Rejected) above the table
+- Add a "Status" column to the table showing a color-coded Badge component
+- Add a Select dropdown in the Actions column (or inline) to change status
+- Create a mutation to update the status in the database
+- Show the status badge in the detail dialog as well
 
-### What Stays the Same
-- Light mode background stays white/near-white
-- Destructive (red) color stays unchanged
-- Border radius, animations, typography -- all unchanged
-- No component code changes needed since everything uses CSS variables
+**3. Status Badge Colors**
+| Status | Color |
+|---|---|
+| Pending | Gray/muted |
+| Approved | Green |
+| Rejected | Red |
+| Working | Blue |
+| Delivered | Purple |
 
-### Result
-Every button, link, badge, progress bar, sidebar highlight, and accent across the entire site will shift from blue to purple, matching your brand.
+**4. Files Modified**
+- `src/pages/admin/RequestsEditor.tsx` -- main changes (filter tabs, status column, dropdown, detail view)
+- One database migration for the new column
 

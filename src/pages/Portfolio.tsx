@@ -146,7 +146,7 @@ export default function Portfolio() {
               return (
                 <div className="flex flex-col">
                   {hasMultiple ? (
-                    <Carousel setApi={setCarouselApi} plugins={[Autoplay({ delay: 3000, stopOnInteraction: false })]} className="w-full">
+                    <Carousel setApi={setCarouselApi} plugins={[Autoplay({ delay: 5000, stopOnInteraction: false })]} className="w-full">
                       <CarouselContent>
                         {allImages.map((url, i) => (
                           <CarouselItem key={i}>

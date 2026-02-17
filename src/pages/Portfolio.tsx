@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
+import Autoplay from "embla-carousel-autoplay";
 import { motion } from "framer-motion";
 import { ExternalLink } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -145,7 +146,7 @@ export default function Portfolio() {
               return (
                 <div className="flex flex-col">
                   {hasMultiple ? (
-                    <Carousel setApi={setCarouselApi} className="w-full">
+                    <Carousel setApi={setCarouselApi} plugins={[Autoplay({ delay: 3000, stopOnInteraction: false })]} className="w-full">
                       <CarouselContent>
                         {allImages.map((url, i) => (
                           <CarouselItem key={i}>

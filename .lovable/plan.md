@@ -1,45 +1,63 @@
 
 
-## Add Work Progress Status to Contact Requests
+# Content Protection Plan
 
-### Overview
-Add a status tracking system to contact requests so you can mark each request as Approved, Rejected, Working, or Delivered -- giving you a clear view of work progress right from the admin panel.
+## Summary
 
-### What You'll See
-- A new "Status" column in the requests table showing color-coded badges (e.g., green for Approved, red for Rejected, blue for Working, purple for Delivered)
-- A dropdown in each row to quickly change the status
-- The detail dialog will also show the current status
-- Filter tabs at the top to view requests by status (All, Pending, Approved, Working, Delivered, Rejected)
+Protect all public pages from copying images, text, and icons -- **except** individual blog post pages (`/blog/:slug`) where users can copy images and text. Also block browser DevTools (inspect mode) across the entire public site including blog posts. Admin pages remain completely unprotected.
 
-### Technical Details
+## Protection Rules
 
-**1. Database Migration**
-- Add a `status` column to the `contact_requests` table with a default value of `'pending'`
-- Type: `text` with allowed values: `pending`, `approved`, `rejected`, `working`, `delivered`
+| Page | Copy Text | Copy Images | Right-Click | DevTools |
+|------|-----------|-------------|-------------|----------|
+| Home `/` | Blocked | Blocked | Blocked | Blocked |
+| Portfolio `/portfolio` | Blocked | Blocked | Blocked | Blocked |
+| Portfolio Detail `/portfolio/:id` | Blocked | Blocked | Blocked | Blocked |
+| Blog listing `/blog` | Blocked | Blocked | Blocked | Blocked |
+| Blog post `/blog/:slug` | Allowed | Allowed | Allowed | Blocked |
+| Pricing `/pricing` | Blocked | Blocked | Blocked | Blocked |
+| Policy pages | Blocked | Blocked | Blocked | Blocked |
+| Admin `/abdullah/*` | No protection at all | | | |
 
-```sql
-ALTER TABLE public.contact_requests
-ADD COLUMN status text NOT NULL DEFAULT 'pending';
+## Changes
+
+### 1. New Component: `src/components/ContentProtection.tsx`
+
+A wrapper component that applies protection based on current route:
+
+- **Copy/Select protection** (all public pages except `/blog/:slug`):
+  - Disable right-click context menu
+  - Block `copy` and `cut` events
+  - Block Ctrl/Cmd+C, Ctrl/Cmd+X, Ctrl/Cmd+A shortcuts
+  - Apply `user-select: none` CSS to prevent text selection
+  - Apply `-webkit-user-drag: none` to prevent image dragging
+
+- **DevTools protection** (all public pages including blog posts):
+  - Block F12, Ctrl/Cmd+Shift+I, Ctrl/Cmd+Shift+J, Ctrl/Cmd+U (view source)
+  - These are client-side deterrents -- not foolproof but effective against casual users
+
+### 2. CSS Updates: `src/index.css`
+
+Add a `.content-protected` class:
+```css
+.content-protected {
+  user-select: none;
+  -webkit-user-select: none;
+}
+.content-protected img {
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
 ```
 
-**2. Update `src/pages/admin/RequestsEditor.tsx`**
-- Add the `status` field to the `ContactRequest` interface
-- Add filter tabs (All / Pending / Approved / Working / Delivered / Rejected) above the table
-- Add a "Status" column to the table showing a color-coded Badge component
-- Add a Select dropdown in the Actions column (or inline) to change status
-- Create a mutation to update the status in the database
-- Show the status badge in the detail dialog as well
+### 3. Integration: `src/App.tsx`
 
-**3. Status Badge Colors**
-| Status | Color |
-|---|---|
-| Pending | Gray/muted |
-| Approved | Green |
-| Rejected | Red |
-| Working | Blue |
-| Delivered | Purple |
+Wrap the public layout section with `<ContentProtection>` so it covers all non-admin routes. The component internally checks the route and applies the right level of protection.
 
-**4. Files Modified**
-- `src/pages/admin/RequestsEditor.tsx` -- main changes (filter tabs, status column, dropdown, detail view)
-- One database migration for the new column
+## Technical Notes
+
+- Route detection uses `useLocation()` from React Router
+- Blog post pages are identified by checking if the path matches `/blog/` followed by a slug segment
+- All event listeners are cleaned up on unmount or route change via `useEffect` cleanup
+- This is a **client-side deterrent** -- determined users with technical knowledge can still bypass it, but it effectively prevents casual copying
 

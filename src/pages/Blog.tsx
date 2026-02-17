@@ -223,15 +223,17 @@ export default function Blog() {
 
       {/* Blog Post Dialog - Portfolio Style */}
       <Dialog open={!!selectedPost} onOpenChange={(open) => !open && setSelectedPost(null)}>
-        <DialogContent className="max-w-2xl animate-enter overflow-hidden p-0">
+        <DialogContent className="max-w-2xl animate-enter overflow-hidden rounded-lg p-0">
           {selectedPost && (
-            <div className="flex flex-col">
+            <div className="flex max-h-[85vh] flex-col">
               {selectedPost.cover_image_url && (
-                <div className="aspect-video w-full overflow-hidden">
-                  <img src={selectedPost.cover_image_url} alt={selectedPost.title} className="h-full w-full object-cover" />
+                <div className="shrink-0 p-3 pb-0">
+                  <div className="aspect-video w-full overflow-hidden rounded-lg">
+                    <img src={selectedPost.cover_image_url} alt={selectedPost.title} className="h-full w-full object-cover" />
+                  </div>
                 </div>
               )}
-              <div className="flex flex-1 flex-col gap-5 p-6 sm:p-8">
+              <div className="flex shrink-0 flex-col gap-3 p-6 pb-0 sm:px-8">
                 <DialogHeader className="space-y-3">
                   {selectedCategory && (
                     <Badge variant="secondary" className="w-fit bg-primary/10 text-primary">
@@ -274,17 +276,19 @@ export default function Blog() {
                     </div>
                   )}
                 </div>
+              </div>
 
-                {selectedPost.content && (
-                  <div className="max-h-[40vh] overflow-y-auto border-t border-border pt-4">
-                    <div
-                      className="prose prose-sm max-w-none text-foreground prose-headings:text-foreground prose-p:text-muted-foreground prose-a:text-primary prose-strong:text-foreground"
-                      dangerouslySetInnerHTML={{ __html: selectedPost.content }}
-                    />
-                  </div>
-                )}
+              {selectedPost.content && (
+                <div className="min-h-0 flex-1 overflow-y-auto border-t border-border mx-6 sm:mx-8 mt-3 pt-4">
+                  <div
+                    className="prose prose-sm max-w-none text-foreground prose-headings:text-foreground prose-p:text-muted-foreground prose-a:text-primary prose-strong:text-foreground"
+                    dangerouslySetInnerHTML={{ __html: selectedPost.content }}
+                  />
+                </div>
+              )}
 
-                <Button asChild size="lg" className="mt-auto w-full">
+              <div className="shrink-0 p-6 pt-3 sm:px-8">
+                <Button asChild size="lg" className="w-full">
                   <Link to={`/blog/${selectedPost.slug}`}>
                     Read Full Post <ExternalLink className="ml-1 h-4 w-4" />
                   </Link>

@@ -1,60 +1,40 @@
 
 
-## Preloader System for Instant Page Transitions
+## Update Brand Colors to Purple Theme
 
-### Problem
-When users navigate between pages, images take time to load, causing a jarring experience. Data is already prefetched, but images are not.
+### What Changes
+Replace the current blue primary color scheme with a purple/violet theme matching your brand identity from the image.
 
-### Solution
-Add a splash/loading screen that appears when the user first visits. Behind the scenes, all data AND images from every page will be preloaded. Once everything is ready, the app reveals itself. After that, switching pages feels instant.
-
-### How It Works
-
-1. **SplashScreen Component** (`src/components/SplashScreen.tsx`)
-   - A full-screen loading overlay with the site logo and a progress bar
-   - Fades out smoothly once everything is loaded
-
-2. **Image Preloader Hook** (`src/hooks/useImagePreloader.ts`)
-   - Waits for all prefetched data to be available (profile, projects, blog posts, pricing plans)
-   - Collects every image URL from the data: profile photo, project thumbnails, project gallery images, blog cover images, blog gallery images
-   - Also includes static assets (header logo, header icon, company logos)
-   - Uses `new Image()` to preload each one in parallel
-   - Tracks progress (0-100%) for the progress bar
-   - Returns `ready` state when all images are loaded (or after a timeout safety net of ~8 seconds)
-
-3. **Integration in AppLayout** (`src/App.tsx`)
-   - Show the SplashScreen while loading
-   - Once ready, fade it out and show the actual app
-   - Only shows on first visit (not on page refreshes within the session)
-
-### What Gets Preloaded
-- Profile photo
-- Header logo and icon
-- Company logos (An-Nur Digital, Quran Insight)
-- All project cover images and gallery images
-- All blog post cover images and gallery images
-- All pricing plan icons (if any image-based)
-
-### Technical Details
-
-**SplashScreen**: Uses framer-motion for a smooth fade-out animation. Shows the header logo centered with a progress indicator below it.
-
-**useImagePreloader**: 
-- Reads from React Query cache using the same query keys as `usePrefetchData`
-- Creates `Image` objects for each URL and listens to `onload`/`onerror`
-- Tracks loaded count vs total to compute progress percentage
-- Has a max wait timeout (~8s) so users aren't stuck if an image fails
-- Marks as ready when all images load OR timeout is reached
-
-**AppLayout changes**:
-- Calls `useImagePreloader()` which returns `{ ready, progress }`
-- Renders `<SplashScreen>` when `!ready`, passing `progress`
-- Uses `AnimatePresence` for smooth transition from splash to content
-
-### Files to Create
-- `src/components/SplashScreen.tsx`
-- `src/hooks/useImagePreloader.ts`
+### Color Palette (extracted from image)
+- **Primary**: Deep purple/violet (~265 deg hue, rich saturation)
+- **Dark mode background**: Deep navy-purple tones
+- **Accents**: Lighter purple for highlights and badges
 
 ### Files to Modify
-- `src/App.tsx` (integrate preloader into AppLayout)
+
+**1. `src/index.css`** -- Update all CSS custom properties:
+
+**Light mode:**
+- `--primary`: Change from blue (213 94% 48%) to purple (~265 84% 55%)
+- `--accent`: Match primary purple
+- `--ring`: Match primary purple
+- `--sidebar-primary` and `--sidebar-ring`: Match primary purple
+
+**Dark mode:**
+- `--primary`: Lighter purple for dark backgrounds (~265 84% 65%)
+- `--background`: Shift to a deep navy-purple (260 40% 10%)
+- `--card`: Slightly lighter navy-purple
+- `--secondary`, `--muted`: Purple-tinted dark tones
+- `--border`, `--input`: Purple-tinted borders
+- `--accent`, `--ring`: Match dark mode primary
+- All sidebar variables: Match the purple scheme
+
+### What Stays the Same
+- Light mode background stays white/near-white
+- Destructive (red) color stays unchanged
+- Border radius, animations, typography -- all unchanged
+- No component code changes needed since everything uses CSS variables
+
+### Result
+Every button, link, badge, progress bar, sidebar highlight, and accent across the entire site will shift from blue to purple, matching your brand.
 

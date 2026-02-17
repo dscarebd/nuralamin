@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { User, Link2, Briefcase, FolderOpen, DollarSign, Settings, LogOut, LayoutDashboard, Inbox, FileText } from "lucide-react";
+import { User, Link2, Briefcase, FolderOpen, DollarSign, Settings, LogOut, LayoutDashboard, Inbox, FileText, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
@@ -15,6 +15,7 @@ const navItems = [
   { label: "Blog", icon: FileText, path: "/admin/blog" },
   { label: "Pricing", icon: DollarSign, path: "/admin/pricing" },
   { label: "Requests", icon: Inbox, path: "/admin/requests" },
+  { label: "Policies", icon: Shield, path: "/admin/policies" },
   { label: "Settings", icon: Settings, path: "/admin/settings" },
 ];
 

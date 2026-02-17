@@ -27,6 +27,7 @@ import PricingEditor from "./pages/admin/PricingEditor";
 import SettingsEditor from "./pages/admin/SettingsEditor";
 import RequestsEditor from "./pages/admin/RequestsEditor";
 import BlogEditor from "./pages/admin/BlogEditor";
+import PoliciesEditor from "./pages/admin/PoliciesEditor";
 import ProtectedRoute from "./components/admin/ProtectedRoute";
 import FloatingHeader from "./components/FloatingHeader";
 import FloatingFooter from "./components/FloatingFooter";
@@ -60,6 +61,7 @@ function AppLayout() {
             <Route path="pricing" element={<PricingEditor />} />
             <Route path="blog" element={<BlogEditor />} />
             <Route path="requests" element={<RequestsEditor />} />
+            <Route path="policies" element={<PoliciesEditor />} />
             <Route path="settings" element={<SettingsEditor />} />
           </Route>
           <Route path="*" element={<motion.div {...pageTransition}><NotFound /></motion.div>} />

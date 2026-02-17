@@ -111,6 +111,7 @@ export type Database = {
           plan_name: string
           project_details: string
           project_links: string | null
+          status: string
         }
         Insert: {
           budget?: string | null
@@ -122,6 +123,7 @@ export type Database = {
           plan_name: string
           project_details: string
           project_links?: string | null
+          status?: string
         }
         Update: {
           budget?: string | null
@@ -133,6 +135,7 @@ export type Database = {
           plan_name?: string
           project_details?: string
           project_links?: string | null
+          status?: string
         }
         Relationships: []
       }

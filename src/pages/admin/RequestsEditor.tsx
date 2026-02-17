@@ -4,9 +4,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { Trash2, Eye, Inbox, CheckCheck, ClipboardList, MessageCircle, FileText, Link2, DollarSign } from "lucide-react";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Trash2, Eye, Inbox, CheckCheck, ClipboardList, MessageCircle, FileText, Link2, DollarSign, Activity } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
+
+type Status = "pending" | "approved" | "rejected" | "working" | "delivered";
 
 interface ContactRequest {
   id: string;
@@ -18,12 +23,27 @@ interface ContactRequest {
   budget: string | null;
   created_at: string;
   is_read: boolean;
+  status: Status;
+}
+
+const STATUS_CONFIG: Record<Status, { label: string; className: string }> = {
+  pending: { label: "Pending", className: "bg-muted text-muted-foreground" },
+  approved: { label: "Approved", className: "bg-emerald-500/15 text-emerald-600 border-emerald-500/30" },
+  rejected: { label: "Rejected", className: "bg-red-500/15 text-red-600 border-red-500/30" },
+  working: { label: "Working", className: "bg-blue-500/15 text-blue-600 border-blue-500/30" },
+  delivered: { label: "Delivered", className: "bg-violet-500/15 text-violet-600 border-violet-500/30" },
+};
+
+function StatusBadge({ status }: { status: Status }) {
+  const config = STATUS_CONFIG[status] || STATUS_CONFIG.pending;
+  return <Badge variant="outline" className={config.className}>{config.label}</Badge>;
 }
 
 export default function RequestsEditor() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [viewItem, setViewItem] = useState<ContactRequest | null>(null);
+  const [statusFilter, setStatusFilter] = useState<string>("all");
 
   const { data: requests = [], isLoading } = useQuery({
     queryKey: ["contact_requests"],
@@ -72,6 +92,17 @@ export default function RequestsEditor() {
     },
   });
 
+  const updateStatusMutation = useMutation({
+    mutationFn: async ({ id, status }: { id: string; status: Status }) => {
+      const { error } = await supabase.from("contact_requests").update({ status } as any).eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["contact_requests"] });
+      toast({ title: "Updated", description: "Status changed." });
+    },
+  });
+
   const handleView = (r: ContactRequest) => {
     setViewItem(r);
     if (!r.is_read) {
@@ -80,6 +111,7 @@ export default function RequestsEditor() {
   };
 
   const unreadCount = requests.filter((r) => !r.is_read).length;
+  const filtered = statusFilter === "all" ? requests : requests.filter((r) => r.status === statusFilter);
 
   if (isLoading) {
     return <div className="flex items-center justify-center p-12"><div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" /></div>;
@@ -99,10 +131,21 @@ export default function RequestsEditor() {
         )}
       </div>
 
-      {requests.length === 0 ? (
+      <Tabs value={statusFilter} onValueChange={setStatusFilter}>
+        <TabsList className="flex-wrap h-auto gap-1">
+          <TabsTrigger value="all">All ({requests.length})</TabsTrigger>
+          {(Object.keys(STATUS_CONFIG) as Status[]).map((s) => (
+            <TabsTrigger key={s} value={s}>
+              {STATUS_CONFIG[s].label} ({requests.filter((r) => r.status === s).length})
+            </TabsTrigger>
+          ))}
+        </TabsList>
+      </Tabs>
+
+      {filtered.length === 0 ? (
         <div className="flex flex-col items-center justify-center rounded-xl border border-dashed bg-card p-12 text-center">
           <Inbox className="mb-3 h-10 w-10 text-muted-foreground" />
-          <p className="text-muted-foreground">No requests yet.</p>
+          <p className="text-muted-foreground">No requests found.</p>
         </div>
       ) : (
         <div className="rounded-xl border bg-card">
@@ -113,12 +156,13 @@ export default function RequestsEditor() {
                 <TableHead>Name</TableHead>
                 <TableHead>Contact</TableHead>
                 <TableHead>Plan</TableHead>
+                <TableHead>Status</TableHead>
                 <TableHead>Date</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {requests.map((r) => (
+              {filtered.map((r) => (
                 <TableRow key={r.id} className={!r.is_read ? "bg-primary/5" : ""}>
                   <TableCell>
                     {!r.is_read && <span className="block h-2.5 w-2.5 rounded-full bg-primary" />}
@@ -126,6 +170,21 @@ export default function RequestsEditor() {
                   <TableCell className={`font-medium ${!r.is_read ? "font-bold" : ""}`}>{r.name}</TableCell>
                   <TableCell>{r.contact_id}</TableCell>
                   <TableCell>{r.plan_name}</TableCell>
+                  <TableCell>
+                    <Select
+                      value={r.status}
+                      onValueChange={(v) => updateStatusMutation.mutate({ id: r.id, status: v as Status })}
+                    >
+                      <SelectTrigger className="h-8 w-[130px] text-xs">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {(Object.keys(STATUS_CONFIG) as Status[]).map((s) => (
+                          <SelectItem key={s} value={s}>{STATUS_CONFIG[s].label}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </TableCell>
                   <TableCell>{format(new Date(r.created_at), "MMM d, yyyy")}</TableCell>
                   <TableCell className="text-right space-x-1">
                     <Button size="icon" variant="ghost" onClick={() => handleView(r)}>
@@ -151,6 +210,7 @@ export default function RequestsEditor() {
                   <DialogTitle className="text-xl font-bold">{viewItem.name}</DialogTitle>
                   <DialogDescription className="text-xs">{format(new Date(viewItem.created_at), "PPP 'at' p")}</DialogDescription>
                 </DialogHeader>
+                <div className="mt-2"><StatusBadge status={viewItem.status} /></div>
               </div>
               <div className="grid gap-3 px-6 pb-6 pt-2">
                 <div className="rounded-xl border bg-muted/30 p-4 flex items-center gap-4">

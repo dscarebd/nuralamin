@@ -226,68 +226,70 @@ export default function Blog() {
         <DialogContent className="max-w-2xl animate-enter overflow-hidden rounded-lg p-0">
           {selectedPost && (
             <div className="flex max-h-[85vh] flex-col">
-              {selectedPost.cover_image_url && (
-                <div className="shrink-0 p-3 pb-0">
-                  <div className="aspect-video w-full overflow-hidden rounded-lg">
-                    <img src={selectedPost.cover_image_url} alt={selectedPost.title} className="h-full w-full object-cover" />
+              <div className="min-h-0 flex-1 overflow-y-auto">
+                {selectedPost.cover_image_url && (
+                  <div className="p-3 pb-0">
+                    <div className="aspect-video w-full overflow-hidden rounded-lg">
+                      <img src={selectedPost.cover_image_url} alt={selectedPost.title} className="h-full w-full object-cover" />
+                    </div>
+                  </div>
+                )}
+                <div className="flex flex-col gap-3 p-6 pb-0 sm:px-8">
+                  <DialogHeader className="space-y-3">
+                    {selectedCategory && (
+                      <Badge variant="secondary" className="w-fit bg-primary/10 text-primary">
+                        {selectedCategory.name}
+                      </Badge>
+                    )}
+                    <DialogTitle className="text-2xl font-extrabold uppercase tracking-tight text-foreground">
+                      {selectedPost.title}
+                    </DialogTitle>
+                    {selectedPost.excerpt && (
+                      <DialogDescription className="text-sm leading-relaxed">
+                        {selectedPost.excerpt}
+                      </DialogDescription>
+                    )}
+                  </DialogHeader>
+
+                  <div className="space-y-3 border-t border-border pt-4 text-sm">
+                    {selectedPost.published_at && (
+                      <div className="flex gap-6">
+                        <span className="w-24 shrink-0 font-semibold text-foreground">Date</span>
+                        <span className="text-muted-foreground">{new Date(selectedPost.published_at).toLocaleDateString()}</span>
+                      </div>
+                    )}
+                    {selectedCategory && (
+                      <div className="flex gap-6">
+                        <span className="w-24 shrink-0 font-semibold text-foreground">Category</span>
+                        <span className="text-muted-foreground">{selectedCategory.name}</span>
+                      </div>
+                    )}
+                    {(selectedPost.tags ?? []).length > 0 && (
+                      <div className="flex gap-6">
+                        <span className="w-24 shrink-0 font-semibold text-foreground">Tags</span>
+                        <div className="flex flex-wrap gap-1.5">
+                          {(selectedPost.tags ?? []).map((tag) => (
+                            <span key={tag} className="rounded-md bg-secondary px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
-              )}
-              <div className="flex shrink-0 flex-col gap-3 p-6 pb-0 sm:px-8">
-                <DialogHeader className="space-y-3">
-                  {selectedCategory && (
-                    <Badge variant="secondary" className="w-fit bg-primary/10 text-primary">
-                      {selectedCategory.name}
-                    </Badge>
-                  )}
-                  <DialogTitle className="text-2xl font-extrabold uppercase tracking-tight text-foreground">
-                    {selectedPost.title}
-                  </DialogTitle>
-                  {selectedPost.excerpt && (
-                    <DialogDescription className="text-sm leading-relaxed">
-                      {selectedPost.excerpt}
-                    </DialogDescription>
-                  )}
-                </DialogHeader>
 
-                <div className="space-y-3 border-t border-border pt-4 text-sm">
-                  {selectedPost.published_at && (
-                    <div className="flex gap-6">
-                      <span className="w-24 shrink-0 font-semibold text-foreground">Date</span>
-                      <span className="text-muted-foreground">{new Date(selectedPost.published_at).toLocaleDateString()}</span>
-                    </div>
-                  )}
-                  {selectedCategory && (
-                    <div className="flex gap-6">
-                      <span className="w-24 shrink-0 font-semibold text-foreground">Category</span>
-                      <span className="text-muted-foreground">{selectedCategory.name}</span>
-                    </div>
-                  )}
-                  {(selectedPost.tags ?? []).length > 0 && (
-                    <div className="flex gap-6">
-                      <span className="w-24 shrink-0 font-semibold text-foreground">Tags</span>
-                      <div className="flex flex-wrap gap-1.5">
-                        {(selectedPost.tags ?? []).map((tag) => (
-                          <span key={tag} className="rounded-md bg-secondary px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
+                {selectedPost.content && (
+                  <div className="border-t border-border mx-6 sm:mx-8 mt-3 pt-4 pb-2">
+                    <div
+                      className="prose prose-sm max-w-none text-foreground prose-headings:text-foreground prose-p:text-muted-foreground prose-a:text-primary prose-strong:text-foreground"
+                      dangerouslySetInnerHTML={{ __html: selectedPost.content }}
+                    />
+                  </div>
+                )}
               </div>
 
-              {selectedPost.content && (
-                <div className="min-h-0 flex-1 overflow-y-auto border-t border-border mx-6 sm:mx-8 mt-3 pt-4">
-                  <div
-                    className="prose prose-sm max-w-none text-foreground prose-headings:text-foreground prose-p:text-muted-foreground prose-a:text-primary prose-strong:text-foreground"
-                    dangerouslySetInnerHTML={{ __html: selectedPost.content }}
-                  />
-                </div>
-              )}
-
-              <div className="shrink-0 p-6 pt-3 sm:px-8">
+              <div className="shrink-0 border-t border-border p-6 pt-3 sm:px-8">
                 <Button asChild size="lg" className="w-full">
                   <Link to={`/blog/${selectedPost.slug}`}>
                     Read Full Post <ExternalLink className="ml-1 h-4 w-4" />

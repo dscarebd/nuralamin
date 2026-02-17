@@ -96,6 +96,22 @@ export default function RequestsEditor() {
     mutationFn: async ({ id, status }: { id: string; status: Status }) => {
       const { error } = await supabase.from("contact_requests").update({ status } as any).eq("id", id);
       if (error) throw error;
+
+      // Send Telegram notification for approved/delivered
+      if (status === "approved" || status === "delivered") {
+        const request = requests.find((r) => r.id === id);
+        if (request) {
+          supabase.functions.invoke("notify-telegram", {
+            body: {
+              type: "status_change",
+              status,
+              name: request.name,
+              plan_name: request.plan_name,
+              contact_id: request.contact_id,
+            },
+          }).catch(console.error);
+        }
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["contact_requests"] });

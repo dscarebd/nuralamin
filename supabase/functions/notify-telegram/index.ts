@@ -12,7 +12,7 @@ serve(async (req) => {
   }
 
   try {
-    const { name, contact_id, project_details, project_links, plan_name, budget, status } =
+    const { name, contact_id, project_details, project_links, plan_name, budget, status, type } =
       await req.json();
 
     const botToken = Deno.env.get("TELEGRAM_BOT_TOKEN");
@@ -25,30 +25,48 @@ serve(async (req) => {
       );
     }
 
-    const isSubmitted = status === "submitted";
-    const header = isSubmitted
-      ? "✅ New Contact Request!"
-      : "⚠️ Abandoned Form (Not Requested)";
-
     const val = (v: string | undefined | null) => v?.trim() || "(not provided)";
 
-    const lines = [
-      header,
-      "",
-      `📋 Plan: ${val(plan_name)}`,
-      `👤 Name: ${val(name)}`,
-      `📞 Contact: ${val(contact_id)}`,
-      `💰 Budget: ${val(budget)}`,
-      "",
-      `📝 Project Details:`,
-      val(project_details),
-    ];
+    let text: string;
 
-    if (project_links?.trim()) {
-      lines.push("", `🔗 Links: ${project_links.trim()}`);
+    if (type === "status_change") {
+      const statusEmoji: Record<string, string> = {
+        approved: "✅",
+        delivered: "📦",
+      };
+      const emoji = statusEmoji[status] || "🔔";
+      const lines = [
+        `${emoji} Request Status: ${(status as string).toUpperCase()}`,
+        "",
+        `👤 Name: ${val(name)}`,
+        `📋 Plan: ${val(plan_name)}`,
+        `📞 Contact: ${val(contact_id)}`,
+      ];
+      text = lines.join("\n");
+    } else {
+      const isSubmitted = status === "submitted";
+      const header = isSubmitted
+        ? "✅ New Contact Request!"
+        : "⚠️ Abandoned Form (Not Requested)";
+
+      const lines = [
+        header,
+        "",
+        `📋 Plan: ${val(plan_name)}`,
+        `👤 Name: ${val(name)}`,
+        `📞 Contact: ${val(contact_id)}`,
+        `💰 Budget: ${val(budget)}`,
+        "",
+        `📝 Project Details:`,
+        val(project_details),
+      ];
+
+      if (project_links?.trim()) {
+        lines.push("", `🔗 Links: ${project_links.trim()}`);
+      }
+
+      text = lines.join("\n");
     }
-
-    const text = lines.join("\n");
 
     const telegramRes = await fetch(
       `https://api.telegram.org/bot${botToken}/sendMessage`,

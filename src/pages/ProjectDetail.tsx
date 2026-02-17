@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useParams, Link } from "react-router-dom";
+import SEOHead from "@/components/SEOHead";
 import { motion } from "framer-motion";
 import { ArrowLeft, ExternalLink, Calendar, DollarSign, Tag, Layers } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -68,6 +69,19 @@ export default function ProjectDetail() {
 
   return (
     <div className="min-h-screen bg-background px-4 py-8 md:px-8">
+      <SEOHead
+        title={`${project.title} - NUR AL AMIN Portfolio`}
+        description={project.description || `View the ${project.title} project by NUR AL AMIN.`}
+        ogImage={project.image_url || undefined}
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "CreativeWork",
+          name: project.title,
+          description: project.description || "",
+          image: project.image_url || undefined,
+          author: { "@type": "Person", name: "NUR AL AMIN" },
+        }}
+      />
       <div className="mx-auto max-w-4xl">
         {/* Back button */}
         <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.3 }}>

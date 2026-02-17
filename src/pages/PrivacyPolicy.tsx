@@ -3,6 +3,7 @@ import { ArrowLeft, Shield } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useSiteSettings } from "@/hooks/usePublicData";
+import SEOHead from "@/components/SEOHead";
 
 const DEFAULT_CONTENT = `
 <h2>1. Introduction</h2>
@@ -58,6 +59,10 @@ export default function PrivacyPolicy() {
 
   return (
     <div className="min-h-screen bg-background px-4 py-8 md:px-8">
+      <SEOHead
+        title="Privacy Policy - NUR AL AMIN"
+        description="Read NUR AL AMIN's privacy policy. Learn how we collect, use, and protect your personal information."
+      />
       <motion.article
         className="mx-auto max-w-3xl"
         initial={{ opacity: 0, y: 20 }}

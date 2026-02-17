@@ -3,6 +3,7 @@ import { ArrowLeft, RotateCcw } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useSiteSettings } from "@/hooks/usePublicData";
+import SEOHead from "@/components/SEOHead";
 
 const DEFAULT_CONTENT = `
 <h2>1. Overview</h2>
@@ -59,6 +60,10 @@ export default function RefundPolicy() {
 
   return (
     <div className="min-h-screen bg-background px-4 py-8 md:px-8">
+      <SEOHead
+        title="Refund Policy - NUR AL AMIN"
+        description="Understand NUR AL AMIN's refund policy for web and app development services. Learn about eligible refund scenarios and processes."
+      />
       <motion.article
         className="mx-auto max-w-3xl"
         initial={{ opacity: 0, y: 20 }}

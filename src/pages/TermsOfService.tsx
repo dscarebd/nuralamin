@@ -3,6 +3,7 @@ import { ArrowLeft, FileText } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useSiteSettings } from "@/hooks/usePublicData";
+import SEOHead from "@/components/SEOHead";
 
 const DEFAULT_CONTENT = `
 <h2>1. Acceptance of Terms</h2>
@@ -56,6 +57,10 @@ export default function TermsOfService() {
 
   return (
     <div className="min-h-screen bg-background px-4 py-8 md:px-8">
+      <SEOHead
+        title="Terms of Service - NUR AL AMIN"
+        description="Read the terms of service for NUR AL AMIN's web and app development services. Understand project terms, payments, and policies."
+      />
       <motion.article
         className="mx-auto max-w-3xl"
         initial={{ opacity: 0, y: 20 }}

@@ -119,4 +119,13 @@
     60% { transform: translateX(-4px); }
     80% { transform: translateX(4px); }
   }
+
+  .content-protected {
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .content-protected img {
+    -webkit-user-drag: none;
+    pointer-events: none;
+  }
 }

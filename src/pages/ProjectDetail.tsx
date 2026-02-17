@@ -77,7 +77,7 @@ export default function ProjectDetail() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
           className="mb-8 overflow-hidden rounded-xl border border-border/60">
           {hasMultiple ? (
-            <Carousel setApi={setCarouselApi} plugins={[Autoplay({ delay: 3000, stopOnInteraction: false })]} className="w-full">
+            <Carousel setApi={setCarouselApi} plugins={[Autoplay({ delay: 5000, stopOnInteraction: false })]} className="w-full">
               <CarouselContent>
                 {allImages.map((url, i) => (
                   <CarouselItem key={i}>

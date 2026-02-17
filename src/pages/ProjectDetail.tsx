@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft, ExternalLink, Calendar, DollarSign, Tag, Layers } from "lucide-react";
@@ -13,6 +13,7 @@ import imgRestaurant from "@/assets/project-restaurant.jpg";
 import imgFitness from "@/assets/project-fitness.jpg";
 import imgLms from "@/assets/project-lms.jpg";
 import { Skeleton } from "@/components/ui/skeleton";
+import ImageLightbox from "@/components/ImageLightbox";
 
 const fallbackImages: Record<string, string> = {
   "E-Commerce Platform": imgEcommerce,
@@ -28,6 +29,8 @@ export default function ProjectDetail() {
   const { data: project, isLoading } = useProject(id);
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
 
   useEffect(() => {
     if (!carouselApi) return;
@@ -81,8 +84,8 @@ export default function ProjectDetail() {
               <CarouselContent>
                 {allImages.map((url, i) => (
                   <CarouselItem key={i}>
-                    <div className="aspect-video w-full overflow-hidden">
-                      <img src={url} alt={`${project.title} ${i + 1}`} className="h-full w-full object-cover" />
+                    <div className="aspect-video w-full cursor-pointer overflow-hidden" onClick={() => { setLightboxIndex(i); setLightboxOpen(true); }}>
+                      <img src={url} alt={`${project.title} ${i + 1}`} className="h-full w-full object-cover transition-transform hover:scale-105" />
                     </div>
                   </CarouselItem>
                 ))}
@@ -97,11 +100,13 @@ export default function ProjectDetail() {
               </div>
             </Carousel>
           ) : (
-            <div className="aspect-video w-full overflow-hidden">
-              <img src={mainImg} alt={project.title} className="h-full w-full object-cover" />
+            <div className="aspect-video w-full cursor-pointer overflow-hidden" onClick={() => { setLightboxIndex(0); setLightboxOpen(true); }}>
+              <img src={mainImg} alt={project.title} className="h-full w-full object-cover transition-transform hover:scale-105" />
             </div>
           )}
         </motion.div>
+
+        <ImageLightbox images={allImages} currentIndex={lightboxIndex} open={lightboxOpen} onClose={() => setLightboxOpen(false)} onIndexChange={setLightboxIndex} />
 
         {/* Project info */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }}

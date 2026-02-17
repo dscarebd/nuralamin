@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Calendar, Tag, ArrowRight, Pin, Search, ExternalLink } from "lucide-react";
@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useBlogPosts, useBlogCategories } from "@/hooks/usePublicData";
+import ImageLightbox from "@/components/ImageLightbox";
 
 type BlogPost = {
   id: string;
@@ -40,6 +41,9 @@ export default function Blog() {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+  const [lightboxImages, setLightboxImages] = useState<string[]>([]);
 
   const searchLower = search.toLowerCase();
   const matchesSearch = (post: typeof posts[0]) =>
@@ -227,13 +231,16 @@ export default function Blog() {
           {selectedPost && (
             <div className="flex max-h-[85vh] flex-col">
               <div className="min-h-0 flex-1 overflow-y-auto">
-                {selectedPost.cover_image_url && (
-                  <div className="p-3 pb-0">
-                    <div className="aspect-video w-full overflow-hidden rounded-lg">
-                      <img src={selectedPost.cover_image_url} alt={selectedPost.title} className="h-full w-full object-cover" />
+                {selectedPost.cover_image_url && (() => {
+                  const blogImages = [selectedPost.cover_image_url, ...((selectedPost as any).gallery_images ?? [])].filter(Boolean) as string[];
+                  return (
+                    <div className="p-3 pb-0">
+                      <div className="aspect-video w-full cursor-pointer overflow-hidden rounded-lg" onClick={() => { setLightboxImages(blogImages); setLightboxIndex(0); setLightboxOpen(true); }}>
+                        <img src={selectedPost.cover_image_url} alt={selectedPost.title} className="h-full w-full object-cover transition-transform hover:scale-105" />
+                      </div>
                     </div>
-                  </div>
-                )}
+                  );
+                })()}
                 <div className="flex flex-col gap-3 p-6 pb-0 sm:px-8">
                   <DialogHeader className="space-y-3">
                     {selectedCategory && (
@@ -290,11 +297,14 @@ export default function Blog() {
 
                 {((selectedPost as any).gallery_images ?? []).length > 0 && (
                   <div className="mx-6 sm:mx-8 mt-3 grid grid-cols-2 gap-2">
-                    {((selectedPost as any).gallery_images as string[]).map((url, i) => (
-                      <div key={i} className="overflow-hidden rounded-lg">
-                        <img src={url} alt={`Gallery ${i + 1}`} className="h-full w-full object-cover" />
-                      </div>
-                    ))}
+                    {((selectedPost as any).gallery_images as string[]).map((url, i) => {
+                      const blogImages = [selectedPost.cover_image_url, ...((selectedPost as any).gallery_images ?? [])].filter(Boolean) as string[];
+                      return (
+                        <div key={i} className="cursor-pointer overflow-hidden rounded-lg" onClick={() => { setLightboxImages(blogImages); setLightboxIndex(i + (selectedPost.cover_image_url ? 1 : 0)); setLightboxOpen(true); }}>
+                          <img src={url} alt={`Gallery ${i + 1}`} className="h-full w-full object-cover transition-transform hover:scale-105" />
+                        </div>
+                      );
+                    })}
                   </div>
                 )}
               </div>
@@ -310,6 +320,7 @@ export default function Blog() {
           )}
         </DialogContent>
       </Dialog>
+      <ImageLightbox images={lightboxImages} currentIndex={lightboxIndex} open={lightboxOpen} onClose={() => setLightboxOpen(false)} onIndexChange={setLightboxIndex} />
     </div>
   );
 }

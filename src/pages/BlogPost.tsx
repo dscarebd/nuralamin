@@ -95,6 +95,17 @@ export default function BlogPost() {
           className="prose prose-sm dark:prose-invert max-w-none text-foreground"
           dangerouslySetInnerHTML={{ __html: post.content ?? "" }}
         />
+
+        {(post.gallery_images ?? []).length > 0 && (
+          <div className="mt-8">
+            <h2 className="mb-4 text-lg font-bold text-foreground">Gallery</h2>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              {(post.gallery_images ?? []).map((url, i) => (
+                <img key={i} src={url} alt={`Gallery ${i + 1}`} className="w-full rounded-xl object-cover" />
+              ))}
+            </div>
+          </div>
+        )}
       </motion.article>
     </div>
   );

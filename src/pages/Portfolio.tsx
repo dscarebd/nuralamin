@@ -125,10 +125,10 @@ export default function Portfolio() {
         </TabsContent>
 
         <Dialog open={!!selectedProject} onOpenChange={(open) => { if (!open) { setSelectedProject(null); setActiveImage(null); } }}>
-          <DialogContent className="max-w-2xl animate-enter overflow-hidden p-0">
+          <DialogContent className="max-h-[85vh] max-w-2xl animate-enter overflow-y-auto p-0">
             {selectedProject && (() => {
               const mainImg = activeImage || selectedProject.image_url || fallbackImages[selectedProject.title] || imgEcommerce;
-              const gallery = ((selectedProject as any).gallery_images ?? []) as string[];
+              const gallery = selectedProject.gallery_images ?? [];
               return (
                 <div className="flex flex-col">
                   <div className="aspect-video w-full overflow-hidden">
@@ -164,9 +164,11 @@ export default function Portfolio() {
                       <div className="flex gap-6"><span className="w-24 shrink-0 font-semibold text-foreground">Budget</span><span className="text-muted-foreground">{selectedProject.budget}</span></div>
                       <div className="flex gap-6"><span className="w-24 shrink-0 font-semibold text-foreground">Tech Stack</span><span className="text-muted-foreground">{(selectedProject.tech ?? []).join(", ")}</span></div>
                     </div>
-                    <Button asChild size="lg" className="mt-auto w-full">
-                      <a href={selectedProject.link ?? "#"} target="_blank" rel="noopener noreferrer">View Project <ExternalLink className="ml-1 h-4 w-4" /></a>
-                    </Button>
+                    {selectedProject.link && (
+                      <Button asChild size="lg" className="mt-auto w-full" onClick={(e) => e.stopPropagation()}>
+                        <a href={selectedProject.link} target="_blank" rel="noopener noreferrer">View Project <ExternalLink className="ml-1 h-4 w-4" /></a>
+                      </Button>
+                    )}
                   </div>
                 </div>
               );

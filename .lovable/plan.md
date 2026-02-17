@@ -1,50 +1,43 @@
 
+## Blog Post Popup (Portfolio-Style Dialog)
 
-## Instant Page Switching with Data Prefetching
+Currently, clicking a blog card navigates to a separate `/blog/:slug` page. This plan will change it to open a **popup dialog** matching the portfolio's style -- with the cover image on top, content below, and metadata displayed cleanly.
 
-**Problem**: When switching between pages (Home, Portfolio, Pricing), content takes time to load because each page independently fetches its data from the backend only when visited.
+### What Changes
 
-**Solution**: Prefetch all page data on initial app load so it's already cached when navigating. Combined with keeping the existing page transitions smooth, this makes page switches feel instant.
+**1. Blog listing page (`src/pages/Blog.tsx`)**
+- Add state to track the selected blog post (like portfolio's `selectedProject`)
+- Change `<Link>` wrappers on blog cards to `onClick` handlers that set the selected post
+- Add a `Dialog` component at the bottom (matching the portfolio pattern) that shows:
+  - Cover image (full-width, aspect-video)
+  - Title, category badge, published date, and tags
+  - Full HTML content rendered via `dangerouslySetInnerHTML`
+  - A "Read on page" link for users who want the full-page view
 
-### How It Works
+**2. Keep the standalone BlogPost page**
+- The `/blog/:slug` route and `BlogPost.tsx` will remain functional for direct links and SEO
+- The dialog will include a subtle link to the full page as a fallback
 
-React Query (already in use) caches fetched data. By triggering all data fetches once on app startup, every subsequent page visit reads from the in-memory cache -- no loading delay.
+### Dialog Layout (mirrors Portfolio)
 
-### Changes
-
-**1. Create `src/hooks/usePrefetchData.ts` (new file)**
-- A custom hook that calls `queryClient.prefetchQuery()` for all public data queries: profile, social links, experiences, projects, pricing plans, and site settings.
-- Runs once on app mount using `useEffect`.
-
-**2. Update `src/App.tsx`**
-- Call `usePrefetchData()` inside `AppLayout` so all data is fetched in the background as soon as the app loads.
-
-**3. Update `src/hooks/usePublicData.ts`**
-- Add `staleTime: 1000 * 60 * 5` (5 minutes) to all query hooks so React Query serves cached data instantly instead of refetching on every page navigation.
+```text
++----------------------------------+
+|  [Cover Image - aspect-video]    |
++----------------------------------+
+|  Category Badge                  |
+|  Title (large, bold)             |
+|  Date  |  Tags                   |
+|----------------------------------|
+|  Full blog content (scrollable)  |
+|                                  |
+|  [Read Full Post button]         |
++----------------------------------+
+```
 
 ### Technical Details
 
-The prefetch hook will look like:
-
-```typescript
-import { useQueryClient } from "@tanstack/react-query";
-import { useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
-
-export function usePrefetchData() {
-  const queryClient = useQueryClient();
-  
-  useEffect(() => {
-    // Prefetch all public data queries in parallel
-    queryClient.prefetchQuery({ queryKey: ["profile"], queryFn: ... });
-    queryClient.prefetchQuery({ queryKey: ["social_links"], queryFn: ... });
-    queryClient.prefetchQuery({ queryKey: ["experiences"], queryFn: ... });
-    queryClient.prefetchQuery({ queryKey: ["projects"], queryFn: ... });
-    queryClient.prefetchQuery({ queryKey: ["pricing_plans"], queryFn: ... });
-    queryClient.prefetchQuery({ queryKey: ["site_settings"], queryFn: ... });
-  }, []);
-}
-```
-
-Each `useQuery` hook in `usePublicData.ts` will get `staleTime: 5 * 60 * 1000` so cached results are served immediately without triggering background refetches during normal browsing.
-
+- Reuse the same `Dialog`, `DialogContent`, `DialogHeader`, `DialogTitle`, `DialogDescription` components already used in Portfolio
+- Set `max-w-2xl` on DialogContent (same as portfolio)
+- Add `ScrollArea` or `max-h-[70vh] overflow-y-auto` for long blog content inside the dialog
+- Featured post cards and regular post cards will both use `onClick` instead of `<Link>`
+- The dialog content will use the same premium styling: gradient overlay on image, clean metadata section with border separator

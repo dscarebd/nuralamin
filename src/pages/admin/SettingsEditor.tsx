@@ -20,6 +20,7 @@ export default function SettingsEditor() {
   const [form, setForm] = useState<Record<string, string>>({});
 
   useEffect(() => {
+    if (!Array.isArray(settings)) return;
     const map: Record<string, string> = {};
     settings.forEach((s) => { map[s.key] = s.value ?? ""; });
     setForm(map);

@@ -72,11 +72,11 @@ function AppLayout() {
 
   return (
     <div className="flex h-screen flex-col">
-      <div className={`flex-1 overflow-auto ${isHome ? "lg:overflow-hidden" : ""}`}>
+      <div className={`flex-1 overflow-auto ${isHome ? "lg:overflow-hidden lg:flex lg:flex-col" : ""}`}>
         <FloatingHeader />
         <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>
-            <Route path="/" element={<motion.div {...pageTransition} className="lg:h-full lg:overflow-hidden"><Index /></motion.div>} />
+            <Route path="/" element={<motion.div {...pageTransition} className="lg:flex-1 lg:min-h-0 lg:overflow-hidden"><Index /></motion.div>} />
             <Route path="/portfolio" element={<motion.div {...pageTransition}><Portfolio /></motion.div>} />
             <Route path="/portfolio/:id" element={<motion.div {...pageTransition}><ProjectDetail /></motion.div>} />
             <Route path="/blog" element={<motion.div {...pageTransition}><Blog /></motion.div>} />

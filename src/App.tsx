@@ -32,6 +32,7 @@ import ProtectedRoute from "./components/admin/ProtectedRoute";
 import FloatingHeader from "./components/FloatingHeader";
 import FloatingFooter from "./components/FloatingFooter";
 import SplashScreen from "./components/SplashScreen";
+import ContentProtection from "./components/ContentProtection";
 import { usePrefetchData } from "./hooks/usePrefetchData";
 import { useImagePreloader } from "./hooks/useImagePreloader";
 import { usePageViewTracker } from "./hooks/usePageViewTracker";
@@ -76,7 +77,7 @@ function AppLayout() {
   }
 
   return (
-    <>
+    <ContentProtection>
       <AnimatePresence>
         {!ready && <SplashScreen progress={progress} />}
       </AnimatePresence>
@@ -108,7 +109,7 @@ function AppLayout() {
           </div>
         )}
       </div>
-    </>
+    </ContentProtection>
   );
 }
 

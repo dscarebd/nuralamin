@@ -133,27 +133,31 @@ export default function Portfolio() {
             <p className="text-sm text-muted-foreground">Projects I've built and contributed to</p>
           </motion.div>
 
-          <TabsList className="w-full sm:w-auto">
-            <TabsTrigger value="website" className="flex-1 sm:flex-initial data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Website</TabsTrigger>
-            <TabsTrigger value="mobile" className="flex-1 sm:flex-initial data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Mobile App</TabsTrigger>
-          </TabsList>
+          {hasMultipleCategories && (
+            <TabsList className="w-full sm:w-auto">
+              <TabsTrigger value="website" className="flex-1 sm:flex-initial data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Website</TabsTrigger>
+              <TabsTrigger value="mobile" className="flex-1 sm:flex-initial data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Mobile App</TabsTrigger>
+            </TabsList>
+          )}
         </div>
 
         <TabsContent value="website">
           <motion.div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" variants={stagger} initial="hidden" animate="visible">
-            {websiteProjects.map((project) => (
+            {(hasMultipleCategories ? websiteProjects : dbProjects).map((project) => (
               <ProjectCard key={project.id} project={project} onClick={() => setSelectedProject(project)} />
             ))}
           </motion.div>
         </TabsContent>
 
-        <TabsContent value="mobile">
-          <motion.div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" variants={stagger} initial="hidden" animate="visible">
-            {mobileProjects.map((project) => (
-              <ProjectCard key={project.id} project={project} onClick={() => setSelectedProject(project)} />
-            ))}
-          </motion.div>
-        </TabsContent>
+        {hasMultipleCategories && (
+          <TabsContent value="mobile">
+            <motion.div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" variants={stagger} initial="hidden" animate="visible">
+              {mobileProjects.map((project) => (
+                <ProjectCard key={project.id} project={project} onClick={() => setSelectedProject(project)} />
+              ))}
+            </motion.div>
+          </TabsContent>
+        )}
 
         <Dialog open={!!selectedProject} onOpenChange={(open) => { if (!open) setSelectedProject(null); }}>
           <DialogContent className="max-h-[85vh] max-w-2xl animate-enter overflow-y-auto p-0">

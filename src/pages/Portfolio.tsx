@@ -105,8 +105,10 @@ export default function Portfolio() {
     return () => { carouselApi.off("select", onSelect); };
   }, [carouselApi]);
 
+  const categories = [...new Set(dbProjects.map((p) => p.category).filter(Boolean))];
+  const hasMultipleCategories = categories.length > 1;
   const websiteProjects = dbProjects.filter((p) => p.category !== "Mobile App");
-  const mobileProjects = dbProjects.filter((p) => p.category === "Mobile App");
+  const mobileProjects = dbProjects.filter((p) => p.category === "Mobile App" || p.category === "Web + App");
 
   const telegramUrl = settings?.telegram_url ?? "https://t.me/nuralamin_official";
   const footerText = settings?.footer_text ?? "NUR AL AMIN © 2017 – 2026. All Rights Reserved.";

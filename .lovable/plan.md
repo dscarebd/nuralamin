@@ -1,66 +1,63 @@
 
 
-# Update Portfolio Projects with Real Data
+# Content Protection Plan
 
-## Overview
+## Summary
 
-Replace the 6 demo projects in the database with real project data extracted from the provided URLs. All projects will be categorized as "Web + App" since they work on both platforms.
+Protect all public pages from copying images, text, and icons -- **except** individual blog post pages (`/blog/:slug`) where users can copy images and text. Also block browser DevTools (inspect mode) across the entire public site including blog posts. Admin pages remain completely unprotected.
 
-## Projects to Update
+## Protection Rules
 
-### 1. Quran Insight (quraninsight.app)
-- **Title**: Quran Insight
-- **Category**: Web + App
-- **Description**: AI-powered Quran search and learning platform with Bengali and English support. Features include Tafsir, daily verses, duas, hadith, prayer times, Islamic calendar, Qibla direction, and Names of Allah.
-- **Tech**: React, AI, Tailwind CSS, TypeScript
-- **Link**: https://quraninsight.app/
+| Page | Copy Text | Copy Images | Right-Click | DevTools |
+|------|-----------|-------------|-------------|----------|
+| Home `/` | Blocked | Blocked | Blocked | Blocked |
+| Portfolio `/portfolio` | Blocked | Blocked | Blocked | Blocked |
+| Portfolio Detail `/portfolio/:id` | Blocked | Blocked | Blocked | Blocked |
+| Blog listing `/blog` | Blocked | Blocked | Blocked | Blocked |
+| Blog post `/blog/:slug` | Allowed | Allowed | Allowed | Blocked |
+| Pricing `/pricing` | Blocked | Blocked | Blocked | Blocked |
+| Policy pages | Blocked | Blocked | Blocked | Blocked |
+| Admin `/abdullah/*` | No protection at all | | | |
 
-### 2. Quran Insight Download Page (download.quraninsight.app)
-- **Title**: Quran Insight Mobile
-- **Category**: Web + App
-- **Description**: Mobile app landing and download page for Quran Insight. AI-powered Quran search, Bengali and English Tafsir, daily verses, duas, hadith, and Masail -- free with no ads.
-- **Tech**: React Native, AI, TypeScript
-- **Link**: http://download.quraninsight.app/
+## Changes
 
-### 3. Ramadan Insight (ramadan.quraninsight.app)
-- **Title**: Ramadan Insight
-- **Category**: Web + App
-- **Description**: Ramadan companion app with real-time Sehri and Iftar countdown, daily Quranic verses, prayer niyyat guides, fasting tracker, and location-based Islamic calendar integration.
-- **Tech**: React, Tailwind CSS, TypeScript
-- **Link**: https://ramadan.quraninsight.app/
+### 1. New Component: `src/components/ContentProtection.tsx`
 
-### 4. Quiz Insight (quizinsight.quraninsight.app)
-- **Title**: Quiz Insight
-- **Category**: Web + App
-- **Description**: Interactive Islamic knowledge quiz platform with user authentication, progress tracking, and engaging question-based learning to test and improve understanding of Islam.
-- **Tech**: React, Supabase, Tailwind CSS, TypeScript
-- **Link**: https://quizinsight.quraninsight.app/
+A wrapper component that applies protection based on current route:
 
-### 5. Muslims Day (muslimsday.lovable.app)
-- **Title**: Muslims Day
-- **Category**: Web + App
-- **Description**: All-in-one daily Islamic companion with accurate prayer times, Sehri/Iftar schedules, Quran reader, dua collection, Islamic calendar, and location-based notifications with prohibited prayer time alerts.
-- **Tech**: React, Tailwind CSS, TypeScript, PWA
-- **Link**: https://muslimsday.lovable.app
+- **Copy/Select protection** (all public pages except `/blog/:slug`):
+  - Disable right-click context menu
+  - Block `copy` and `cut` events
+  - Block Ctrl/Cmd+C, Ctrl/Cmd+X, Ctrl/Cmd+A shortcuts
+  - Apply `user-select: none` CSS to prevent text selection
+  - Apply `-webkit-user-drag: none` to prevent image dragging
 
-### 6. Expertise Editor (expertiseeditor.com)
-- **Title**: Expertise Editor
-- **Category**: Web + App
-- **Description**: Complete online PDF toolkit with 27 free tools for merging, splitting, compressing, converting, editing, and securing PDF documents. Features AI-powered tools, fast processing, and browser-based operation with no installation required.
-- **Tech**: React, AI, Tailwind CSS, TypeScript
-- **Link**: https://expertiseeditor.com/
+- **DevTools protection** (all public pages including blog posts):
+  - Block F12, Ctrl/Cmd+Shift+I, Ctrl/Cmd+Shift+J, Ctrl/Cmd+U (view source)
+  - These are client-side deterrents -- not foolproof but effective against casual users
 
-## Implementation Steps
+### 2. CSS Updates: `src/index.css`
 
-1. **Delete all 6 existing demo projects** from the database using SQL
-2. **Insert the 6 real projects** with the extracted data above, ordered 1-6 as listed
-3. **Take screenshots** from the fetched website data and upload them to the storage bucket as project cover images
-4. Budget and date fields will be left empty as requested
+Add a `.content-protected` class:
+```css
+.content-protected {
+  user-select: none;
+  -webkit-user-select: none;
+}
+.content-protected img {
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+```
 
-## Technical Details
+### 3. Integration: `src/App.tsx`
 
-- Use the database insert tool to delete old rows and insert new ones into the `projects` table
-- Upload screenshots to the `uploads/projects/` storage bucket for cover images
-- Update `image_url` for each project to point to the uploaded screenshot
-- No code changes needed -- the existing Portfolio page and ProjectsEditor will work with the new data automatically
+Wrap the public layout section with `<ContentProtection>` so it covers all non-admin routes. The component internally checks the route and applies the right level of protection.
+
+## Technical Notes
+
+- Route detection uses `useLocation()` from React Router
+- Blog post pages are identified by checking if the path matches `/blog/` followed by a slug segment
+- All event listeners are cleaned up on unmount or route change via `useEffect` cleanup
+- This is a **client-side deterrent** -- determined users with technical knowledge can still bypass it, but it effectively prevents casual copying
 

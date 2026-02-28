@@ -156,6 +156,17 @@ export default function BlogEditor() {
     onError: (e: Error) => toast({ title: "Error", description: e.message, variant: "destructive" }),
   });
 
+  const deleteCategoryMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("blog_categories").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["blog_categories"] });
+      toast({ title: "Category deleted!" });
+    },
+  });
+
   const handleGenerateFromProject = async (project: typeof dbProjects[0]) => {
     setGenerating(true);
     setGenDialogOpen(false);

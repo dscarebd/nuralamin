@@ -190,6 +190,7 @@ export default function BlogEditor() {
       if (insertError) throw insertError;
 
       qc.invalidateQueries({ queryKey: ["admin_blog_posts"] });
+      qc.invalidateQueries({ queryKey: ["blog_posts"] });
       toast({ title: "Blog post generated!", description: "Open it to review and publish." });
     } catch (e: any) {
       toast({ title: "Generation failed", description: e.message, variant: "destructive" });

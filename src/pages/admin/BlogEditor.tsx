@@ -51,12 +51,22 @@ export default function BlogEditor() {
     },
   });
 
+  const { data: dbProjects = [] } = useQuery({
+    queryKey: ["admin_projects"],
+    queryFn: async () => {
+      const { data } = await supabase.from("projects").select("*").order("display_order");
+      return data ?? [];
+    },
+  });
+
   const [editing, setEditing] = useState<string | null>(null);
   const [form, setForm] = useState<BlogPostForm>({
     title: "", slug: "", excerpt: "", content: "", cover_image_url: "", gallery_images: [], category_id: "", tags: "", is_published: false, is_featured: false,
   });
   const [newCategory, setNewCategory] = useState("");
   const [catDialogOpen, setCatDialogOpen] = useState(false);
+  const [genDialogOpen, setGenDialogOpen] = useState(false);
+  const [generating, setGenerating] = useState(false);
 
   const startEdit = (post: typeof posts[0]) => {
     setEditing(post.id);

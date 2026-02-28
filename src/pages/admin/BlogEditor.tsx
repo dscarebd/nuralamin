@@ -243,6 +243,35 @@ export default function BlogEditor() {
               </div>
             </DialogContent>
           </Dialog>
+          <Dialog open={genDialogOpen} onOpenChange={setGenDialogOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline" className="gap-2" disabled={generating}>
+                {generating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+                {generating ? "Generating..." : "AI Generate"}
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Generate Blog from Project</DialogTitle>
+              </DialogHeader>
+              <p className="text-sm text-muted-foreground">Select a project to generate a complete blog post using AI:</p>
+              <div className="space-y-2 max-h-[300px] overflow-y-auto">
+                {dbProjects.map((proj) => (
+                  <button
+                    key={proj.id}
+                    onClick={() => handleGenerateFromProject(proj)}
+                    className="w-full text-left rounded-lg border p-3 hover:bg-accent transition-colors"
+                  >
+                    <p className="font-medium text-sm text-foreground">{proj.title}</p>
+                    <p className="text-xs text-muted-foreground line-clamp-1">{proj.description}</p>
+                  </button>
+                ))}
+                {dbProjects.length === 0 && (
+                  <p className="text-sm text-muted-foreground text-center py-4">No projects found</p>
+                )}
+              </div>
+            </DialogContent>
+          </Dialog>
           <Button onClick={() => addMutation.mutate()} className="gap-2"><Plus className="h-4 w-4" /> New Post</Button>
         </div>
       </div>

@@ -156,16 +156,36 @@ export default function BlogEditor() {
     onError: (e: Error) => toast({ title: "Error", description: e.message, variant: "destructive" }),
   });
 
-  const deleteCategoryMutation = useMutation({
-    mutationFn: async (id: string) => {
-      const { error } = await supabase.from("blog_categories").delete().eq("id", id);
+  const handleGenerateFromProject = async (project: typeof dbProjects[0]) => {
+    setGenerating(true);
+    setGenDialogOpen(false);
+    try {
+      const { data, error } = await supabase.functions.invoke("generate-blog", {
+        body: { project },
+      });
       if (error) throw error;
-    },
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["blog_categories"] });
-      toast({ title: "Category deleted!" });
-    },
-  });
+      if (data?.error) throw new Error(data.error);
+
+      const slug = slugify(data.title || project.title);
+      const { error: insertError } = await supabase.from("blog_posts").insert({
+        title: data.title || project.title,
+        slug,
+        excerpt: data.excerpt || "",
+        content: data.content || "",
+        cover_image_url: project.image_url || "",
+        tags: data.tags || [],
+        display_order: posts.length + 1,
+      });
+      if (insertError) throw insertError;
+
+      qc.invalidateQueries({ queryKey: ["admin_blog_posts"] });
+      toast({ title: "Blog post generated!", description: "Open it to review and publish." });
+    } catch (e: any) {
+      toast({ title: "Generation failed", description: e.message, variant: "destructive" });
+    } finally {
+      setGenerating(false);
+    }
+  };
 
   if (isLoading) return <div className="animate-pulse text-muted-foreground">Loading...</div>;
 

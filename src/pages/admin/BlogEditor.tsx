@@ -8,7 +8,7 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { Plus, Trash2, Save, PenLine, Eye, EyeOff, FolderPlus, X } from "lucide-react";
+import { Plus, Trash2, Save, PenLine, Eye, EyeOff, FolderPlus, X, Sparkles, Loader2 } from "lucide-react";
 import ImageUpload from "@/components/admin/ImageUpload";
 import MultiImageUpload from "@/components/admin/MultiImageUpload";
 import RichTextEditor from "@/components/admin/RichTextEditor";
@@ -51,12 +51,22 @@ export default function BlogEditor() {
     },
   });
 
+  const { data: dbProjects = [] } = useQuery({
+    queryKey: ["admin_projects"],
+    queryFn: async () => {
+      const { data } = await supabase.from("projects").select("*").order("display_order");
+      return data ?? [];
+    },
+  });
+
   const [editing, setEditing] = useState<string | null>(null);
   const [form, setForm] = useState<BlogPostForm>({
     title: "", slug: "", excerpt: "", content: "", cover_image_url: "", gallery_images: [], category_id: "", tags: "", is_published: false, is_featured: false,
   });
   const [newCategory, setNewCategory] = useState("");
   const [catDialogOpen, setCatDialogOpen] = useState(false);
+  const [genDialogOpen, setGenDialogOpen] = useState(false);
+  const [generating, setGenerating] = useState(false);
 
   const startEdit = (post: typeof posts[0]) => {
     setEditing(post.id);
@@ -157,6 +167,37 @@ export default function BlogEditor() {
     },
   });
 
+  const handleGenerateFromProject = async (project: typeof dbProjects[0]) => {
+    setGenerating(true);
+    setGenDialogOpen(false);
+    try {
+      const { data, error } = await supabase.functions.invoke("generate-blog", {
+        body: { project },
+      });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+
+      const slug = slugify(data.title || project.title);
+      const { error: insertError } = await supabase.from("blog_posts").insert({
+        title: data.title || project.title,
+        slug,
+        excerpt: data.excerpt || "",
+        content: data.content || "",
+        cover_image_url: project.image_url || "",
+        tags: data.tags || [],
+        display_order: posts.length + 1,
+      });
+      if (insertError) throw insertError;
+
+      qc.invalidateQueries({ queryKey: ["admin_blog_posts"] });
+      toast({ title: "Blog post generated!", description: "Open it to review and publish." });
+    } catch (e: any) {
+      toast({ title: "Generation failed", description: e.message, variant: "destructive" });
+    } finally {
+      setGenerating(false);
+    }
+  };
+
   if (isLoading) return <div className="animate-pulse text-muted-foreground">Loading...</div>;
 
   return (
@@ -199,6 +240,35 @@ export default function BlogEditor() {
                     <p className="text-sm text-muted-foreground text-center py-4">No categories yet</p>
                   )}
                 </div>
+              </div>
+            </DialogContent>
+          </Dialog>
+          <Dialog open={genDialogOpen} onOpenChange={setGenDialogOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline" className="gap-2" disabled={generating}>
+                {generating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+                {generating ? "Generating..." : "AI Generate"}
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Generate Blog from Project</DialogTitle>
+              </DialogHeader>
+              <p className="text-sm text-muted-foreground">Select a project to generate a complete blog post using AI:</p>
+              <div className="space-y-2 max-h-[300px] overflow-y-auto">
+                {dbProjects.map((proj) => (
+                  <button
+                    key={proj.id}
+                    onClick={() => handleGenerateFromProject(proj)}
+                    className="w-full text-left rounded-lg border p-3 hover:bg-accent transition-colors"
+                  >
+                    <p className="font-medium text-sm text-foreground">{proj.title}</p>
+                    <p className="text-xs text-muted-foreground line-clamp-1">{proj.description}</p>
+                  </button>
+                ))}
+                {dbProjects.length === 0 && (
+                  <p className="text-sm text-muted-foreground text-center py-4">No projects found</p>
+                )}
               </div>
             </DialogContent>
           </Dialog>

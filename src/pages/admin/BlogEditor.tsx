@@ -8,7 +8,7 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { Plus, Trash2, Save, PenLine, Eye, EyeOff, FolderPlus, X } from "lucide-react";
+import { Plus, Trash2, Save, PenLine, Eye, EyeOff, FolderPlus, X, Sparkles, Loader2 } from "lucide-react";
 import ImageUpload from "@/components/admin/ImageUpload";
 import MultiImageUpload from "@/components/admin/MultiImageUpload";
 import RichTextEditor from "@/components/admin/RichTextEditor";

@@ -2,7 +2,7 @@ import { useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import SEOHead from "@/components/SEOHead";
 import { Link } from "react-router-dom";
-import { Calendar, Tag, ArrowRight, Pin, Search, ExternalLink } from "lucide-react";
+import { Calendar, Tag, ArrowRight, Pin, Search, ExternalLink, Eye } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -220,6 +220,10 @@ export default function Blog() {
                                     {(post.tags ?? []).length}
                                   </span>
                                 )}
+                                <span className="flex items-center gap-1">
+                                  <Eye className="h-3.5 w-3.5" />
+                                  {(post as any).view_count ?? 0}
+                                </span>
                               </div>
                               <ArrowRight className="h-4 w-4 text-primary opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100" />
                             </div>

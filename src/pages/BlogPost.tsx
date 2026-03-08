@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import SEOHead from "@/components/SEOHead";
 import { motion } from "framer-motion";
-import { ArrowLeft, Calendar, Tag } from "lucide-react";
+import { ArrowLeft, Calendar, Tag, Eye } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext, type CarouselApi } from "@/components/ui/carousel";
@@ -32,6 +33,12 @@ export default function BlogPost() {
     carouselApi.on("select", onSelect);
     return () => { carouselApi.off("select", onSelect); };
   }, [carouselApi]);
+
+  // Increment view count
+  useEffect(() => {
+    if (!slug) return;
+    supabase.rpc("increment_blog_view", { _slug: slug });
+  }, [slug]);
 
   if (isLoading) {
     return (
@@ -117,6 +124,10 @@ export default function BlogPost() {
                   })}
                 </span>
               )}
+              <span className="flex items-center gap-1.5">
+                <Eye className="h-4 w-4" />
+                {(post as any).view_count ?? 0} views
+              </span>
             </div>
 
             {(post.tags ?? []).length > 0 && (

@@ -245,8 +245,8 @@ export default function Blog() {
                   const blogImages = [selectedPost.cover_image_url, ...((selectedPost as any).gallery_images ?? [])].filter(Boolean) as string[];
                   return (
                     <div className="p-3 pb-0">
-                      <div className="aspect-video w-full cursor-pointer overflow-hidden rounded-lg" onClick={() => { setLightboxImages(blogImages); setLightboxIndex(0); setLightboxOpen(true); }}>
-                        <img src={selectedPost.cover_image_url} alt={selectedPost.title} className="h-full w-full object-cover transition-transform hover:scale-105" />
+                      <div className="w-full cursor-pointer overflow-hidden rounded-lg" onClick={() => { setLightboxImages(blogImages); setLightboxIndex(0); setLightboxOpen(true); }}>
+                        <img src={selectedPost.cover_image_url} alt={selectedPost.title} className="w-full h-auto object-contain transition-transform hover:scale-105" />
                       </div>
                     </div>
                   );
@@ -262,13 +262,13 @@ export default function Blog() {
                       {selectedPost.title}
                     </DialogTitle>
                     {selectedPost.excerpt && (
-                      <DialogDescription className="text-sm leading-relaxed">
+                      <DialogDescription className="text-base leading-relaxed">
                         {selectedPost.excerpt}
                       </DialogDescription>
                     )}
                   </DialogHeader>
 
-                  <div className="space-y-3 border-t border-border pt-4 text-sm">
+                  <div className="space-y-3 border-t border-border pt-4 text-base">
                     {selectedPost.published_at && (
                       <div className="flex gap-6">
                         <span className="w-24 shrink-0 font-semibold text-foreground">Date</span>
@@ -286,7 +286,7 @@ export default function Blog() {
                         <span className="w-24 shrink-0 font-semibold text-foreground">Tags</span>
                         <div className="flex flex-wrap gap-1.5">
                           {(selectedPost.tags ?? []).map((tag) => (
-                            <span key={tag} className="rounded-md bg-secondary px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+                            <span key={tag} className="rounded-md bg-secondary px-2.5 py-1 text-xs font-medium text-muted-foreground">
                               {tag}
                             </span>
                           ))}
@@ -299,7 +299,7 @@ export default function Blog() {
                 {selectedPost.content && (
                   <div className="border-t border-border mx-6 sm:mx-8 mt-3 pt-4 pb-2">
                     <div
-                      className="prose prose-sm max-w-none text-foreground prose-headings:text-foreground prose-p:text-muted-foreground prose-a:text-primary prose-strong:text-foreground"
+                      className="prose prose-base max-w-none text-foreground prose-headings:text-foreground prose-p:text-muted-foreground prose-a:text-primary prose-strong:text-foreground"
                       dangerouslySetInnerHTML={{ __html: selectedPost.content }}
                     />
                   </div>

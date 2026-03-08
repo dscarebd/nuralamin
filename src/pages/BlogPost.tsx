@@ -90,66 +90,79 @@ export default function BlogPost() {
           <Link to="/blog"><ArrowLeft className="h-4 w-4" /> Back to Blog</Link>
         </Button>
 
-        {category && (
-          <Badge variant="secondary" className="mb-3 bg-primary/10 text-primary">
-            {category.name}
-          </Badge>
-        )}
+        {/* Hero: Left info + Right image */}
+        <div className="mb-8 flex flex-col-reverse gap-6 md:flex-row md:items-start">
+          {/* Left: Title, excerpt, tags, date */}
+          <div className="flex flex-1 flex-col justify-center">
+            {category && (
+              <Badge variant="secondary" className="mb-3 w-fit bg-primary/10 text-primary">
+                {category.name}
+              </Badge>
+            )}
 
-        <h1 className="mb-4 text-3xl font-extrabold tracking-tight text-foreground md:text-4xl">
-          {post.title}
-        </h1>
+            <h1 className="mb-4 text-3xl font-extrabold tracking-tight text-foreground md:text-4xl">
+              {post.title}
+            </h1>
 
-        <div className="mb-6 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-          {post.published_at && (
-            <span className="flex items-center gap-1.5">
-              <Calendar className="h-4 w-4" />
-              {new Date(post.published_at).toLocaleDateString("en-US", {
-                year: "numeric", month: "long", day: "numeric",
-              })}
-            </span>
-          )}
-          {(post.tags ?? []).length > 0 && (
-            <div className="flex items-center gap-1.5">
-              <Tag className="h-4 w-4" />
-              <div className="flex flex-wrap gap-1">
-                {(post.tags ?? []).map((tag) => (
-                  <Badge key={tag} variant="outline" className="text-xs">{tag}</Badge>
-                ))}
+            {post.excerpt && (
+              <p className="mb-4 text-base text-muted-foreground leading-relaxed">{post.excerpt}</p>
+            )}
+
+            <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+              {post.published_at && (
+                <span className="flex items-center gap-1.5">
+                  <Calendar className="h-4 w-4" />
+                  {new Date(post.published_at).toLocaleDateString("en-US", {
+                    year: "numeric", month: "long", day: "numeric",
+                  })}
+                </span>
+              )}
+            </div>
+
+            {(post.tags ?? []).length > 0 && (
+              <div className="mt-4 flex items-center gap-1.5">
+                <Tag className="h-4 w-4 text-muted-foreground" />
+                <div className="flex flex-wrap gap-1.5">
+                  {(post.tags ?? []).map((tag) => (
+                    <Badge key={tag} variant="outline" className="text-xs">{tag}</Badge>
+                  ))}
+                </div>
               </div>
+            )}
+          </div>
+
+          {/* Right: Image */}
+          {allImages.length > 0 && (
+            <div className="w-full shrink-0 overflow-hidden rounded-xl border border-border/60 md:w-[45%]">
+              {hasMultiple ? (
+                <Carousel setApi={setCarouselApi} plugins={[Autoplay({ delay: 5000, stopOnInteraction: false })]} className="w-full">
+                  <CarouselContent>
+                    {allImages.map((url, i) => (
+                      <CarouselItem key={i}>
+                        <div className="w-full cursor-pointer overflow-hidden" onClick={() => { setLightboxIndex(i); setLightboxOpen(true); }}>
+                          <img src={url} alt={`${post.title} ${i + 1}`} className="w-full h-auto object-contain transition-transform hover:scale-105" />
+                        </div>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  <CarouselPrevious className="left-3 top-1/2 h-10 w-10 -translate-y-1/2 border-none bg-black/40 text-white hover:bg-black/60" />
+                  <CarouselNext className="right-3 top-1/2 h-10 w-10 -translate-y-1/2 border-none bg-black/40 text-white hover:bg-black/60" />
+                  <div className="flex justify-center gap-1.5 py-3">
+                    {allImages.map((_, i) => (
+                      <button key={i} onClick={() => carouselApi?.scrollTo(i)}
+                        className={`h-2 rounded-full transition-all ${currentSlide === i ? "w-5 bg-primary" : "w-2 bg-muted-foreground/30"}`} />
+                    ))}
+                  </div>
+                </Carousel>
+              ) : (
+                <div className="w-full cursor-pointer overflow-hidden" onClick={() => { setLightboxIndex(0); setLightboxOpen(true); }}>
+                  <img src={allImages[0]} alt={post.title} className="w-full h-auto object-contain transition-transform hover:scale-105" />
+                </div>
+              )}
             </div>
           )}
         </div>
 
-        {allImages.length > 0 && (
-          <div className="mb-8 overflow-hidden rounded-xl border border-border/60">
-            {hasMultiple ? (
-              <Carousel setApi={setCarouselApi} plugins={[Autoplay({ delay: 5000, stopOnInteraction: false })]} className="w-full">
-                <CarouselContent>
-                  {allImages.map((url, i) => (
-                    <CarouselItem key={i}>
-                      <div className="w-full cursor-pointer overflow-hidden" onClick={() => { setLightboxIndex(i); setLightboxOpen(true); }}>
-                        <img src={url} alt={`${post.title} ${i + 1}`} className="w-full h-auto object-contain transition-transform hover:scale-105" />
-                      </div>
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-                <CarouselPrevious className="left-3 top-1/2 h-10 w-10 -translate-y-1/2 border-none bg-black/40 text-white hover:bg-black/60" />
-                <CarouselNext className="right-3 top-1/2 h-10 w-10 -translate-y-1/2 border-none bg-black/40 text-white hover:bg-black/60" />
-                <div className="flex justify-center gap-1.5 py-3">
-                  {allImages.map((_, i) => (
-                    <button key={i} onClick={() => carouselApi?.scrollTo(i)}
-                      className={`h-2 rounded-full transition-all ${currentSlide === i ? "w-5 bg-primary" : "w-2 bg-muted-foreground/30"}`} />
-                  ))}
-                </div>
-              </Carousel>
-            ) : (
-              <div className="w-full cursor-pointer overflow-hidden" onClick={() => { setLightboxIndex(0); setLightboxOpen(true); }}>
-                <img src={allImages[0]} alt={post.title} className="w-full h-auto object-contain transition-transform hover:scale-105" />
-              </div>
-            )}
-          </div>
-        )}
 
         <ImageLightbox images={allImages} currentIndex={lightboxIndex} open={lightboxOpen} onClose={() => setLightboxOpen(false)} onIndexChange={setLightboxIndex} />
         <div

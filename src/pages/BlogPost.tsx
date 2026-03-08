@@ -124,6 +124,10 @@ export default function BlogPost() {
                   })}
                 </span>
               )}
+              <span className="flex items-center gap-1.5">
+                <Eye className="h-4 w-4" />
+                {(post as any).view_count ?? 0} views
+              </span>
             </div>
 
             {(post.tags ?? []).length > 0 && (

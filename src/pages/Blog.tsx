@@ -116,12 +116,15 @@ export default function Blog() {
         )}
 
         {isLoading ? (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="flex flex-col gap-5">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="animate-pulse rounded-xl border bg-card p-4">
-                <div className="mb-4 h-40 rounded-lg bg-muted" />
-                <div className="mb-2 h-4 w-3/4 rounded bg-muted" />
-                <div className="h-3 w-1/2 rounded bg-muted" />
+              <div key={i} className="animate-pulse flex flex-col sm:flex-row gap-4 rounded-xl border bg-card p-4">
+                <div className="sm:w-60 shrink-0 h-40 rounded-lg bg-muted" />
+                <div className="flex-1 space-y-3 py-2">
+                  <div className="h-4 w-3/4 rounded bg-muted" />
+                  <div className="h-3 w-1/2 rounded bg-muted" />
+                  <div className="h-3 w-1/3 rounded bg-muted" />
+                </div>
               </div>
             ))}
           </div>

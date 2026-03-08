@@ -199,7 +199,13 @@ export default function Blog() {
                               <Badge variant="secondary" className="mb-2 w-fit bg-primary/10 text-primary">{category.name}</Badge>
                             )}
                             <h2 className="mb-2 text-lg font-bold text-foreground transition-colors group-hover:text-primary line-clamp-2">{post.title}</h2>
-                            {post.excerpt && <p className="mb-3 text-sm text-muted-foreground line-clamp-2">{post.excerpt}</p>}
+                            {post.excerpt && <p className="mb-2 text-sm text-muted-foreground line-clamp-2">{post.excerpt}</p>}
+                            {post.content && (
+                              <div
+                                className="mb-3 text-xs text-muted-foreground/80 line-clamp-3 prose-headings:hidden"
+                                dangerouslySetInnerHTML={{ __html: post.content.replace(/<h[1-6][^>]*>.*?<\/h[1-6]>/gi, '') }}
+                              />
+                            )}
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-3 text-xs text-muted-foreground">
                                 {post.published_at && (

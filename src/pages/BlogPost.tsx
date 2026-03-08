@@ -128,8 +128,8 @@ export default function BlogPost() {
                 <CarouselContent>
                   {allImages.map((url, i) => (
                     <CarouselItem key={i}>
-                      <div className="aspect-video w-full cursor-pointer overflow-hidden" onClick={() => { setLightboxIndex(i); setLightboxOpen(true); }}>
-                        <img src={url} alt={`${post.title} ${i + 1}`} className="h-full w-full object-cover transition-transform hover:scale-105" />
+                      <div className="w-full cursor-pointer overflow-hidden" onClick={() => { setLightboxIndex(i); setLightboxOpen(true); }}>
+                        <img src={url} alt={`${post.title} ${i + 1}`} className="w-full h-auto object-contain transition-transform hover:scale-105" />
                       </div>
                     </CarouselItem>
                   ))}

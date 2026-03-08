@@ -128,8 +128,8 @@ export default function BlogPost() {
                 <CarouselContent>
                   {allImages.map((url, i) => (
                     <CarouselItem key={i}>
-                      <div className="aspect-video w-full cursor-pointer overflow-hidden" onClick={() => { setLightboxIndex(i); setLightboxOpen(true); }}>
-                        <img src={url} alt={`${post.title} ${i + 1}`} className="h-full w-full object-cover transition-transform hover:scale-105" />
+                      <div className="w-full cursor-pointer overflow-hidden" onClick={() => { setLightboxIndex(i); setLightboxOpen(true); }}>
+                        <img src={url} alt={`${post.title} ${i + 1}`} className="w-full h-auto object-contain transition-transform hover:scale-105" />
                       </div>
                     </CarouselItem>
                   ))}
@@ -144,8 +144,8 @@ export default function BlogPost() {
                 </div>
               </Carousel>
             ) : (
-              <div className="aspect-video w-full cursor-pointer overflow-hidden" onClick={() => { setLightboxIndex(0); setLightboxOpen(true); }}>
-                <img src={allImages[0]} alt={post.title} className="h-full w-full object-cover transition-transform hover:scale-105" />
+              <div className="w-full cursor-pointer overflow-hidden" onClick={() => { setLightboxIndex(0); setLightboxOpen(true); }}>
+                <img src={allImages[0]} alt={post.title} className="w-full h-auto object-contain transition-transform hover:scale-105" />
               </div>
             )}
           </div>
@@ -153,7 +153,7 @@ export default function BlogPost() {
 
         <ImageLightbox images={allImages} currentIndex={lightboxIndex} open={lightboxOpen} onClose={() => setLightboxOpen(false)} onIndexChange={setLightboxIndex} />
         <div
-          className="prose prose-sm dark:prose-invert max-w-none text-foreground"
+          className="prose prose-lg dark:prose-invert max-w-none text-foreground"
           dangerouslySetInnerHTML={{ __html: post.content ?? "" }}
         />
       </motion.article>

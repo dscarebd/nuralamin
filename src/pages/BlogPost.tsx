@@ -144,8 +144,8 @@ export default function BlogPost() {
                 </div>
               </Carousel>
             ) : (
-              <div className="aspect-video w-full cursor-pointer overflow-hidden" onClick={() => { setLightboxIndex(0); setLightboxOpen(true); }}>
-                <img src={allImages[0]} alt={post.title} className="h-full w-full object-cover transition-transform hover:scale-105" />
+              <div className="w-full cursor-pointer overflow-hidden" onClick={() => { setLightboxIndex(0); setLightboxOpen(true); }}>
+                <img src={allImages[0]} alt={post.title} className="w-full h-auto object-contain transition-transform hover:scale-105" />
               </div>
             )}
           </div>

@@ -2,7 +2,7 @@ import { useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import SEOHead from "@/components/SEOHead";
 import { Link } from "react-router-dom";
-import { Calendar, Tag, ArrowRight, Pin, Search, ExternalLink } from "lucide-react";
+import { Calendar, Tag, ArrowRight, Pin, Search, ExternalLink, Eye } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

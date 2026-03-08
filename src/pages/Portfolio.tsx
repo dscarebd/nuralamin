@@ -66,19 +66,19 @@ function ProjectCard({ project, onClick }: { project: Project; onClick: () => vo
         <img src={image} alt={project.title} className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
       </div>
       <div className="flex flex-1 flex-col p-5">
-        <span className="mb-2 w-fit rounded-full bg-primary/10 px-2.5 py-0.5 text-[11px] font-medium text-primary transition-colors duration-300 group-hover:bg-primary/20">
+        <span className="mb-2 w-fit rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary transition-colors duration-300 group-hover:bg-primary/20">
           {project.category}
         </span>
-        <h3 className="mb-1 text-base font-bold text-foreground transition-colors duration-300 group-hover:text-primary">{project.title}</h3>
-        <p className="mb-4 flex-1 line-clamp-2 text-sm leading-relaxed text-muted-foreground">{project.description}</p>
+        <h3 className="mb-1 text-lg font-bold text-foreground transition-colors duration-300 group-hover:text-primary">{project.title}</h3>
+        <p className="mb-4 flex-1 line-clamp-2 text-base leading-relaxed text-muted-foreground">{project.description}</p>
         <div className="mb-3 flex flex-wrap gap-1.5">
           {(project.tech ?? []).map((t) => (
-            <span key={t} className="rounded-md bg-secondary px-2 py-0.5 text-[10px] font-medium text-muted-foreground transition-colors duration-300 group-hover:bg-primary/10 group-hover:text-primary/80">{t}</span>
+            <span key={t} className="rounded-md bg-secondary px-2 py-0.5 text-xs font-medium text-muted-foreground transition-colors duration-300 group-hover:bg-primary/10 group-hover:text-primary/80">{t}</span>
           ))}
         </div>
         <a href={project.link ?? "#"} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}
-          className="flex items-center gap-1 text-xs font-medium text-primary transition-all duration-300 hover:underline group-hover:translate-x-1">
-          View Project <ExternalLink className="h-3 w-3 transition-transform duration-300 group-hover:rotate-12" />
+          className="flex items-center gap-1 text-sm font-medium text-primary transition-all duration-300 hover:underline group-hover:translate-x-1">
+          View Project <ExternalLink className="h-3.5 w-3.5 transition-transform duration-300 group-hover:rotate-12" />
         </a>
       </div>
     </motion.div>

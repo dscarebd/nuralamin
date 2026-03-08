@@ -29,8 +29,8 @@ export default function MainContent() {
   return (
     <main className="flex h-full flex-col gap-6 overflow-y-auto rounded-2xl border bg-card p-8 scrollbar-thin">
       <motion.section variants={fadeUp} initial="hidden" animate="visible">
-        <h2 className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground">About</h2>
-        <div className="prose prose-sm dark:prose-invert max-w-none text-sm leading-relaxed text-muted-foreground" dangerouslySetInnerHTML={{ __html: about }} />
+        <h2 className="mb-3 text-sm font-semibold uppercase tracking-widest text-muted-foreground">About</h2>
+        <div className="prose dark:prose-invert max-w-none text-base leading-relaxed text-muted-foreground" dangerouslySetInnerHTML={{ __html: about }} />
       </motion.section>
 
       <div className="h-px bg-border" />

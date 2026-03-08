@@ -1,30 +1,63 @@
 
 
-## Blog Page Redesign: List Layout with Full Image View
+# Content Protection Plan
 
-### Problem
-Current blog page uses a grid layout (2-3 columns) with `object-cover` on fixed-height containers, which crops tall/portrait images. The user wants to display full images without cropping.
+## Summary
 
-### Design Approach
-Switch from grid cards to a **vertical list layout** where each post is a horizontal card (image left, content right on desktop; stacked on mobile). The image will use `object-contain` or natural aspect ratio so nothing gets cropped.
+Protect all public pages from copying images, text, and icons -- **except** individual blog post pages (`/blog/:slug`) where users can copy images and text. Also block browser DevTools (inspect mode) across the entire public site including blog posts. Admin pages remain completely unprotected.
 
-### Changes (single file: `src/pages/Blog.tsx`)
+## Protection Rules
 
-**Featured Posts Section:**
-- Replace the 2-column grid with a single-column stack
-- Each featured post: horizontal layout with image on the left (max-width ~280px) showing full image, content on the right
-- On mobile: stack vertically, image on top at full width with natural aspect ratio
+| Page | Copy Text | Copy Images | Right-Click | DevTools |
+|------|-----------|-------------|-------------|----------|
+| Home `/` | Blocked | Blocked | Blocked | Blocked |
+| Portfolio `/portfolio` | Blocked | Blocked | Blocked | Blocked |
+| Portfolio Detail `/portfolio/:id` | Blocked | Blocked | Blocked | Blocked |
+| Blog listing `/blog` | Blocked | Blocked | Blocked | Blocked |
+| Blog post `/blog/:slug` | Allowed | Allowed | Allowed | Blocked |
+| Pricing `/pricing` | Blocked | Blocked | Blocked | Blocked |
+| Policy pages | Blocked | Blocked | Blocked | Blocked |
+| Admin `/abdullah/*` | No protection at all | | | |
 
-**Regular Posts Section:**
-- Replace `grid sm:grid-cols-2 lg:grid-cols-3` with a single-column list (`flex flex-col gap-6`)
-- Each post card: horizontal row layout — image thumbnail on the left (fixed width ~200-240px, natural height), title/excerpt/meta on the right
-- On mobile: stack vertically, full-width image with natural aspect ratio
-- Remove `h-44` fixed height constraint; use `w-full` with no height restriction so portrait images display fully
-- Change `object-cover` to `object-contain` or remove height constraints entirely
+## Changes
 
-**Dialog** — no changes needed, it already works fine.
+### 1. New Component: `src/components/ContentProtection.tsx`
 
-**Key CSS patterns:**
-- List item: `flex flex-col sm:flex-row gap-4` with image `sm:w-60 shrink-0 rounded-lg overflow-hidden` and natural aspect ratio
-- Image: `w-full h-auto object-cover rounded-lg` (no fixed height, so tall images show fully)
+A wrapper component that applies protection based on current route:
+
+- **Copy/Select protection** (all public pages except `/blog/:slug`):
+  - Disable right-click context menu
+  - Block `copy` and `cut` events
+  - Block Ctrl/Cmd+C, Ctrl/Cmd+X, Ctrl/Cmd+A shortcuts
+  - Apply `user-select: none` CSS to prevent text selection
+  - Apply `-webkit-user-drag: none` to prevent image dragging
+
+- **DevTools protection** (all public pages including blog posts):
+  - Block F12, Ctrl/Cmd+Shift+I, Ctrl/Cmd+Shift+J, Ctrl/Cmd+U (view source)
+  - These are client-side deterrents -- not foolproof but effective against casual users
+
+### 2. CSS Updates: `src/index.css`
+
+Add a `.content-protected` class:
+```css
+.content-protected {
+  user-select: none;
+  -webkit-user-select: none;
+}
+.content-protected img {
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+```
+
+### 3. Integration: `src/App.tsx`
+
+Wrap the public layout section with `<ContentProtection>` so it covers all non-admin routes. The component internally checks the route and applies the right level of protection.
+
+## Technical Notes
+
+- Route detection uses `useLocation()` from React Router
+- Blog post pages are identified by checking if the path matches `/blog/` followed by a slug segment
+- All event listeners are cleaned up on unmount or route change via `useEffect` cleanup
+- This is a **client-side deterrent** -- determined users with technical knowledge can still bypass it, but it effectively prevents casual copying
 

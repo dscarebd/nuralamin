@@ -262,7 +262,7 @@ export default function Blog() {
                       {selectedPost.title}
                     </DialogTitle>
                     {selectedPost.excerpt && (
-                      <DialogDescription className="text-sm leading-relaxed">
+                      <DialogDescription className="text-base leading-relaxed">
                         {selectedPost.excerpt}
                       </DialogDescription>
                     )}

@@ -44,10 +44,10 @@ export default function MainContent() {
               <div className="flex flex-col gap-1">
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 sm:gap-2">
                   <div className="order-2 sm:order-1">
-                    <h3 className="text-sm font-bold text-foreground">{exp.title}</h3>
-                    <p className="text-xs text-muted-foreground">{exp.company}</p>
+                    <h3 className="text-base font-bold text-foreground">{exp.title}</h3>
+                    <p className="text-sm text-muted-foreground">{exp.company}</p>
                   </div>
-                  <span className="order-1 sm:order-2 shrink-0 self-start rounded-full bg-primary/15 px-3 py-1 text-[11px] font-medium text-primary">{exp.period}</span>
+                  <span className="order-1 sm:order-2 shrink-0 self-start rounded-full bg-primary/15 px-3 py-1 text-xs font-medium text-primary">{exp.period}</span>
                 </div>
                 <div className="mt-2 rounded-lg border bg-secondary/50 p-3">
                   <div className="prose prose-sm dark:prose-invert max-w-none text-sm leading-relaxed text-muted-foreground" dangerouslySetInnerHTML={{ __html: exp.description ?? "" }} />

@@ -215,8 +215,8 @@ export default function Portfolio() {
         </Dialog>
 
         <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="mt-16 rounded-xl border bg-card p-8 text-center">
-          <h2 className="mb-2 text-xl font-bold text-foreground">Interested in working together?</h2>
-          <p className="mb-6 text-sm text-muted-foreground">I'm always open to new projects and collaborations. Let's build something great.</p>
+          <h2 className="mb-2 text-2xl font-bold text-foreground">Interested in working together?</h2>
+          <p className="mb-6 text-base text-muted-foreground">I'm always open to new projects and collaborations. Let's build something great.</p>
           <div className="flex justify-center gap-3">
             <Button asChild>
               <a href={telegramUrl} target="_blank" rel="noopener noreferrer">

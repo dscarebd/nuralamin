@@ -244,7 +244,7 @@ export default function Pricing() {
 
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6, duration: 0.5 }} className="mt-12 rounded-2xl border bg-card p-8 text-center">
           <h3 className="text-xl font-bold text-foreground">{ctaText}</h3>
-          <p className="mt-2 text-sm text-muted-foreground">{ctaDesc}</p>
+          <p className="mt-2 text-base text-muted-foreground">{ctaDesc}</p>
           <Button asChild className="mt-4 gap-2 rounded-xl">
             <a href={telegramUrl} target="_blank" rel="noopener noreferrer">Let's Talk</a>
           </Button>

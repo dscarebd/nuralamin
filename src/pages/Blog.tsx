@@ -286,7 +286,7 @@ export default function Blog() {
                         <span className="w-24 shrink-0 font-semibold text-foreground">Tags</span>
                         <div className="flex flex-wrap gap-1.5">
                           {(selectedPost.tags ?? []).map((tag) => (
-                            <span key={tag} className="rounded-md bg-secondary px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+                            <span key={tag} className="rounded-md bg-secondary px-2.5 py-1 text-xs font-medium text-muted-foreground">
                               {tag}
                             </span>
                           ))}

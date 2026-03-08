@@ -153,7 +153,7 @@ export default function BlogPost() {
 
         <ImageLightbox images={allImages} currentIndex={lightboxIndex} open={lightboxOpen} onClose={() => setLightboxOpen(false)} onIndexChange={setLightboxIndex} />
         <div
-          className="prose prose-sm dark:prose-invert max-w-none text-foreground"
+          className="prose prose-lg dark:prose-invert max-w-none text-foreground"
           dangerouslySetInnerHTML={{ __html: post.content ?? "" }}
         />
       </motion.article>

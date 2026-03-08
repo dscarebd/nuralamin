@@ -268,7 +268,7 @@ export default function Blog() {
                     )}
                   </DialogHeader>
 
-                  <div className="space-y-3 border-t border-border pt-4 text-sm">
+                  <div className="space-y-3 border-t border-border pt-4 text-base">
                     {selectedPost.published_at && (
                       <div className="flex gap-6">
                         <span className="w-24 shrink-0 font-semibold text-foreground">Date</span>

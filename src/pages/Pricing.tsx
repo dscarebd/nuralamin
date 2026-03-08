@@ -174,16 +174,16 @@ export default function Pricing() {
           <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${colors.bg}`}>
             <Icon className={`h-5 w-5 ${colors.text}`} />
           </div>
-          <h2 className="text-lg font-bold text-foreground">{plan.name}</h2>
+          <h2 className="text-xl font-bold text-foreground">{plan.name}</h2>
         </div>
         <div className="mb-2 flex items-baseline gap-1">
           <span className="text-3xl font-extrabold text-foreground">{plan.price}</span>
-          <span className="text-sm text-muted-foreground">/Start From</span>
+          <span className="text-base text-muted-foreground">/Start From</span>
         </div>
-        <p className="mb-6 text-sm text-muted-foreground">{plan.description}</p>
+        <p className="mb-6 text-base text-muted-foreground">{plan.description}</p>
         <ul className="mb-8 flex flex-1 flex-col gap-3">
           {(plan.features ?? []).map((feature) => (
-            <li key={feature} className="flex items-start gap-2 text-sm text-foreground">
+            <li key={feature} className="flex items-start gap-2 text-base text-foreground">
               <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" /> {feature}
             </li>
           ))}

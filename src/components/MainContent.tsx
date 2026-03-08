@@ -50,7 +50,7 @@ export default function MainContent() {
                   <span className="order-1 sm:order-2 shrink-0 self-start rounded-full bg-primary/15 px-3 py-1 text-xs font-medium text-primary">{exp.period}</span>
                 </div>
                 <div className="mt-2 rounded-lg border bg-secondary/50 p-3">
-                  <div className="prose prose-sm dark:prose-invert max-w-none text-sm leading-relaxed text-muted-foreground" dangerouslySetInnerHTML={{ __html: exp.description ?? "" }} />
+                  <div className="prose dark:prose-invert max-w-none text-base leading-relaxed text-muted-foreground" dangerouslySetInnerHTML={{ __html: exp.description ?? "" }} />
                 </div>
               </div>
             </motion.div>

@@ -182,21 +182,21 @@ export default function Blog() {
 
             {/* Regular posts */}
             {regularPosts.length > 0 && (
-              <motion.div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" variants={stagger} initial="hidden" animate="visible">
+              <motion.div className="flex flex-col gap-5" variants={stagger} initial="hidden" animate="visible">
                 {regularPosts.map((post) => {
                   const category = categories.find((c) => c.id === post.category_id);
                   return (
                     <motion.div key={post.id} variants={fadeUp}>
                       <div onClick={() => setSelectedPost(post)} className="group block cursor-pointer">
-                        <div className="overflow-hidden rounded-xl border border-border/60 bg-card transition-all duration-300 hover:border-primary/30">
+                        <div className="flex flex-col sm:flex-row gap-0 overflow-hidden rounded-xl border border-border/60 bg-card transition-all duration-300 hover:border-primary/30">
                           {post.cover_image_url && (
-                            <div className="relative h-44 overflow-hidden">
-                              <img src={post.cover_image_url} alt={post.title} className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
+                            <div className="sm:w-60 shrink-0 overflow-hidden">
+                              <img src={post.cover_image_url} alt={post.title} className="w-full h-auto object-contain transition-transform duration-700 ease-out group-hover:scale-105" />
                             </div>
                           )}
-                          <div className="p-5">
+                          <div className="flex flex-1 flex-col justify-center p-5">
                             {category && (
-                              <Badge variant="secondary" className="mb-2 bg-primary/10 text-primary">{category.name}</Badge>
+                              <Badge variant="secondary" className="mb-2 w-fit bg-primary/10 text-primary">{category.name}</Badge>
                             )}
                             <h2 className="mb-2 text-lg font-bold text-foreground transition-colors group-hover:text-primary line-clamp-2">{post.title}</h2>
                             {post.excerpt && <p className="mb-3 text-sm text-muted-foreground line-clamp-2">{post.excerpt}</p>}

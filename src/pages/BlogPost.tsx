@@ -40,7 +40,7 @@ export default function BlogPost() {
     supabase.rpc("increment_blog_view", { _slug: slug });
   }, [slug]);
 
-
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-background px-4 py-8 md:px-8">
         <div className="mx-auto max-w-3xl animate-pulse space-y-4">

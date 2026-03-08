@@ -299,7 +299,7 @@ export default function Blog() {
                 {selectedPost.content && (
                   <div className="border-t border-border mx-6 sm:mx-8 mt-3 pt-4 pb-2">
                     <div
-                      className="prose prose-sm max-w-none text-foreground prose-headings:text-foreground prose-p:text-muted-foreground prose-a:text-primary prose-strong:text-foreground"
+                      className="prose prose-base max-w-none text-foreground prose-headings:text-foreground prose-p:text-muted-foreground prose-a:text-primary prose-strong:text-foreground"
                       dangerouslySetInnerHTML={{ __html: selectedPost.content }}
                     />
                   </div>

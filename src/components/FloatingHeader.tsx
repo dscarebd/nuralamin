@@ -40,7 +40,7 @@ export default function FloatingHeader() {
                 key={item.to}
                 to={item.to}
                 end={item.to === "/"}
-                className="rounded-lg px-3 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                className="rounded-lg px-3 py-1.5 text-base font-medium text-muted-foreground transition-colors hover:text-foreground"
                 activeClassName="bg-primary/10 text-primary"
               >
                 {item.label}

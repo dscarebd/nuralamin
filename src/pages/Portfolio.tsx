@@ -194,9 +194,9 @@ export default function Portfolio() {
                   <div className="flex flex-1 flex-col gap-5 p-6 sm:p-8">
                     <DialogHeader className="space-y-3">
                       <DialogTitle className="text-2xl font-extrabold uppercase tracking-tight text-foreground">{selectedProject.title}</DialogTitle>
-                      <DialogDescription className="text-sm leading-relaxed">{selectedProject.description}</DialogDescription>
+                      <DialogDescription className="text-base leading-relaxed">{selectedProject.description}</DialogDescription>
                     </DialogHeader>
-                    <div className="space-y-3 border-t border-border pt-4 text-sm">
+                    <div className="space-y-3 border-t border-border pt-4 text-base">
                       <div className="flex gap-6"><span className="w-24 shrink-0 font-semibold text-foreground">Category</span><span className="text-muted-foreground">{selectedProject.category}</span></div>
                       <div className="flex gap-6"><span className="w-24 shrink-0 font-semibold text-foreground">Date</span><span className="text-muted-foreground">{selectedProject.date}</span></div>
                       <div className="flex gap-6"><span className="w-24 shrink-0 font-semibold text-foreground">Budget</span><span className="text-muted-foreground">{selectedProject.budget}</span></div>

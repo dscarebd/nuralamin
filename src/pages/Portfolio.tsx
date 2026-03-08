@@ -66,19 +66,19 @@ function ProjectCard({ project, onClick }: { project: Project; onClick: () => vo
         <img src={image} alt={project.title} className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
       </div>
       <div className="flex flex-1 flex-col p-5">
-        <span className="mb-2 w-fit rounded-full bg-primary/10 px-2.5 py-0.5 text-[11px] font-medium text-primary transition-colors duration-300 group-hover:bg-primary/20">
+        <span className="mb-2 w-fit rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary transition-colors duration-300 group-hover:bg-primary/20">
           {project.category}
         </span>
-        <h3 className="mb-1 text-base font-bold text-foreground transition-colors duration-300 group-hover:text-primary">{project.title}</h3>
-        <p className="mb-4 flex-1 line-clamp-2 text-sm leading-relaxed text-muted-foreground">{project.description}</p>
+        <h3 className="mb-1 text-lg font-bold text-foreground transition-colors duration-300 group-hover:text-primary">{project.title}</h3>
+        <p className="mb-4 flex-1 line-clamp-2 text-base leading-relaxed text-muted-foreground">{project.description}</p>
         <div className="mb-3 flex flex-wrap gap-1.5">
           {(project.tech ?? []).map((t) => (
-            <span key={t} className="rounded-md bg-secondary px-2 py-0.5 text-[10px] font-medium text-muted-foreground transition-colors duration-300 group-hover:bg-primary/10 group-hover:text-primary/80">{t}</span>
+            <span key={t} className="rounded-md bg-secondary px-2 py-0.5 text-xs font-medium text-muted-foreground transition-colors duration-300 group-hover:bg-primary/10 group-hover:text-primary/80">{t}</span>
           ))}
         </div>
         <a href={project.link ?? "#"} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}
-          className="flex items-center gap-1 text-xs font-medium text-primary transition-all duration-300 hover:underline group-hover:translate-x-1">
-          View Project <ExternalLink className="h-3 w-3 transition-transform duration-300 group-hover:rotate-12" />
+          className="flex items-center gap-1 text-sm font-medium text-primary transition-all duration-300 hover:underline group-hover:translate-x-1">
+          View Project <ExternalLink className="h-3.5 w-3.5 transition-transform duration-300 group-hover:rotate-12" />
         </a>
       </div>
     </motion.div>
@@ -129,8 +129,8 @@ export default function Portfolio() {
       <Tabs defaultValue="website" className="mx-auto max-w-5xl">
         <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <h1 className="text-2xl font-bold text-foreground">My Portfolio</h1>
-            <p className="text-sm text-muted-foreground">Projects I've built and contributed to</p>
+            <h1 className="text-3xl font-bold text-foreground">My Portfolio</h1>
+            <p className="text-base text-muted-foreground">Projects I've built and contributed to</p>
           </motion.div>
 
           {hasMultipleCategories && (
@@ -194,9 +194,9 @@ export default function Portfolio() {
                   <div className="flex flex-1 flex-col gap-5 p-6 sm:p-8">
                     <DialogHeader className="space-y-3">
                       <DialogTitle className="text-2xl font-extrabold uppercase tracking-tight text-foreground">{selectedProject.title}</DialogTitle>
-                      <DialogDescription className="text-sm leading-relaxed">{selectedProject.description}</DialogDescription>
+                      <DialogDescription className="text-base leading-relaxed">{selectedProject.description}</DialogDescription>
                     </DialogHeader>
-                    <div className="space-y-3 border-t border-border pt-4 text-sm">
+                    <div className="space-y-3 border-t border-border pt-4 text-base">
                       <div className="flex gap-6"><span className="w-24 shrink-0 font-semibold text-foreground">Category</span><span className="text-muted-foreground">{selectedProject.category}</span></div>
                       <div className="flex gap-6"><span className="w-24 shrink-0 font-semibold text-foreground">Date</span><span className="text-muted-foreground">{selectedProject.date}</span></div>
                       <div className="flex gap-6"><span className="w-24 shrink-0 font-semibold text-foreground">Budget</span><span className="text-muted-foreground">{selectedProject.budget}</span></div>
@@ -215,8 +215,8 @@ export default function Portfolio() {
         </Dialog>
 
         <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="mt-16 rounded-xl border bg-card p-8 text-center">
-          <h2 className="mb-2 text-xl font-bold text-foreground">Interested in working together?</h2>
-          <p className="mb-6 text-sm text-muted-foreground">I'm always open to new projects and collaborations. Let's build something great.</p>
+          <h2 className="mb-2 text-2xl font-bold text-foreground">Interested in working together?</h2>
+          <p className="mb-6 text-base text-muted-foreground">I'm always open to new projects and collaborations. Let's build something great.</p>
           <div className="flex justify-center gap-3">
             <Button asChild>
               <a href={telegramUrl} target="_blank" rel="noopener noreferrer">

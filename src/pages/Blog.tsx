@@ -245,8 +245,8 @@ export default function Blog() {
                   const blogImages = [selectedPost.cover_image_url, ...((selectedPost as any).gallery_images ?? [])].filter(Boolean) as string[];
                   return (
                     <div className="p-3 pb-0">
-                      <div className="aspect-video w-full cursor-pointer overflow-hidden rounded-lg" onClick={() => { setLightboxImages(blogImages); setLightboxIndex(0); setLightboxOpen(true); }}>
-                        <img src={selectedPost.cover_image_url} alt={selectedPost.title} className="h-full w-full object-cover transition-transform hover:scale-105" />
+                      <div className="w-full cursor-pointer overflow-hidden rounded-lg" onClick={() => { setLightboxImages(blogImages); setLightboxIndex(0); setLightboxOpen(true); }}>
+                        <img src={selectedPost.cover_image_url} alt={selectedPost.title} className="w-full h-auto object-contain transition-transform hover:scale-105" />
                       </div>
                     </div>
                   );

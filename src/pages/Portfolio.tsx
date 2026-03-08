@@ -129,8 +129,8 @@ export default function Portfolio() {
       <Tabs defaultValue="website" className="mx-auto max-w-5xl">
         <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <h1 className="text-2xl font-bold text-foreground">My Portfolio</h1>
-            <p className="text-sm text-muted-foreground">Projects I've built and contributed to</p>
+            <h1 className="text-3xl font-bold text-foreground">My Portfolio</h1>
+            <p className="text-base text-muted-foreground">Projects I've built and contributed to</p>
           </motion.div>
 
           {hasMultipleCategories && (

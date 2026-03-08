@@ -36,7 +36,7 @@ export default function MainContent() {
       <div className="h-px bg-border" />
 
       <motion.section initial="hidden" animate="visible" variants={stagger}>
-        <motion.h2 variants={fadeUp} className="mb-6 text-xs font-semibold uppercase tracking-widest text-muted-foreground">Experience</motion.h2>
+        <motion.h2 variants={fadeUp} className="mb-6 text-sm font-semibold uppercase tracking-widest text-muted-foreground">Experience</motion.h2>
         <div className="relative space-y-8 pl-6 before:absolute before:left-[5px] before:top-2 before:h-[calc(100%-2rem)] before:w-px before:bg-border">
           {experiences.map((exp, i) => (
             <motion.div key={exp.id ?? i} className="relative" variants={fadeUp}>

@@ -141,37 +141,26 @@ export default function Blog() {
                   <Pin className="h-4 w-4 text-primary" />
                   <h2 className="text-sm font-semibold uppercase tracking-wider text-primary">Featured</h2>
                 </div>
-                <div className={featuredPosts.length === 1 ? "grid gap-6" : "grid gap-6 md:grid-cols-2"}>
+                <div className="flex flex-col gap-5">
                   {featuredPosts.map((post) => {
                     const category = categories.find((c) => c.id === post.category_id);
                     return (
                       <div key={post.id} onClick={() => setSelectedPost(post)} className="group block cursor-pointer">
-                        <div className="overflow-hidden rounded-xl border border-border/60 bg-card transition-all duration-300 hover:border-primary/30">
+                        <div className="flex flex-col sm:flex-row gap-0 overflow-hidden rounded-xl border border-border/60 bg-card transition-all duration-300 hover:border-primary/30">
                           {post.cover_image_url && (
-                            <div className="relative h-52 overflow-hidden md:h-64">
-                              <img src={post.cover_image_url} alt={post.title} className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
-                              <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
-                              <div className="absolute bottom-0 left-0 right-0 p-5">
-                                {category && (
-                                  <Badge variant="secondary" className="mb-2 bg-primary/20 text-primary backdrop-blur-sm">
-                                    {category.name}
-                                  </Badge>
-                                )}
-                                <h2 className="text-xl font-bold text-foreground transition-colors group-hover:text-primary line-clamp-2">{post.title}</h2>
-                              </div>
+                            <div className="sm:w-72 shrink-0 overflow-hidden">
+                              <img src={post.cover_image_url} alt={post.title} className="w-full h-auto object-contain transition-transform duration-700 ease-out group-hover:scale-105" />
                             </div>
                           )}
-                          {!post.cover_image_url && (
-                            <div className="p-5">
-                              {category && (
-                                <Badge variant="secondary" className="mb-2 bg-primary/10 text-primary">{category.name}</Badge>
-                              )}
-                              <h2 className="text-xl font-bold text-foreground transition-colors group-hover:text-primary line-clamp-2">{post.title}</h2>
-                            </div>
-                          )}
-                          <div className="px-5 pb-5">
-                            {post.excerpt && <p className="mb-3 text-sm text-muted-foreground line-clamp-2">{post.excerpt}</p>}
-                            <div className="flex items-center justify-between">
+                          <div className="flex flex-1 flex-col justify-center p-5">
+                            {category && (
+                              <Badge variant="secondary" className="mb-2 w-fit bg-primary/20 text-primary">
+                                {category.name}
+                              </Badge>
+                            )}
+                            <h2 className="text-xl font-bold text-foreground transition-colors group-hover:text-primary line-clamp-2">{post.title}</h2>
+                            {post.excerpt && <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{post.excerpt}</p>}
+                            <div className="mt-3 flex items-center justify-between">
                               <div className="flex items-center gap-3 text-xs text-muted-foreground">
                                 {post.published_at && (
                                   <span className="flex items-center gap-1">

@@ -89,7 +89,7 @@ export default function ProfileSidebar() {
 
       <motion.div custom={1} variants={fadeUp} initial="hidden" animate="visible" className="text-center">
         <h1 className="text-2xl font-bold text-foreground">{name}</h1>
-        <p className="text-sm text-muted-foreground">{title}</p>
+        <p className="text-base text-muted-foreground">{title}</p>
       </motion.div>
 
       <motion.div custom={2} variants={fadeUp} initial="hidden" animate="visible" className="w-full">
